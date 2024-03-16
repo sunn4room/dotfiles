@@ -6,17 +6,18 @@
     nixpkgs.url = "git+https://mirrors.tuna.tsinghua.edu.cn/git/nixpkgs?ref=nixos-23.11";
   };
 
-  outputs = { self, nixpkgs, ... } @ inputs: {
-
+  outputs = {
+    self,
+    nixpkgs,
+    ...
+  } @ inputs: let
+    inherit (self) outputs;
+  in {
     nixosConfigurations = {
       vbox = nixpkgs.lib.nixosSystem {
-        specialArgs = inputs;
-        modules = [
-          ./vbox/configuration.nix
-        ];
+        specialArgs = {inherit inputs output;};
+        modules = [./nixos/vbox.nix];
       };
     };
-
   };
-
 }
