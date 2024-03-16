@@ -15,7 +15,7 @@
   in {
     nixosConfigurations = {
       vbox = nixpkgs.lib.nixosSystem {
-        specialArgs = {inherit inputs output;};
+        specialArgs = {inherit inputs outputs;};
         modules = [./nixos/vbox.nix];
       };
     };
