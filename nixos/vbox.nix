@@ -1,9 +1,5 @@
 { config, lib, pkgs, ... }: {
 
-  imports = [
-    ./module/user.nix
-  ];
-
   boot.initrd.availableKernelModules = [ "ata_piix" "ohci_pci" "ehci_pci" "ahci" "sd_mod" "sr_mod" ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ ];
@@ -49,6 +45,12 @@
   ];
 
   services.openssh.enable = true;
+
+  users.users.sunny = {
+    initialPassword = "sunny";
+    isNormalUser = true;
+    extraGroups = [ "wheel" ];
+  };
 
   system.stateVersion = "23.11";
 
