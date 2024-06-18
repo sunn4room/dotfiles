@@ -1,0 +1,5 @@
+/util/
+
+/flake.nix
+/flake.lock
+/nixos/

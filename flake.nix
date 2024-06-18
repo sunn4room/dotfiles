@@ -14,9 +14,9 @@
     inherit (self) outputs;
   in {
     nixosConfigurations = {
-      vbox = nixpkgs.lib.nixosSystem {
+      vm-server = nixpkgs.lib.nixosSystem {
         specialArgs = {inherit inputs outputs;};
-        modules = [./nixos/vbox.nix];
+        modules = [./nixos/vm-server.nix];
       };
     };
   };
