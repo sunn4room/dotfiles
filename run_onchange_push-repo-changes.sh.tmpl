@@ -10,7 +10,7 @@ if test "$(git status -s | wc -l)" -ne "0"; then
 	echo
 	echo "> push repo changes"
 	git add --all
-	git commit -m "fix scripts with renamed script"
+	git commit -m "add nvim config"
 	git remote set-url origin git@gitee.com:sunn4room/dotfiles.git
 	git push origin main
 fi
