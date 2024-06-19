@@ -1,0 +1,12 @@
+#!/bin/sh
+
+{{ output (print .chezmoi.sourceDir "/util/hash-nixos.sh") .chezmoi.hostname | trim | comment "# " }}
+
+set -e
+
+echo
+echo "> rebuild nixos"
+sudo nixos-rebuild switch \
+	--flake "{{ .chezmoi.sourceDir }}#{{ .chezmoi.hostname }}" \
+	--option substituters "https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store https://cache.nixos.org"
+

@@ -1,5 +1,6 @@
 #!/bin/sh
-{{ output (print .chezmoi.sourceDir "/util/hash-repo.sh") | comment "# " }}
+
+{{ output (print .chezmoi.sourceDir "/util/hash-repo.sh") | trim | comment "# " }}
 
 set -e
 
@@ -9,7 +10,7 @@ if test "$(git status -s | wc -l)" -ne "0"; then
 	echo
 	echo "> push repo changes"
 	git add --all
-	git commit -m "add script for push repo changes"
+	git commit -m "add script to rebuild nixos"
 	git remote set-url origin git@gitee.com:sunn4room/dotfiles.git
 	git push origin main
 fi
