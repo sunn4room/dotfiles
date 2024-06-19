@@ -1,6 +1,6 @@
 #!/bin/sh
 
-{{ output (print .chezmoi.sourceDir "/util/hash-nixos.sh") .chezmoi.hostname | trim | comment "# " }}
+{{ output (print .chezmoi.sourceDir "/script/hash-nixos.sh") .chezmoi.hostname | trim | comment "# " }}
 
 set -e
 
