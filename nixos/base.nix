@@ -7,6 +7,13 @@
     wget
     tmux
     chezmoi
+    gcc
+    htop-vim
+    ripgrep
+    fzf
+    fd
+    lf
+    jq
   ];
 
   users.users.sunny.initialPassword = "sunny";
