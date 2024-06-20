@@ -18,6 +18,10 @@
         specialArgs = {inherit inputs outputs;};
         modules = [./nixos/vbox.nix];
       };
+      vbox-desktop = nixpkgs.lib.nixosSystem {
+        specialArgs = {inherit inputs outputs;};
+        modules = [./nixos/vbox-desktop.nix];
+      };
     };
   };
 }

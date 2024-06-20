@@ -1,5 +1,7 @@
 #!/bin/sh
 
+{{ include "flake.nix" | sha256sum | comment "# " }}
+{{ include "flake.lock" | sha256sum | comment "# " }}
 {{ output (print .chezmoi.sourceDir "/script/hash-nixos.sh") .chezmoi.hostname | trim | comment "# " }}
 
 set -e
