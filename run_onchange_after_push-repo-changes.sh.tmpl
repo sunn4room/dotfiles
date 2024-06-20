@@ -10,7 +10,7 @@ if test "$(git status -s | wc -l)" -ne "0"; then
 	echo
 	echo "> push repo changes"
 	git add --all
-	git commit -m "add global environment EDITOR and PAGER"
+	git commit -m "rename vm-server host to vbox"
 	git remote set-url origin git@gitee.com:sunn4room/dotfiles.git
 	git push origin main
 fi

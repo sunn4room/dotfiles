@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }: {
 
   imports = [
-    ./base.nix
+    ./module/base.nix
   ];
 
   nixpkgs.hostPlatform = "x86_64-linux";
@@ -27,9 +27,7 @@
 
   time.timeZone = "Asia/Shanghai";
   i18n.defaultLocale = "en_US.UTF-8";
-
-  networking.hostName = "vm-server";
-  networking.interfaces.enp0s3.useDHCP = true;
+  networking.hostName = "vbox";
 
   virtualisation.virtualbox.guest.enable = true;
 
