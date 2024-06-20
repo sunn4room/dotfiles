@@ -20,6 +20,8 @@
   users.users.sunny.isNormalUser = true;
   users.users.sunny.extraGroups = [ "wheel" ];
 
+  services.openssh.enable = true;
+
   nixpkgs.config.allowUnfree = true;
   system.stateVersion = "24.05";
 
