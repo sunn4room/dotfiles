@@ -22,6 +22,10 @@
     unzip
     atool
   ];
+  environment.variables = {
+    EDITOR = "nvim";
+    PAGER = "less";
+  };
 
   users.users.sunny.initialPassword = "sunny";
   users.users.sunny.isNormalUser = true;
