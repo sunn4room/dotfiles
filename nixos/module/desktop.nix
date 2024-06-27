@@ -8,6 +8,8 @@
     clipit
     picom
     libnotify
+    i3lock
+    xautolock
     dunst
     feh
     mpv

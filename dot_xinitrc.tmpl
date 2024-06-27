@@ -7,6 +7,8 @@ xrandr --output eDP-1 --mode 1920x1080_144.00
 {{ end -}}
 xrdb ~/.Xresources
 feh --bg-fill ~/.background
+xset dpms 0 0 0
+xautolock -time 10 -locker 'xset +dpms dpms 5 5 5; i3lock -n -c "{{ .base16.color00 }}"; xset dpms 0 0 0' -notify 10 -notifier 'notify-send -t 10000 "lock screen soon"'
 
 picom &
 clipit &
