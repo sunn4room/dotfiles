@@ -3,6 +3,10 @@
   boot.loader.systemd-boot.configurationLimit = 2;
 
   environment.systemPackages = with pkgs; [
+    gcc
+    (python3.withPackages (python-pkgs: [
+      python-pkgs.requests
+    ]))
     neovim
     git
     lazygit
@@ -11,7 +15,6 @@
     httpie
     tmux
     chezmoi
-    gcc
     htop-vim
     ripgrep
     fzf
