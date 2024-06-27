@@ -1,0 +1,50 @@
+[colors.primary]
+background = "{{ .base16.color00 }}"
+foreground = "{{ .base16.color07 }}"
+
+[colors.normal]
+black      = "{{ .base16.color00 }}"
+red        = "{{ .base16.color01 }}"
+green      = "{{ .base16.color02 }}"
+yellow     = "{{ .base16.color03 }}"
+blue       = "{{ .base16.color04 }}"
+magenta    = "{{ .base16.color05 }}"
+cyan       = "{{ .base16.color06 }}"
+white      = "{{ .base16.color07 }}"
+
+[colors.bright]
+black      = "{{ .base16.color10 }}"
+red        = "{{ .base16.color11 }}"
+green      = "{{ .base16.color12 }}"
+yellow     = "{{ .base16.color13 }}"
+blue       = "{{ .base16.color14 }}"
+magenta    = "{{ .base16.color15 }}"
+cyan       = "{{ .base16.color16 }}"
+white      = "{{ .base16.color17 }}"
+
+[colors.cursor]
+cursor     = "{{ .base16.color07 }}"
+text       = "{{ .base16.color00 }}"
+
+[colors.selection]
+background = "{{ .base16.color06 }}"
+text       = "{{ .base16.color00 }}"
+
+[cursor]
+blink_interval = 500
+blink_timeout = 0
+
+[cursor.style]
+blinking = "Always"
+
+[font]
+size = 11
+
+[window]
+dynamic_padding = true
+dynamic_title = true
+opacity = 0.9
+
+[window.dimensions]
+columns = 100
+lines = 25

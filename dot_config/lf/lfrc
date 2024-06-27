@@ -1,0 +1,113 @@
+set nohidden
+set nopreview
+set ratios "1"
+set info size
+
+cmd open $xdg-open "$f"
+
+cmd extract ${{
+    atool --extract-to=$PWD "$f"
+}}
+cmd compress ${{
+    test -n "$1" && {
+        echo -e "$fx" | sed "s/^${PWD//\//\\\/}\///" | atool -a "$1"
+    }
+}}
+
+cmd mkdir &{{
+    test "$#" -ne 0 && {
+        mkdir "$@"
+        lf -remote "send $id reload"
+        lf -remote "send $id select \"$@\""
+    }
+}}
+cmd mkfile &{{
+    test "$#" -ne 0 && {
+        touch "$@"
+        lf -remote "send $id reload"
+        lf -remote "send $id select \"$@\""
+    }
+}}
+
+cmd bulk-rename ${{
+    index=$(mktemp /tmp/lf-bulk-rename-index.XXXXXXXXXX)
+    if [ -n "${fs}" ]; then
+        echo "$fs" > $index
+    else
+        echo "$(ls "$(dirname $f)" | tr ' ' "\n")" > $index
+    fi
+    index_edit=$(mktemp /tmp/lf-bulk-rename.XXXXXXXXXX)
+    cat $index > $index_edit
+    $EDITOR $index_edit
+    if [ $(cat $index | wc -l) -eq $(cat $index_edit | wc -l) ]; then
+        max=$(($(cat $index | wc -l)+1))
+        counter=1
+        while [ $counter -le $max ]; do
+            a="$(cat $index | sed "${counter}q;d")"
+            b="$(cat $index_edit | sed "${counter}q;d")"
+            counter=$(($counter+1))
+            [ "$a" = "$b" ] && continue
+            [ -e "$b" ] && echo "File exists: $b" && continue
+            mv "$a" "$b"
+        done
+    else
+        echo "Number of lines must stay the same"
+    fi
+    rm $index $index_edit
+}}
+
+cmd fzf_jump ${{
+    res="$(fzf --prompt='fzf jump > ' | sed 's/\\/\\\\/g;s/"/\\"/g')"
+    [ ! -z "$res" ] && lf -remote "send $id select \"$res\""
+}}
+
+cmd rg_jump ${{
+    res="$( \
+        RG_PREFIX="rg --column --line-number --no-heading --color=always \
+            --smart-case "
+        FZF_DEFAULT_COMMAND="$RG_PREFIX ''" \
+            fzf --bind "change:reload:$RG_PREFIX {q} || true" \
+            --ansi --prompt 'rg jump > ' \
+            | cut -d':' -f1
+    )"
+    [ ! -z "$res" ] && lf -remote "send $id select \"$res\""
+}}
+
+# unmap default
+map . set hidden!
+map q quit
+map j down
+map k up
+map h updir
+map <m-2> updir
+map l open
+map <m-1> select
+map J page-down
+map K page-up
+map <c-j> scroll-down
+map <c-k> scroll-up
+map <enter> open
+map d delete
+map r rename
+map R bulk-rename
+map <space> toggle
+map v :toggle; down
+map V :toggle; up
+map c cut
+map y copy
+map p paste
+map x extract
+map z push :compress<space>
+map ad push :mkdir<space>
+map af push :mkfile<space>
+map f fzf_jump
+map i $$EDITOR $f
+map e $bash
+map gd cd ~/Downloads
+map gp cd ~/Projects
+map gm cd ~/Music
+map gv cd ~/Video
+map gu cd /run/media/
+map gr cd /
+
+cmd on-quit clear

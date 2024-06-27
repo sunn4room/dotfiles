@@ -1,5 +1,7 @@
 { config, lib, pkgs, ... }: {
 
+  boot.loader.systemd-boot.configurationLimit = 2;
+
   environment.systemPackages = with pkgs; [
     neovim
     git
@@ -30,6 +32,24 @@
   users.users.sunny.initialPassword = "sunny";
   users.users.sunny.isNormalUser = true;
   users.users.sunny.extraGroups = [ "wheel" ];
+  users.users.guest.initialPassword = "guest";
+  users.users.guest.isNormalUser = true;
+
+  security.sudo.extraRules = [
+    {
+      users = [ "sunny" ];
+      commands = [
+        {
+          command = "/run/current-system/sw/bin/systemctl poweroff";
+          options = [ "SETENV" "NOPASSWD" ];
+        }
+        {
+          command = "/run/current-system/sw/bin/systemctl reboot";
+          options = [ "SETENV" "NOPASSWD" ];
+        }
+      ];
+    }
+  ];
 
   services.openssh.enable = true;
   services.cron.enable = true;

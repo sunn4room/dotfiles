@@ -10,5 +10,6 @@ echo
 echo "> rebuild nixos"
 sudo nixos-rebuild switch \
 	--flake "{{ .chezmoi.sourceDir }}#{{ .chezmoi.hostname }}" \
-	--option substituters "https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store https://cache.nixos.org"
-
+	--option substituters "https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store https://mirror.sjtu.edu.cn/nix-channels/store https://mirrors.ustc.edu.cn/nix-channels/store https://cache.nixos.org"
+sudo nix-env --delete-generations +2 --profile /nix/var/nix/profiles/system
+sudo nix-collect-garbage
