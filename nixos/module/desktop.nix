@@ -4,13 +4,13 @@
     alacritty
     qutebrowser
     xorg.libxcvt
-    xorg.xbacklight
     xsel
     clipit
     picom
     libnotify
     i3lock
     xautolock
+    brightnessctl
     dunst
     feh
     mpv
