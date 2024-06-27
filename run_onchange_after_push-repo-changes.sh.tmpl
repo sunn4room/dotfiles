@@ -10,7 +10,7 @@ if test "$(git status -s | wc -l)" -ne "0"; then
 	echo
 	echo "> push repo changes"
 	git add --all
-	git commit -m "add bash config"
+	git commit -m "add omen host"
 	git remote set-url origin git@gitee.com:sunn4room/dotfiles.git
 	git push origin main
 fi

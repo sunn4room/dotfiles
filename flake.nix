@@ -14,6 +14,10 @@
     inherit (self) outputs;
   in {
     nixosConfigurations = {
+      omen = nixpkgs.lib.nixosSystem {
+        specialArgs = {inherit inputs outputs;};
+        modules = [./nixos/omen.nix];
+      };
       vbox = nixpkgs.lib.nixosSystem {
         specialArgs = {inherit inputs outputs;};
         modules = [./nixos/vbox.nix];
