@@ -21,6 +21,8 @@
   services.xserver.enable = true;
   services.xserver.displayManager.startx.enable = true;
   services.xserver.windowManager.awesome.enable = true;
+  services.pipewire.enable = true;
+  services.pipewire.pulse.enable = true;
 
   fonts = {
     packages = with pkgs; [
