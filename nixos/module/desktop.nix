@@ -4,6 +4,7 @@
     alacritty
     qutebrowser
     xorg.libxcvt
+    xorg.xbacklight
     xsel
     clipit
     picom
@@ -23,8 +24,7 @@
   services.xserver.enable = true;
   services.xserver.displayManager.startx.enable = true;
   services.xserver.windowManager.awesome.enable = true;
-  services.pipewire.enable = true;
-  services.pipewire.pulse.enable = true;
+  hardware.pulseaudio.enable = true;
 
   fonts = {
     packages = with pkgs; [

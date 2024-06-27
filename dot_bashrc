@@ -1,3 +1,38 @@
+add_path() {
+	case ":$PATH:" in
+		*":$1:"*) ;;
+		*) export PATH="$1:$PATH" ;;
+	esac
+}
+
+add_path "$HOME/.local/bin"
+add_path "$HOME/.yarn/bin"
+add_path "$HOME/.cargo/bin"
+export EDITOR="nvim"
+export GTK_IM_MODULE=fcitx
+export QT_IM_MODULE=fcitx
+export XMODIFIERS=@im=fcitx
+export QT_QPA_PLATFORMTHEME=qt5ct
+export FZF_DEFAULT_OPTS='
+--ansi
+--algo=v1
+--tiebreak=chunk,begin,length,index
+--layout=reverse
+--info=inline
+--no-separator
+--color=fg:white,hl:magenta,fg+:bright-white,bg+:-1,hl+:bright-magenta
+--color=prompt:green,query:bright-white,info:cyan,pointer:bright-magenta,marker:magenta,header:blue,spinner:red
+--bind="change:first,tab:down,btab:up"
+'
+export FZF_DEFAULT_COMMAND='
+fd -H -L
+--strip-cwd-prefix
+--exclude={.git,.idea,.cache,.sass-cache,node_modules,.npm,build,target}
+'
+export PAGER="less"
+export LESS="-R"
+export GOPROXY="https://goproxy.cn,direct"
+
 [[ $- != *i* ]] && return
 
 # bash
