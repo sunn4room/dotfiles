@@ -1,0 +1,74 @@
+[[ $- != *i* ]] && return
+
+# bash
+set -o vi
+bind '"\e[A": history-search-backward'
+bind '"\e[B": history-search-forward'
+
+# color
+# shellcheck disable=SC2034
+blk='\001\033[01;30m\002'
+# shellcheck disable=SC2034
+red='\001\033[01;31m\002'
+# shellcheck disable=SC2034
+grn='\001\033[01;32m\002'
+# shellcheck disable=SC2034
+ylw='\001\033[01;33m\002'
+# shellcheck disable=SC2034
+blu='\001\033[01;34m\002'
+# shellcheck disable=SC2034
+pur='\001\033[01;35m\002'
+# shellcheck disable=SC2034
+cyn='\001\033[01;36m\002'
+# shellcheck disable=SC2034
+wht='\001\033[01;37m\002'
+# shellcheck disable=SC2034
+clr='\001\033[00m\002'
+
+# banner
+echo -ne "${grn}"
+cat ~/.banner
+echo -ne "${clr}"
+
+# prompt
+__prompt_status() {
+	RETURN_CODE=$?
+	if test $RETURN_CODE -ne 0; then
+		echo -ne "\001\033[1;34m\002get \001\033[1;31m\002\x1f$RETURN_CODE\n\x1f"
+	fi
+}
+__prompt_git() {
+	if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+		local GIT_INFO
+		GIT_INFO="$(git branch --show-current)"
+		test -z "$GIT_INFO" && GIT_INFO="$(git rev-parse --short HEAD)"
+		local GIT_STATUS
+		GIT_STATUS="$(git status -s | wc -l)"
+		if test "$GIT_STATUS" -eq 0; then
+			echo -ne " \001\033[1;34m\002git \001\033[1;32m\002\x1f$GIT_INFO"
+		else
+			echo -ne " \001\033[1;34m\002git \001\033[1;31m\002\x1f$GIT_INFO"
+		fi
+	fi
+}
+__prompt_envs() {
+	local ENVS=""
+	if test -n "$TMUX"; then
+		ENVS="$ENVS,tmux:$(tmux display-message -p "#S")"
+	fi
+	if test -n "$CHEZMOI"; then
+		ENVS="$ENVS,chezmoi"
+	fi
+	if test -n "$lf"; then
+		ENVS="$ENVS,lf"
+	fi
+	if test -n "$GHPROXY"; then
+		ENVS="$ENVS,ghproxy"
+	fi
+	if test -n "$ENVS"; then
+		echo -ne " \001\033[1;34m\002env \001\033[1;35m\002${ENVS:1}"
+	fi
+}
+
+PS1='$(__prompt_status)\n\[\e[1;34m\]cwd \[\e[1;36m\]\w$(__prompt_git)$(__prompt_envs)\n\[\e[1;34m\]run \[\e[0m\]'
+
