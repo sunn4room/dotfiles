@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+sleep 0.2
+
+if [[ "$1" == qute://* ]]; then
+	qutebrowser "$1"
+elif [[ "$1" == edge://* ]]; then
+	microsoft-edge-stable "$1"
+else
+	WCLASS="$(wclass)"
+	if [ "$WCLASS" = "qutebrowser" ]; then
+		qutebrowser "$1"
+	elif [ "$WCLASS" = "Microsoft-edge" ]; then
+		microsoft-edge-stable "$1"
+	else
+		xdg-open "$1"
+	fi
+fi

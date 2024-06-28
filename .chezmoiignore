@@ -8,6 +8,7 @@
 
 {{ if ne .chezmoi.username "sunny" -}}
 /.ssh/
+/.config/web
 /.gitconfig
 /decrypt-private-key.sh
 /rebuild-nixos.sh

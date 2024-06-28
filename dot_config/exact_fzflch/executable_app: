@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+if [ "$#" -eq 0 ]; then
+    test -z $XDG_DATA_DIRS && XDG_DATA_DIRS="/usr/share:$HOME/.local/share"
+    echo $XDG_DATA_DIRS \
+    | tr ":" "\n" \
+    | sed 's#$#/applications#' \
+    | while read line; do
+        test -d "$line" && fd --base-directory "$line" -e desktop
+    done \
+    | sed 's#\.desktop$##'
+else
+    spawn gtk-launch "$1"
+fi

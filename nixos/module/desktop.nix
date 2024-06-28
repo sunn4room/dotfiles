@@ -5,6 +5,7 @@
     qutebrowser
     xorg.libxcvt
     xsel
+    gtk3
     clipit
     picom
     libnotify

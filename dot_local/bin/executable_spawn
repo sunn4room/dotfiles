@@ -1,0 +1,16 @@
+#!/usr/bin/env sh
+
+if test "$#" -eq "0"; then
+	exit 1
+fi
+
+CMD=""
+for arg in "$@"; do
+	arg="$(printf 'x%sx' "$arg" | sed -e 's/\\/\\\\/g' -e 's/\"/\\\"/g')"
+	arg="${arg//$'\n'/\\n}"
+	CMD="${CMD}\"${arg:1:-1}\","
+done
+
+awesome-client <<EOF
+require("awful").spawn({${CMD}})
+EOF

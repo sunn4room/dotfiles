@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+if [ "$#" -eq 0 ]; then
+	sed 's/   /   '$'\e[1;34m''/;s/$/'$'\e[0m''/' ~/.config/web/bookmark
+else
+	echo "$1" | sed 's#^.*   ##' | xargs -I {} spawn browse "{}" >/dev/null 2>&1
+fi

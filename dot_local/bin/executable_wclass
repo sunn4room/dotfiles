@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+SCRIPT="
+if client.focus then
+    return client.focus.class
+else
+    return \"\"
+end
+"
+
+WCLASS=$(awesome-client "$SCRIPT" | awk '{print $2}')
+echo "${WCLASS:1:-1}"
