@@ -23,6 +23,7 @@
     (libsForQt5.fcitx5-with-addons.override {addons = [
       pkgs.libsForQt5.fcitx5-chinese-addons
     ];})
+    intel-gpu-tools
   ];
 
   services.xserver.enable = true;

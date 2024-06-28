@@ -13,6 +13,7 @@
   boot.extraModulePackages = [ ];
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+  boot.supportedFilesystems = [ "ntfs" ];
   hardware.cpu.intel.updateMicrocode = true;
   hardware.enableRedistributableFirmware = true;
   hardware.opengl.enable = true;
@@ -24,6 +25,8 @@
   fileSystems."/".fsType = "ext4";
   fileSystems."/boot".device = "/dev/disk/by-uuid/CD34-7B8E";
   fileSystems."/boot".fsType = "vfat";
+  fileSystems."/data".device = "/dev/nvme0n1p5";
+  fileSystems."/data".fsType = "ntfs";
 
   time.timeZone = "Asia/Shanghai";
   i18n.defaultLocale = "en_US.UTF-8";

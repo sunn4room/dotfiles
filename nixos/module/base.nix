@@ -1,6 +1,7 @@
 { config, lib, pkgs, ... }: {
 
   boot.loader.systemd-boot.configurationLimit = 2;
+  boot.supportedFilesystems = [ "xfs" "vfat" ];
 
   environment.systemPackages = with pkgs; [
     gcc
