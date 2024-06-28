@@ -1,7 +1,10 @@
 [user]
 	email = sunn4room@163.com
 	name = sunn4room
+	signingkey = sunn4room
 
 [init]
 	defaultBranch = main
 
+[commit]
+	gpgsign = true
