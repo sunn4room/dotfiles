@@ -12,6 +12,7 @@ xset dpms 0 0 0
 picom &
 clipit &
 dunst &
+fcitx5 &
 xautolock -time 10 -locker 'xset +dpms dpms 5 5 5; i3lock -n -c "{{ .base16.color00 }}"; xset dpms 0 0 0' -notify 10 -notifier 'notify-send -t 10000 "lock screen soon"' &
 
 exec awesome

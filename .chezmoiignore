@@ -9,6 +9,8 @@
 {{ if ne .chezmoi.username "sunny" -}}
 /.ssh/
 /.config/web
+/.config/fzflch/bookmark
+/.config/fzflch/query:
 /.gitconfig
 /decrypt-private-key.sh
 /rebuild-nixos.sh

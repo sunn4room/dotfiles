@@ -20,6 +20,9 @@
     noto-fonts-emoji
     jetbrains-mono
     capitaine-cursors
+    (libsForQt5.fcitx5-with-addons.override {addons = [
+      pkgs.libsForQt5.fcitx5-chinese-addons
+    ];})
   ];
 
   services.xserver.enable = true;
