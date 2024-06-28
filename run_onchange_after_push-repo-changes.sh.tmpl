@@ -9,8 +9,13 @@ cd "${CHEZMOI_SOURCE_DIR}"
 if test "$(git status -s | wc -l)" -ne "0"; then
 	echo
 	echo "> push repo changes"
+	git status
 	git add --all
-	git commit -m "add nfts support for pc"
+	read -p "commit message: " -d $'\n' MSG
+	if test -z "$MSG"; then
+		MSG="-"
+	fi
+	git commit -m "$MSG"
 	git remote set-url origin git@gitee.com:sunn4room/dotfiles.git
 	git push origin main
 fi
