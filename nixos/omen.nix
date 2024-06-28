@@ -35,5 +35,10 @@
 
   services.libinput.enable = true;
 
+  environment.systemPackages = with pkgs; [
+    microsoft-edge
+    keepassxc
+  ];
+
 }
 

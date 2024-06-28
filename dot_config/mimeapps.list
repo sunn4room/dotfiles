@@ -1,0 +1,10 @@
+[Default Applications]
+x-scheme-handler/https=org.qutebrowser.qutebrowser.desktop
+x-scheme-handler/http=org.qutebrowser.qutebrowser.desktop
+text/html=org.qutebrowser.qutebrowser.desktop
+application/json=nvim.desktop
+application/zip=atool.desktop
+application/x-tar=atool.desktop
+application/gzip=atool.desktop
+application/pdf=org.pwmt.zathura-pdf-mupdf.desktop
+application/octet-stream=mpv.desktop

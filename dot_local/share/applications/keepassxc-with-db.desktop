@@ -1,0 +1,5 @@
+[Desktop Entry]
+Name=KeePassXC with Database
+Exec=keepassxc-with-db
+Terminal=false
+Type=Application

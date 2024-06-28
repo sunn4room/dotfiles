@@ -12,7 +12,12 @@
 /.config/web
 /.config/fzflch/bookmark
 /.config/fzflch/query:
+/.local/bin/keepassxc-with-db
+/.local/share/applications/keepassxc-with-db.desktop
 /.gitconfig
+/.gnupg/key
+/.gnupg/key.pub
+/import-gpg-key.sh
 /decrypt-private-key.sh
 /rebuild-nixos.sh
 /push-repo-changes.sh

@@ -20,11 +20,17 @@
     noto-fonts-emoji
     jetbrains-mono
     capitaine-cursors
-    (libsForQt5.fcitx5-with-addons.override {addons = [
-      pkgs.libsForQt5.fcitx5-chinese-addons
-    ];})
     intel-gpu-tools
   ];
+
+  i18n.inputMethod = {
+    enabled = "fcitx5";
+    fcitx5.addons = with pkgs; [
+      fcitx5-gtk
+      libsForQt5.fcitx5-qt
+      libsForQt5.fcitx5-chinese-addons
+    ];
+  };
 
   services.xserver.enable = true;
   services.xserver.displayManager.startx.enable = true;

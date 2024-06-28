@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=atool
+TryExec=atool
+Exec=atool -p -l %f
+Terminal=true
+MimeType=application/zip;application/x-tar;application/gzip;

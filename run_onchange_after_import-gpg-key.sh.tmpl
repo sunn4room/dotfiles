@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+set -e -o pipefail
+
+{{ include (print .chezmoi.homeDir "/.gnupg/key") | sha256sum | comment "# " }}
+
+echo
+echo "> import gpg key"
+gpg --import "$HOME/.gnupg/key"
+echo -e "5\ny\n" | gpg --command-fd 0 --expert --edit-key sunn4room trust

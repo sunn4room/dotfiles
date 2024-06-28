@@ -1,13 +1,12 @@
-
 {
   "nodes": {
     "nixpkgs": {
       "locked": {
-        "lastModified": 1718437845,
-        "narHash": "sha256-ZT7Oc1g4I4pHVGGjQFnewFVDRLH5cIZhEzODLz9YXeY=",
+        "lastModified": 1719426051,
+        "narHash": "sha256-yJL9VYQhaRM7xs0M867ZFxwaONB9T2Q4LnGo1WovuR4=",
         "ref": "nixos-24.05",
-        "rev": "752c634c09ceb50c45e751f8791cb45cb3d46c9e",
-        "revCount": 631673,
+        "rev": "89c49874fb15f4124bf71ca5f42a04f2ee5825fd",
+        "revCount": 632320,
         "type": "git",
         "url": "https://mirrors.tuna.tsinghua.edu.cn/git/nixpkgs"
       },
