@@ -15,6 +15,10 @@
   boot.loader.efi.canTouchEfiVariables = true;
   hardware.cpu.intel.updateMicrocode = true;
   hardware.enableRedistributableFirmware = true;
+  hardware.opengl.enable = true;
+  hardware.opengl.extraPackages = with pkgs; [
+    intel-vaapi-driver
+  ];
 
   fileSystems."/".device = "/dev/disk/by-uuid/974b0c44-a344-44ad-8500-d7f613e4bcfb";
   fileSystems."/".fsType = "ext4";

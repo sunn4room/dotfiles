@@ -107,3 +107,8 @@ __prompt_envs() {
 
 PS1='$(__prompt_status)\n\[\e[1;34m\]cwd \[\e[1;36m\]\w$(__prompt_git)$(__prompt_envs)\n\[\e[1;34m\]run \[\e[0m\]'
 
+alias hm="chezmoi"
+alias vim="nvim"
+alias vi="nvim"
+alias v="nvim"
+alias fm="lf"

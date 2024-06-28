@@ -1,0 +1,25 @@
+#!/usr/bin/env sh
+
+if test "$#" -eq "0"; then
+	echo "lock"
+	echo "logout"
+	echo "poweroff"
+	echo "reboot"
+else
+	case "$1" in
+	lock)
+		xset +dpms dpms 5 5 5 >/dev/null 2>&1
+		i3lock -n -c "{{ .base16.color00 }}" >/dev/null 2>&1
+		xset dpms 0 0 0 >/dev/null 2>&1
+		;;
+	logout)
+		awesome-client "awesome.quit()" >/dev/null 2>&1
+		;;
+	poweroff)
+		sudo systemctl poweroff >/dev/null 2>&1
+		;;
+	reboot)
+		sudo systemctl reboot >/dev/null 2>&1
+		;;
+	esac
+fi

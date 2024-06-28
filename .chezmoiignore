@@ -8,6 +8,7 @@
 
 {{ if ne .chezmoi.username "sunny" -}}
 /.ssh/
+/.config/rclone
 /.config/web
 /.config/fzflch/bookmark
 /.config/fzflch/query:
