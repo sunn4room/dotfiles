@@ -28,6 +28,7 @@
     unzip
     atool
     rclone
+    sqlite
   ];
   environment.variables = {
     EDITOR = "nvim";
