@@ -1,7 +1,7 @@
 [Default Applications]
-x-scheme-handler/https=org.qutebrowser.qutebrowser.desktop
-x-scheme-handler/http=org.qutebrowser.qutebrowser.desktop
-text/html=org.qutebrowser.qutebrowser.desktop
+x-scheme-handler/https=microsoft-edge.desktop
+x-scheme-handler/http=microsoft-edge.desktop
+text/html=microsoft-edge.desktop
 application/json=nvim.desktop
 application/zip=atool.desktop
 application/x-tar=atool.desktop

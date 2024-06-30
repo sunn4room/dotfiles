@@ -484,6 +484,18 @@ awful.rules.rules = {
           c.maximized_horizontal = false
           c.maximized_vertical = false
         end),
+        awful.key({ modkey }, "i", function(c)
+          awful.spawn({
+            "notify-send",
+            table.concat({
+              "class:    " .. (c.class or ""),
+              "instance: " .. (c.instance or ""),
+              "type:     " .. (c.type or ""),
+              "role:     " .. (c.role or ""),
+              "title:    " .. (c.name or ""),
+            }, "\n"),
+          })
+        end),
         nil
       ),
       buttons = clientbuttons,
