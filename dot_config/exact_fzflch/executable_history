@@ -1,0 +1,10 @@
+#!/usr/bin/env sh
+
+if test "$#" -eq 0; then
+	TMPDIR="$(mktemp -d)"
+	cp "${HOME}/.config/microsoft-edge/Default/History" "${TMPDIR}/History"
+	sqlite3 -separator "   " "${TMPDIR}/History" 'select title, url from urls order by last_visit_time desc' | sed 's/   /   '$'\e[1;34m''/;s/$/'$'\e[0m''/'
+	rm -rf "${TMPDIR}"
+else
+	echo "$1" | sed 's#^.*   ##' | xargs -I {} spawn browse "{}" >/dev/null 2>&1
+fi

@@ -4,16 +4,12 @@
       "locked": {
         "lastModified": 1719426051,
         "narHash": "sha256-yJL9VYQhaRM7xs0M867ZFxwaONB9T2Q4LnGo1WovuR4=",
-        "ref": "nixos-24.05",
-        "rev": "89c49874fb15f4124bf71ca5f42a04f2ee5825fd",
-        "revCount": 632320,
-        "type": "git",
-        "url": "https://mirrors.tuna.tsinghua.edu.cn/git/nixpkgs"
+        "type": "tarball",
+        "url": "https://github.moeyy.xyz/https://github.com/NixOS/nixpkgs/archive/89c49874fb15f4124bf71ca5f42a04f2ee5825fd.zip"
       },
       "original": {
-        "ref": "nixos-24.05",
-        "type": "git",
-        "url": "https://mirrors.tuna.tsinghua.edu.cn/git/nixpkgs"
+        "type": "tarball",
+        "url": "https://github.moeyy.xyz/https://github.com/NixOS/nixpkgs/archive/89c49874fb15f4124bf71ca5f42a04f2ee5825fd.zip"
       }
     },
     "root": {

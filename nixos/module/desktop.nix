@@ -33,7 +33,13 @@
   };
 
   services.xserver.enable = true;
-  services.xserver.displayManager.startx.enable = true;
+  services.xserver.dpi = 120;
+  services.xserver.displayManager.lightdm.enable = true;
+  services.xserver.displayManager.lightdm.greeters.gtk.enable = true;
+  services.xserver.displayManager.lightdm.greeters.gtk.cursorTheme.name = "capitaine-cursors-white";
+  services.xserver.displayManager.lightdm.greeters.gtk.cursorTheme.size = 32;
+  services.xserver.displayManager.lightdm.greeters.gtk.indicators = [ "~host" "~spacer" "~power" ];
+  services.xserver.displayManager.lightdm.greeters.gtk.extraConfig = "font-name = monospace 10";
   services.xserver.windowManager.awesome.enable = true;
   hardware.pulseaudio.enable = true;
 

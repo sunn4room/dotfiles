@@ -272,10 +272,20 @@ return {
               cmp.select_next_item {
                 behavior = cmp.SelectBehavior.Select,
               }
-            elseif luasnip.expand_or_jumpable() then
-              luasnip.expand_or_jump()
+            elseif codegeex.visible() then
+              return
             else
-              fallback()
+              if vim.api.nvim_get_mode().mode == "i" then
+                local cursor = vim.api.nvim_win_get_cursor(0)
+                local prefix = vim.api.nvim_buf_get_lines(0, cursor[1] - 1, cursor[1], true)[1]:sub(1, col)
+                if vim.fn.trim(prefix) == "" then
+                  fallback()
+                else
+                  cmp.complete()
+                end
+              else
+                cmp.complete()
+              end
             end
           end, { "i", "c" }),
           ["<s-tab>"] = cmp.mapping(function(fallback)
@@ -283,12 +293,24 @@ return {
               cmp.select_prev_item {
                 behavior = cmp.SelectBehavior.Select,
               }
-            elseif luasnip.jumpable(-1) then
-              luasnip.jump(-1)
+            elseif codegeex.visible() then
+              return
             else
-              fallback()
+              if vim.api.nvim_get_mode().mode == "i" then
+                codegeex.complete()
+              end
             end
           end, { "i", "c" }),
+          ["<c-n>"] = cmp.mapping(function(fallback)
+            if luasnip.expand_or_jumpable() then
+              luasnip.expand_or_jump()
+            end
+          end, { "i" }),
+          ["<c-p>"] = cmp.mapping(function(fallback)
+            if luasnip.jumpable(-1) then
+              luasnip.jump(-1)
+            end
+          end, { "i" }),
           ["<cr>"] = cmp.mapping(function(fallback)
             if cmp.visible() then
               cmp.confirm { select = true }
@@ -313,12 +335,6 @@ return {
               end
             end
           end, { "i", "c" }),
-          ["<c-space>"] = cmp.mapping(function()
-            cmp.complete()
-          end, { "i", "c" }),
-          ["<c-a>"] = cmp.mapping(function()
-            codegeex.complete()
-          end, { "i" }),
         },
       }
       cmp.setup.cmdline(":", {

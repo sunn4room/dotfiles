@@ -1,6 +1,0 @@
-#!/usr/bin/env sh
-
-LANG="${1:-"zh-Hans"}"
-TEXT="${2}"
-test -z "${TEXT}" && read -d $'\n' TEXT
-microsoft-edge-stable --app="https://www.bing.com/translator?ref=TThis&text=$(urlencode "${TEXT}")&from=auto&to=${LANG}"
