@@ -23,6 +23,13 @@
     intel-gpu-tools
   ];
 
+  environment.variables = {
+    GTK_THEME = "Adwaita:dark";
+  };
+
+  qt.enable = true;
+  qt.style = "adwaita-dark";
+
   i18n.inputMethod = {
     enabled = "fcitx5";
     fcitx5.addons = with pkgs; [
