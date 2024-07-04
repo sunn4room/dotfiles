@@ -2,7 +2,7 @@
 
   environment.systemPackages = with pkgs; [
     alacritty
-    qutebrowser
+    microsoft-edge
     xorg.libxcvt
     xsel
     gtk3

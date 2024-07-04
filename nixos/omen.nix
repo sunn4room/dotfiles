@@ -36,9 +36,10 @@
   services.libinput.enable = true;
 
   environment.systemPackages = with pkgs; [
-    microsoft-edge
     keepassxc
   ];
+
+  virtualisation.virtualbox.host.enable = true;
 
 }
 
