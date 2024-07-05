@@ -69,7 +69,7 @@ __prompt_cwd() {
 		else
 			printf "${RED}"
 		fi
-		printf '[%s]' "${GIT_BRANCH}"
+		printf ' [%s]' "${GIT_BRANCH}"
 	fi
 }
 __prompt_env() {
@@ -98,6 +98,7 @@ __prompt_end() {
 PS1='$(__prompt_start)$(__prompt_user)$(__prompt_host)$(__prompt_cwd)$(__prompt_env)$(__prompt_end)'
 
 alias hm="chezmoi"
+alias hmg="chezmoi cd"
 alias hms="chezmoi status"
 alias hme="chezmoi edit --apply"
 alias hma="chezmoi add"

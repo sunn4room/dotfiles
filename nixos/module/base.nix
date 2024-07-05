@@ -31,7 +31,7 @@
     atool
     rclone
     sqlite
-    tty-clock
+    peaclock
   ];
   environment.variables = {
     EDITOR = "nvim";
