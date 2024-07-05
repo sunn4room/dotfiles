@@ -34,12 +34,14 @@
   networking.wireless.iwd.enable = true;
 
   services.libinput.enable = true;
+  services.libinput.touchpad.naturalScrolling = true;
 
   environment.systemPackages = with pkgs; [
     keepassxc
   ];
 
   virtualisation.virtualbox.host.enable = true;
+  users.users.sunny.extraGroups = [ "vboxusers" ];
 
 }
 
