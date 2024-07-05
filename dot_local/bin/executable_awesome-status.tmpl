@@ -1,0 +1,83 @@
+#!/usr/bin/env python3
+
+import sched
+import time
+import psutil
+
+s = sched.scheduler(time.time, time.sleep)
+bar = [" ", "▁", "▂", "▃", "▄", "▅", "▆", "▇", "█"]
+cpu = [0, 0, 0, 0]
+mem = [0, 0, 0, 0]
+rx = [0, 0, 0, 0]
+tx = [0, 0, 0, 0]
+rxt = 0
+txt = 0
+
+def p2n(p):
+    if p < 12.5:
+        return 0
+    elif p < 25:
+        return 1
+    elif p < 37.5:
+        return 2
+    elif p < 50:
+        return 3
+    elif p < 62.5:
+        return 4
+    elif p < 75:
+        return 5
+    elif p < 87.5:
+        return 6
+    elif p < 100:
+        return 7
+    else:
+        return 8
+
+def b2n(b):
+    if b < 65535:
+        return 0
+    elif b < 131072:
+        return 1
+    elif b < 262144:
+        return 2
+    elif b < 524288:
+        return 3
+    elif b < 1048576:
+        return 4
+    elif b < 2097152:
+        return 5
+    elif b < 4194304:
+        return 6
+    elif b < 8388608:
+        return 7
+    else:
+        return 8
+
+def loop(cur):
+    global cpu, mem, rx, tx, rxt, txt, time
+    next = cur + 1
+    s.enterabs(next, 0, loop, (next,))
+
+    cpun = p2n(psutil.cpu_percent())
+    cpu.pop(0)
+    cpu.append(cpun)
+
+    memn = p2n(psutil.virtual_memory().percent)
+    mem.pop(0)
+    mem.append(memn)
+
+    net = psutil.net_io_counters()
+    rxn = b2n(net.bytes_recv - rxt)
+    rxt = net.bytes_recv
+    txn = b2n(net.bytes_sent - txt)
+    txt = net.bytes_sent
+    rx.pop(0)
+    rx.append(rxn)
+    tx.pop(0)
+    tx.append(txn)
+
+    print(" <span foreground='{{ .base16.color15 }}' background='{{ .base16.color10 }}'>%s</span> <span foreground='{{ .base16.color15 }}' background='{{ .base16.color10 }}'>%s</span> <span foreground='{{ .base16.color15 }}' background='{{ .base16.color10 }}'>%s</span> <span foreground='{{ .base16.color15 }}' background='{{ .base16.color10 }}'>%s</span> %s " % ("".join(bar[n] for n in cpu), "".join(bar[n] for n in mem), "".join(bar[n] for n in rx), "".join(bar[n] for n in tx), time.strftime("%H:%M")), flush=True)
+
+
+s.enter(0, 0, loop, (time.time(),))
+s.run()

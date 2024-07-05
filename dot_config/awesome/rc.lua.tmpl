@@ -244,13 +244,7 @@ scrachpad = function()
   end
 end
 
-local function set_wallpaper(s)
-  gears.wallpaper.maximized(beautiful.wallpaper, s, false)
-end
--- screen.connect_signal("property::geometry", set_wallpaper)
-
 awful.screen.connect_for_each_screen(function(s)
-  -- set_wallpaper(s)
 
   local tags = awful.tag({ "1", "2", "3", "4", "5", "6", "7", "8", "9", "0" }, s, awful.layout.suit.tile.right)
   tags[10].layout = awful.layout.suit.max
@@ -270,6 +264,10 @@ awful.screen.connect_for_each_screen(function(s)
       layouttext.markup = " <span foreground='{{ .base16.color05 }}'>[+]</span> "
     end
   end
+  local statustext = wibox.widget.textbox(" - ")
+  awful.spawn.with_line_callback({"awesome-status"}, { stdout = function(line)
+    statustext.markup = line
+  end })
   tag.connect_signal("property::selected", update_layout_text)
   tag.connect_signal("property::layout", update_layout_text)
   s.mybar:setup({
@@ -333,7 +331,7 @@ awful.screen.connect_for_each_screen(function(s)
         {
           layout = wibox.container.background,
           bg = "{{ .base16.color00 }}",
-          wibox.widget.textclock(" %y/%m/%d %H:%M:%S <span foreground='{{ .base16.color05 }}'>%a</span> ", 1),
+          statustext,
         },
       },
     },

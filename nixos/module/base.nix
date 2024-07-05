@@ -6,8 +6,9 @@
 
   environment.systemPackages = with pkgs; [
     gcc
-    (python3.withPackages (python-pkgs: [
-      python-pkgs.requests
+    (python3.withPackages (python-pkgs: with python-pkgs; [
+      requests
+      psutil
     ]))
     neovim
     git
@@ -30,6 +31,7 @@
     atool
     rclone
     sqlite
+    tty-clock
   ];
   environment.variables = {
     EDITOR = "nvim";
