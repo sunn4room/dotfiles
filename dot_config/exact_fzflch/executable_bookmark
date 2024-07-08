@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 if [ "$#" -eq 0 ]; then
-	sed 's/   /   '$'\e[1;34m''/;s/$/'$'\e[0m''/' ~/.config/web/bookmark
-else
-	echo "$1" | sed 's#^.*   ##' | xargs -I {} spawn browse "{}" >/dev/null 2>&1
+	jq -r '.roots.other.children[] | select(.name == "bookmark") | .children[] | .name' ~/.config/microsoft-edge/Default/Bookmarks
+elif [ "$#" -eq 1 ]; then
+	spawn xdg-open "$(jq -r '.roots.other.children[] | select(.name == "bookmark") | .children[] | select(.name == "'"$1"'") | .url' ~/.config/microsoft-edge/Default/Bookmarks)"
 fi

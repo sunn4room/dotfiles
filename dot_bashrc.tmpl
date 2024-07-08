@@ -34,8 +34,6 @@ __prompt_start() {
 	printf "${BOLD}"
 	if test "${RETURN_CODE}" -ne 0; then
 		printf "${BLUE}< ${RED}${RETURN_CODE}"
-	else
-		printf "${GRAY}<"
 	fi
 	printf "${NEWLINE}${HOLD}"
 }
@@ -53,7 +51,7 @@ __prompt_host() {
 }
 __prompt_cwd() {
 	printf " ${BLUE}# "
-	if test "$(stat -c %u "${PWD}")" -eq 0; then
+	if test "$(stat -c %u "$(pwd -P)")" -eq 0; then
 		printf "${RED}"
 	else
 		printf "${CYAN}"

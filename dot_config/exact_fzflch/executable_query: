@@ -1,12 +1,9 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 if [ "$#" -eq 0 ]; then
-	awk '{print $1}' ~/.config/web/query
+	jq -r '.roots.other.children[] | select(.name == "query") | .children[] | .name' ~/.config/microsoft-edge/Default/Bookmarks
 elif [ "$#" -eq 1 ]; then
 	printf '%s\n' "input?"
 else
-	grep -E "^$1   " ~/.config/web/query |
-		awk '{print $2}' |
-		sed -E 's/\{\}/'"$(urlencode "$3" | sed 's#/#\\/#g')"'/' |
-		xargs -I {} spawn browse "{}" >/dev/null 2>&1
+	spawn xdg-open "$(jq -r '.roots.other.children[] | select(.name == "query") | .children[] | select(.name == "'"$1"'") | .url' ~/.config/microsoft-edge/Default/Bookmarks)$(printf "$3" | jq --slurp --raw-input --raw-output @uri)"
 fi

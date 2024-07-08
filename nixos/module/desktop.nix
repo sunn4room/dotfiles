@@ -22,6 +22,7 @@
     capitaine-cursors
     intel-gpu-tools
     pcmanfm
+    xflux
   ];
 
   environment.variables = {
