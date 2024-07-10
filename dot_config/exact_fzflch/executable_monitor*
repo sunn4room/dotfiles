@@ -1,4 +1,0 @@
-#!/usr/bin/env bash
-
-cp ~/.config/htop/htoprc /tmp/htoprc
-HTOPRC=/tmp/htoprc htop

@@ -1,40 +1,52 @@
 #!/usr/bin/env sh
 
-cd "${HOME}/.config/fzflch" || exit 1
+command -v fzf >/dev/null 2>&1 || exit 1
+cd "${HOME}/.config/fzflch" || exit 2
 module_sel="$(fd -t x | while IFS= read -r module; do
 	if printf '%s' "${module}" | grep -Eq '.*:$'; then
-		"${HOME}/.config/fzflch/${module}" | sed "s/^/${module} /"
+		"./${module}" | sed "s/^/${module} /"
 	else
 		printf '%s\n' "${module}"
 	fi
 done | fzf --prompt "select mod > " --bind "space:accept")"
 
-test -n "${module_sel}" || exit 0
+test -n "${module_sel}" || exit 3
 module="${module_sel%% *}"
 if test "${module_sel}" != "${module}"; then
 	set -- "${module_sel#* }"
+	last_param="$1"
 fi
 while true; do
 	prompt="${module}"
 	if test "$#" != "0"; then
 		prompt="${prompt} $*"
 	fi
-	if printf '%s' "${prompt}" | grep -Eq '\*$'; then
-		"${HOME}/.config/fzflch/${module}" "$@"
+	if test "${last_param}" = '$'; then
+		"./${module}" "$@"
 		break
-	fi
-	if printf '%s' "${prompt}" | grep -Eq '\?$'; then
+	elif test "${last_param}" = '?'; then
 		userinput="$(printf "" | fzf --prompt "${prompt} > " --print-query --no-info)"
+		if test "$?" -ne 1; then
+			break
+		fi
+		if test -z "${userinput}"; then
+			userinput="$(xsel -o)"
+		fi
 		if test -z "${userinput}"; then
 			break
 		else
 			set -- "$@" "${userinput}"
 			prompt="${prompt} ${userinput}"
 		fi
+		selection="$("./${module}" "$@" | fzf --prompt "${prompt} > " --select-1 --exit-0)"
+	elif test "${last_param}" = '+'; then
+		selection="$("./${module}" "$@" | fzf --prompt "${prompt} > " --select-1 --exit-0 --scheme=history --tiebreak=index)"
+	else
+		selection="$("./${module}" "$@" | fzf --prompt "${prompt} > " --select-1 --exit-0)"
 	fi
-	selection="$("${HOME}/.config/fzflch/${module}" "$@" | fzf --prompt "${prompt} > " --select-1 --exit-0)"
 	if test -n "${selection}"; then
 		set -- "$@" "${selection}"
+		last_param="${selection}"
 	else
 		break
 	fi

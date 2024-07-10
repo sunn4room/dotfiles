@@ -34,6 +34,7 @@
     rclone
     sqlite
     peaclock
+    shellcheck-minimal
   ];
   environment.variables = {
     EDITOR = "nvim";

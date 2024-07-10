@@ -1,0 +1,8 @@
+#!/usr/bin/env sh
+
+if test "$#" -eq 0; then
+	printf '$\n'
+else
+	cp ~/.config/htop/htoprc /tmp/htoprc
+	HTOPRC=/tmp/htoprc htop
+fi

@@ -1,9 +1,9 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 
-if [ "$#" -eq 0 ]; then
+if test "$#" -eq 0; then
 	jq -r '.roots.other.children[] | select(.name == "query") | .children[] | .name' ~/.config/microsoft-edge/Default/Bookmarks
-elif [ "$#" -eq 1 ]; then
-	printf '%s\n' "input?"
+elif test "$#" -eq 1; then
+	printf '?\n'
 else
 	spawn xdg-open "$(jq -r '.roots.other.children[] | select(.name == "query") | .children[] | select(.name == "'"$1"'") | .url' ~/.config/microsoft-edge/Default/Bookmarks)$(printf "$3" | jq --slurp --raw-input --raw-output @uri)"
 fi
