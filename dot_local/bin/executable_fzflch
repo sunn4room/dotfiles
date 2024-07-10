@@ -1,31 +1,27 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 command -v fzf >/dev/null 2>&1 || exit 1
 cd "${HOME}/.config/fzflch" || exit 2
-module_sel="$(fd -t x | while IFS= read -r module; do
-	if printf '%s' "${module}" | grep -Eq '.*:$'; then
-		"./${module}" | sed "s/^/${module} /"
+script_str="$(for each_script in *; do
+	if test "${each_script: -1}" = ":"; then
+		"./${each_script}" | sed "s/^/${each_script} /"
 	else
-		printf '%s\n' "${module}"
+		printf '%s\n' "${each_script}"
 	fi
-done | fzf --prompt "select mod > " --bind "space:accept")"
-
-test -n "${module_sel}" || exit 3
-module="${module_sel%% *}"
-if test "${module_sel}" != "${module}"; then
-	set -- "${module_sel#* }"
-	last_param="$1"
+done | fzf --prompt "select > " --bind "space:accept")"
+if test -z "${script_str}"; then
+	exit 3
+elif test "${script_str}" = "${script_str%% *}"; then
+	script=("${script_str}")
+else
+	script=("${script_str%% *}" "${script_str#* }")
 fi
 while true; do
-	prompt="${module}"
-	if test "$#" != "0"; then
-		prompt="${prompt} $*"
-	fi
-	if test "${last_param}" = '$'; then
-		"./${module}" "$@"
+	if test "${script[@]: -1}" = '$'; then
+		"./${script[0]}" "${script[@]:1}"
 		break
-	elif test "${last_param}" = '?'; then
-		userinput="$(printf "" | fzf --prompt "${prompt} > " --print-query --no-info)"
+	elif test "${script[@]: -1}" = '?'; then
+		userinput="$(printf "" | fzf --prompt "${script[*]} > " --print-query --no-info)"
 		if test "$?" -ne 1; then
 			break
 		fi
@@ -35,18 +31,20 @@ while true; do
 		if test -z "${userinput}"; then
 			break
 		else
-			set -- "$@" "${userinput}"
-			prompt="${prompt} ${userinput}"
+			script+=("${userinput}")
 		fi
-		selection="$("./${module}" "$@" | fzf --prompt "${prompt} > " --select-1 --exit-0)"
-	elif test "${last_param}" = '+'; then
-		selection="$("./${module}" "$@" | fzf --prompt "${prompt} > " --select-1 --exit-0 --scheme=history --tiebreak=index)"
+		selection="$("./${script[0]}" "${script[@]:1}" | fzf --prompt "${script[*]} > " --select-1 --exit-0)"
+	elif test "${script[@]: -1}" = '*'; then
+		script_pre=("${script[@]}")
+		unset script_pre[-1]
+		selection="$("./${script_pre[0]}" "${script_pre[@]:1}" "" | fzf --prompt "${script[*]} > " --select-1 --exit-0 --bind "change:reload:./${script_pre[@]} {q}")"
+	elif test "${script[@]: -1}" = '+'; then
+		selection="$("./${script[0]}" "${script[@]:1}" | fzf --prompt "${script[*]} > " --select-1 --exit-0 --scheme=history --tiebreak=index)"
 	else
-		selection="$("./${module}" "$@" | fzf --prompt "${prompt} > " --select-1 --exit-0)"
+		selection="$("./${script[0]}" "${script[@]:1}" | fzf --prompt "${script[*]} > " --select-1 --exit-0)"
 	fi
 	if test -n "${selection}"; then
-		set -- "$@" "${selection}"
-		last_param="${selection}"
+		script+=("${selection}")
 	else
 		break
 	fi
