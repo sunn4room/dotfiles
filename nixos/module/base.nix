@@ -10,7 +10,9 @@
       requests
       psutil
     ]))
+    nodejs_22
     neovim
+    nvimpager
     git
     lazygit
     curl
@@ -35,8 +37,7 @@
   ];
   environment.variables = {
     EDITOR = "nvim";
-    PAGER = "less";
-    LESS = "-R";
+    PAGER = "nvimpager";
     FZF_DEFAULT_OPTS = ''
       --ansi
       --algo=v1

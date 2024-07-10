@@ -101,7 +101,7 @@ map z push :compress<space>
 map ad push :mkdir<space>
 map af push :mkfile<space>
 map f fzf_jump
-map i $$EDITOR $f
+map i $$EDITOR "$f"
 map e $bash
 map gd cd ~/Downloads
 map gp cd ~/Projects

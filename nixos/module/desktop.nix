@@ -27,8 +27,6 @@
 
   environment.variables = {
     GTK_THEME = "Adwaita:dark";
-    QT_SCALE_FACTOR = "1.25";
-    GDK_SCALE = "1.25";
   };
 
   qt.enable = true;
