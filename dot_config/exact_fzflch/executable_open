@@ -1,0 +1,8 @@
+#!/usr/bin/env sh
+
+if "$#" -eq 0; then
+	printf '$\n'
+else
+	cd "${HOME}"
+	fzf | xargs -r -d $'\n' -I{} spawn xdg-open "${HOME}/{}"
+fi

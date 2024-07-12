@@ -24,12 +24,6 @@ while true; do
 		userinput="$(printf "" | fzf --prompt "${script[*]} > " --print-query --no-info)"
 		if test "$?" -ne 1; then
 			break
-		fi
-		if test -z "${userinput}"; then
-			userinput="$(xsel -o)"
-		fi
-		if test -z "${userinput}"; then
-			break
 		else
 			script+=("${userinput}")
 		fi
@@ -37,7 +31,7 @@ while true; do
 	elif test "${script[@]: -1}" = '*'; then
 		script_pre=("${script[@]}")
 		unset script_pre[-1]
-		selection="$("./${script_pre[0]}" "${script_pre[@]:1}" "" | fzf --prompt "${script[*]} > " --select-1 --exit-0 --bind "change:reload:./${script_pre[@]} {q}")"
+		selection="$("./${script_pre[0]}" "${script_pre[@]:1}" "" | fzf --prompt "${script[*]} > " --select-1 --exit-0 --disabled --bind "change:reload:./${script_pre[@]} {q}")"
 	elif test "${script[@]: -1}" = '+'; then
 		selection="$("./${script[0]}" "${script[@]:1}" | fzf --prompt "${script[*]} > " --select-1 --exit-0 --scheme=history --tiebreak=index)"
 	else

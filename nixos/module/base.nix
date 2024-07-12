@@ -6,6 +6,7 @@
 
   environment.systemPackages = with pkgs; [
     gcc
+    file
     (python3.withPackages (python-pkgs: with python-pkgs; [
       requests
       psutil
@@ -35,6 +36,7 @@
     sqlite
     peaclock
     shellcheck-minimal
+    mitmproxy
   ];
   environment.variables = {
     EDITOR = "nvim";
@@ -50,11 +52,7 @@
       --color=prompt:green,query:bright-white,info:cyan,pointer:bright-magenta,marker:magenta,header:blue,spinner:red
       --bind="change:first,tab:down,btab:up"
     '';
-    FZF_DEFAULT_COMMAND = ''
-      fd -H -L
-      --strip-cwd-prefix
-      --exclude={.git,.idea,.cache,.sass-cache,node_modules,.npm,build,target}
-    '';
+    FZF_DEFAULT_COMMAND = "fd -H -L --strip-cwd-prefix --exclude={.git,.idea,.cache,.sass-cache,node_modules,.npm,build,target}";
   };
   environment.sessionVariables = rec {
     XDG_CACHE_HOME  = "$HOME/.cache";

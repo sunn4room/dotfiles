@@ -1,0 +1,13 @@
+#!/usr/bin/env sh
+
+if test "$#" -eq "0"; then
+	iwctl station list | sed "s/\x1b\[[0-9;]*[a-zA-Z]//g" | sed '1,4d;$d' | awk '{print $1}'
+elif test "$#" -eq "1"; then
+	iwctl station "$1" scan
+	sleep 1
+	iwctl station "$1" get-networks | sed "s/\x1b\[[0-9;]*[a-zA-Z]//g" | sed '1,4d;$d;/^  >/d' | awk '{print $1}'
+elif test "$#" -eq "2"; then
+	printf '$\n'
+else
+	iwctl station "$1" connect "$2"
+fi

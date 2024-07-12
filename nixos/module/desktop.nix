@@ -3,6 +3,8 @@
   environment.systemPackages = with pkgs; [
     alacritty
     microsoft-edge
+    neovide
+    zathura
     xorg.libxcvt
     xsel
     gtk3

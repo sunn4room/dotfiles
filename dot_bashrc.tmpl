@@ -117,4 +117,7 @@ alias gitpr="git pull"
 mpvfd() {
 	fd "$@" | sort -R | xargs -r -d "\n" mpv
 }
+microsoft-edge-unsafe() {
+	microsoft-edge --proxy-server="127.0.0.1:$1" --ignore-certificate-errors
+}
 

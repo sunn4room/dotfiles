@@ -5,5 +5,11 @@ if test "$#" -eq 0; then
 elif test "$#" -eq 1; then
 	printf '?\n'
 else
-	spawn xdg-open "$(jq -r '.roots.other.children[] | select(.name == "query") | .children[] | select(.name == "'"$1"'") | .url' ~/.config/microsoft-edge/Default/Bookmarks)$(printf "$3" | jq --slurp --raw-input --raw-output @uri)"
+	userinput="$3"
+	if test -z "${userinput}"; then
+		userinput="$(xsel -o)"
+	fi
+	if test -n "${userinput}"; then
+		spawn xdg-open "$(jq -r '.roots.other.children[] | select(.name == "query") | .children[] | select(.name == "'"$1"'") | .url' ~/.config/microsoft-edge/Default/Bookmarks)$(printf '%s' "${userinput}" | jq --slurp --raw-input --raw-output @uri)"
+	fi
 fi

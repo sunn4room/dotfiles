@@ -341,9 +341,6 @@ end)
 globalkeys = gears.table.join(
   awful.key({ modkey }, "Escape", awesome.restart),
   awful.key({ modkey, "Shift" }, "Escape", awesome.quit),
-  awful.key({ modkey }, "e", function()
-    awful.spawn.with_shell('notify-send -t 60000 "$(xsel -o | fanyi)"')
-  end),
   awful.key({ modkey }, "c", function()
     awful.spawn.with_shell('flameshot gui')
   end),

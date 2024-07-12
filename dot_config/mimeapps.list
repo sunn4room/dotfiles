@@ -1,8 +1,10 @@
 [Default Applications]
 x-scheme-handler/https=microsoft-edge.desktop
 x-scheme-handler/http=microsoft-edge.desktop
+inode/directory=pcmanfm.desktop
+text/plain=neovide.desktop
 text/html=microsoft-edge.desktop
-application/json=nvim.desktop
+application/pdf=org.pwmt.zathura.desktop
 application/zip=atool.desktop
 application/x-tar=atool.desktop
 application/gzip=atool.desktop
