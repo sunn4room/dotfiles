@@ -1,8 +1,8 @@
 #!/usr/bin/env sh
 
-if "$#" -eq 0; then
-	printf '$\n'
-else
+if test "$#" -eq 0; then
 	cd "${HOME}"
-	fzf | xargs -r -d $'\n' -I{} spawn xdg-open "${HOME}/{}"
+	fd -H -L --strip-cwd-prefix --exclude={.git,.idea,.cache,.sass-cache,node_modules,.npm,build,target}
+else
+	spawn xdg-open "${HOME}/${1}"
 fi

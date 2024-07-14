@@ -1,0 +1,3 @@
+[Desktop Entry]
+Name=atool-in-terminal
+Exec=alacritty --class Alacritty,atool -e atool -p -l %f

@@ -3,7 +3,12 @@ set nopreview
 set ratios "1"
 set info size
 
-cmd open $xdg-open "$f"
+cmd open ${{
+    case "$(file --mime-type -Lb "$f")" in
+        text/*) nvim "$f";;
+        application/x-tar|application/x-gzip|application/zip) atool -p -l "$f";;
+    esac
+}}
 
 cmd extract ${{
     atool --extract-to=$PWD "$f"
@@ -81,6 +86,7 @@ map k up
 map h updir
 map <m-2> updir
 map l open
+map o $xdg-open "$f"
 map <m-1> select
 map J page-down
 map K page-up
@@ -101,8 +107,8 @@ map z push :compress<space>
 map ad push :mkdir<space>
 map af push :mkfile<space>
 map f fzf_jump
-map i $$EDITOR "$f"
-map e $bash
+map w rg_jump
+map t $bash
 map gd cd ~/Downloads
 map gp cd ~/Projects
 map gm cd ~/Music

@@ -1,0 +1,3 @@
+[Desktop Entry]
+Name=nvim-in-terminal
+Exec=alacritty --class Alacritty,nvim -e nvim %f

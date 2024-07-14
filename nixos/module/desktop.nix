@@ -3,7 +3,6 @@
   environment.systemPackages = with pkgs; [
     alacritty
     microsoft-edge
-    neovide
     zathura
     xorg.libxcvt
     xsel
@@ -23,11 +22,11 @@
     jetbrains-mono
     capitaine-cursors
     intel-gpu-tools
-    pcmanfm
     xflux
   ];
 
   environment.variables = {
+    TERMINAL = "alacritty";
     GTK_THEME = "Adwaita:dark";
   };
 

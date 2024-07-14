@@ -1,12 +1,11 @@
 [Default Applications]
 x-scheme-handler/https=microsoft-edge.desktop
 x-scheme-handler/http=microsoft-edge.desktop
-inode/directory=pcmanfm.desktop
-text/plain=neovide.desktop
+inode/directory=lf-in-terminal.desktop
+text/plain=nvim-in-terminal.desktop
 text/html=microsoft-edge.desktop
 application/pdf=org.pwmt.zathura.desktop
-application/zip=atool.desktop
-application/x-tar=atool.desktop
-application/gzip=atool.desktop
-application/pdf=org.pwmt.zathura-pdf-mupdf.desktop
+application/zip=atool-in-terminal.desktop
+application/x-tar=atool-in-terminal.desktop
+application/gzip=atool-in-terminal.desktop
 application/octet-stream=mpv.desktop

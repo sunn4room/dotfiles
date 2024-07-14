@@ -40,7 +40,7 @@
   ];
   environment.variables = {
     EDITOR = "nvim";
-    PAGER = "nvimpager";
+    PAGER = "nvimpager -p";
     FZF_DEFAULT_OPTS = ''
       --ansi
       --algo=v1
@@ -52,7 +52,7 @@
       --color=prompt:green,query:bright-white,info:cyan,pointer:bright-magenta,marker:magenta,header:blue,spinner:red
       --bind="change:first,tab:down,btab:up"
     '';
-    FZF_DEFAULT_COMMAND = "fd -H -L --strip-cwd-prefix --exclude={.git,.idea,.cache,.sass-cache,node_modules,.npm,build,target}";
+    FZF_DEFAULT_COMMAND = "fd -H -L --strip-cwd-prefix";
   };
   environment.sessionVariables = rec {
     XDG_CACHE_HOME  = "$HOME/.cache";
