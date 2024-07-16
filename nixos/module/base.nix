@@ -13,7 +13,6 @@
     ]))
     nodejs_22
     neovim
-    nvimpager
     git
     lazygit
     curl
@@ -40,7 +39,8 @@
   ];
   environment.variables = {
     EDITOR = "nvim";
-    PAGER = "nvimpager -p";
+    PAGER = "less";
+    LESS = "-R";
     FZF_DEFAULT_OPTS = ''
       --ansi
       --algo=v1

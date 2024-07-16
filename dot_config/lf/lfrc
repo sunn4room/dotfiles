@@ -5,7 +5,7 @@ set info size
 
 cmd open ${{
     case "$(file --mime-type -Lb "$f")" in
-        text/*) nvim "$f";;
+        inode/x-empty|text/*|application/javascript) less "$f";;
         application/x-tar|application/x-gzip|application/zip) atool -p -l "$f";;
     esac
 }}
@@ -86,7 +86,8 @@ map k up
 map h updir
 map <m-2> updir
 map l open
-map o $xdg-open "$f"
+map o &spawn xdg-open "$f"
+map e $nvim "$f"
 map <m-1> select
 map J page-down
 map K page-up

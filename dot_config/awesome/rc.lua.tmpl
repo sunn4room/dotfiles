@@ -26,26 +26,26 @@ beautiful.init({
   master_width_factor = 0.6,
   useless_gap = dpi(4),
   border_width = dpi(2),
-  border_normal = "{{ .base16.color10 }}",
-  border_focus = "{{ .base16.color05 }}",
-  wibar_fg = "{{ .base16.color07 }}",
-  wibar_bg = "{{ .base16.color00 }}00",
+  border_normal = "#525674",
+  border_focus = "#FF79C6",
+  wibar_fg = "#F8F8F2",
+  wibar_bg = "#282A3600",
   wibar_height = dpi(36),
   wibar_opacity = 0.9,
-  taglist_fg_focus = "{{ .base16.color07 }}",
-  taglist_bg_focus = "{{ .base16.color00 }}",
-  taglist_fg_urgent = "{{ .base16.color01 }}",
-  taglist_bg_urgent = "{{ .base16.color00 }}",
-  taglist_fg_occupied = "{{ .base16.color04 }}",
-  taglist_bg_occupied = "{{ .base16.color00 }}",
-  taglist_fg_empty = "{{ .base16.color10 }}",
-  taglist_bg_empty = "{{ .base16.color00 }}",
-  tasklist_fg_focus = "{{ .base16.color07 }}",
-  tasklist_bg_focus = "{{ .base16.color00 }}",
-  tasklist_fg_normal = "{{ .base16.color04 }}",
-  tasklist_bg_normal = "{{ .base16.color00 }}",
-  tasklist_fg_urgent = "{{ .base16.color01 }}",
-  tasklist_bg_urgent = "{{ .base16.color00 }}",
+  taglist_fg_focus = "#F8F8F2",
+  taglist_bg_focus = "#282A36",
+  taglist_fg_urgent = "#FF5555",
+  taglist_bg_urgent = "#282A36",
+  taglist_fg_occupied = "#BD93F9",
+  taglist_bg_occupied = "#282A36",
+  taglist_fg_empty = "#525674",
+  taglist_bg_empty = "#282A36",
+  tasklist_fg_focus = "#F8F8F2",
+  tasklist_bg_focus = "#282A36",
+  tasklist_fg_normal = "#BD93F9",
+  tasklist_bg_normal = "#282A36",
+  tasklist_fg_urgent = "#FF5555",
+  tasklist_bg_urgent = "#282A36",
   tasklist_spacing = dpi(8),
   tasklist_disable_icon = true,
   tasklist_plain_task_name = true,
@@ -247,21 +247,22 @@ end
 awful.screen.connect_for_each_screen(function(s)
 
   local tags = awful.tag({ "1", "2", "3", "4", "5", "6", "7", "8", "9", "0" }, s, awful.layout.suit.tile.right)
-  tags[10].layout = awful.layout.suit.max
+  tags[1].layout = awful.layout.suit.max
   tags[9].layout = awful.layout.suit.max
+  tags[10].layout = awful.layout.suit.max
 
   s.mybar = awful.wibar({ position = "top", screen = s })
-  local layouttext = wibox.widget.textbox(" <span foreground='{{ .base16.color05 }}'>[|]</span> ")
+  local layouttext = wibox.widget.textbox(" <span foreground='#FF79C6'>[ ]</span> ")
   local update_layout_text = function(t)
     local name = awful.layout.getname(t.layout)
     if name == "tile" then
-      layouttext.markup = " <span foreground='{{ .base16.color05 }}'>[|]</span> "
+      layouttext.markup = " <span foreground='#FF79C6'>[|]</span> "
     elseif name == "tilebottom" then
-      layouttext.markup = " <span foreground='{{ .base16.color05 }}'>[-]</span> "
+      layouttext.markup = " <span foreground='#FF79C6'>[-]</span> "
     elseif name == "max" then
-      layouttext.markup = " <span foreground='{{ .base16.color05 }}'>[ ]</span> "
+      layouttext.markup = " <span foreground='#FF79C6'>[ ]</span> "
     elseif name == "fairv" then
-      layouttext.markup = " <span foreground='{{ .base16.color05 }}'>[+]</span> "
+      layouttext.markup = " <span foreground='#FF79C6'>[+]</span> "
     end
   end
   local statustext = wibox.widget.textbox(" - ")
@@ -282,7 +283,7 @@ awful.screen.connect_for_each_screen(function(s)
         layout = wibox.layout.fixed.horizontal,
         {
           layout = wibox.container.background,
-          bg = "{{ .base16.color00 }}",
+          bg = "#282A36",
           layouttext,
         },
         awful.widget.taglist({
@@ -330,7 +331,7 @@ awful.screen.connect_for_each_screen(function(s)
         wibox.widget.textbox(" "),
         {
           layout = wibox.container.background,
-          bg = "{{ .base16.color00 }}",
+          bg = "#282A36",
           statustext,
         },
       },
