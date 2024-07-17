@@ -36,6 +36,7 @@
     peaclock
     shellcheck-minimal
     mitmproxy
+    exiftool
   ];
   environment.variables = {
     EDITOR = "nvim";

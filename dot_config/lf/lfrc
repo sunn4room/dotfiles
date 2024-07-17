@@ -3,12 +3,7 @@ set nopreview
 set ratios "1"
 set info size
 
-cmd open ${{
-    case "$(file --mime-type -Lb "$f")" in
-        inode/x-empty|text/*|application/javascript) less "$f";;
-        application/x-tar|application/x-gzip|application/zip) atool -p -l "$f";;
-    esac
-}}
+cmd open $exiftool "$f" | less
 
 cmd extract ${{
     atool --extract-to=$PWD "$f"
@@ -87,6 +82,12 @@ map h updir
 map <m-2> updir
 map l open
 map o &spawn xdg-open "$f"
+map i ${{
+    case "$(file --mime-type -Lb "$f")" in
+        inode/x-empty|text/*|application/javascript) less "$f";;
+        application/x-tar|application/x-gzip|application/zip) atool -p -l "$f";;
+    esac
+}}
 map e $nvim "$f"
 map <m-1> select
 map J page-down
