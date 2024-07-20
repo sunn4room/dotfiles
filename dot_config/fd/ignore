@@ -1,0 +1,12 @@
+.git/
+.idea/
+.vscode/
+.cache/
+build/
+target/
+dist/
+
+# node
+node_modules/
+.npm/
+.yarn/

@@ -34,7 +34,6 @@
     rclone
     sqlite
     peaclock
-    shellcheck-minimal
     mitmproxy
     exiftool
   ];

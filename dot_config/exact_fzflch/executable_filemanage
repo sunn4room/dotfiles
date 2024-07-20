@@ -1,7 +1,0 @@
-#!/usr/bin/env sh
-
-if test "$#" -eq 0; then
-	printf '$\n'
-else
-	lf "${HOME}"
-fi

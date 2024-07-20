@@ -2,6 +2,7 @@ set nohidden
 set nopreview
 set ratios "1"
 set info size
+clearmaps
 
 cmd open $exiftool "$f" | less
 
@@ -84,7 +85,7 @@ map l open
 map o &spawn xdg-open "$f"
 map i ${{
     case "$(file --mime-type -Lb "$f")" in
-        inode/x-empty|text/*|application/javascript) less "$f";;
+        inode/x-empty|text/*|application/javascript) cat "$f" | less;;
         application/x-tar|application/x-gzip|application/zip) atool -p -l "$f";;
     esac
 }}

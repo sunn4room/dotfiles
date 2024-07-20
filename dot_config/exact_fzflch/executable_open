@@ -1,0 +1,8 @@
+#!/usr/bin/env sh
+
+if test "$#" -eq 0; then
+	cd "${HOME}"
+	fd -H -L --strip-cwd-prefix
+else
+	spawn xdg-open "${HOME}/$1"
+fi
