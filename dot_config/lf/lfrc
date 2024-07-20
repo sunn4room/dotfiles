@@ -118,5 +118,10 @@ map gm cd ~/Music
 map gv cd ~/Video
 map gu cd /run/media/
 map gr cd /
+map gg top
+map G bottom
+map / search
+map n search-next
+map N search-prev
 
 cmd on-quit clear

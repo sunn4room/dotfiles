@@ -1,0 +1,10 @@
+#!/usr/bin/env sh
+
+if test "$#" -eq 0; then
+	curl -s -X GET \
+		--header 'Content-Type: application/json;charset=UTF-8' \
+		'https://gitee.com/api/v5/repos/sunn4room/docs/git/trees/main?recursive=1' \
+	| jq -r .tree.[].path | grep '\.md$' | sed 's/...$//'
+else
+	spawn xdg-open "https://gitee.com/sunn4room/docs/blob/main/$1.md"
+fi

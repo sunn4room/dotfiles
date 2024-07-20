@@ -11,7 +11,8 @@
       requests
       psutil
     ]))
-    nodejs_22
+    nodePackages.nodejs
+    lua51Packages.lua
     neovim
     git
     lazygit
