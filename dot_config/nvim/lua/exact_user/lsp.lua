@@ -73,7 +73,25 @@ return {
             format_on_save(bufnr, "gopls")
           end,
         },
-        tsserver = {},
+        tsserver = function()
+          if vim.fn.isdirectory("node_modules/@vue/typescript-plugin") == 1 then
+            return {
+              filetypes = { "javascript", "javascriptreact", "javascript.jsx", "typescript", "typescriptreact", "typescript.tsx", "vue" },
+              init_options = {
+                plugins = {
+                  {
+                    name = "@vue/typescript-plugin",
+                    location = "node_modules/@vue/typescript-plugin",
+                    languages = { "javascript", "javascriptreact", "javascript.jsx", "typescript", "typescriptreact", "typescript.tsx", "vue" },
+                  },
+                }
+              },
+            }
+          else
+            return {}
+          end
+        end,
+        volar = {},
         eslint = {},
         pyright = {},
         bashls = {},
@@ -87,7 +105,7 @@ return {
         sources = {
           formatting = {
             prettier = {
-              filetypes = { "javascript", "typescript", "json" },
+              filetypes = { "javascript", "typescript", "json", "vue" },
               condition = function(utils)
                 return utils.root_has_file { "node_modules/.bin/prettier" }
               end,
@@ -116,6 +134,9 @@ return {
         opts.default.capabilities = opts.default.capabilities()
       end
       for k, o in pairs(opts.lsp) do
+        if type(o) == "function" then
+          o = o()
+        end
         require("lspconfig")[k].setup(
           vim.tbl_deep_extend("force", {}, opts.default, o)
         )
@@ -170,6 +191,7 @@ return {
           opts.null_ls.sources[group] = nil
         end
       end
+      opts.null_ls.root_dir = require("null-ls.utils").root_pattern(".git")
       null_ls.setup(opts.null_ls)
     end,
   },

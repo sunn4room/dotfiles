@@ -123,4 +123,7 @@ music() {
 microsoft-edge-unsafe() {
 	microsoft-edge --proxy-server="127.0.0.1:${1:-8080}" --ignore-certificate-errors
 }
+m3u82mp4() {
+	ffmpeg -i "$1" -c copy "$2.mp4"
+}
 

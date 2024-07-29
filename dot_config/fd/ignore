@@ -10,3 +10,6 @@ dist/
 node_modules/
 .npm/
 .yarn/
+
+# python
+.venv/

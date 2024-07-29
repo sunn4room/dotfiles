@@ -11,8 +11,8 @@
       requests
       psutil
     ]))
-    nodePackages.nodejs
-    lua51Packages.lua
+    nodejs_20
+    lua
     neovim
     git
     lazygit
@@ -37,13 +37,14 @@
     peaclock
     mitmproxy
     exiftool
+    ffmpeg
   ];
   environment.variables = {
     EDITOR = "nvim";
     PAGER = "less";
-    LESS = "-R";
     FZF_DEFAULT_OPTS = ''
       --ansi
+      --no-unicode
       --algo=v1
       --tiebreak=chunk,begin,length,index
       --layout=reverse

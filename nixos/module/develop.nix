@@ -3,8 +3,11 @@
   environment.systemPackages = with pkgs; [
     vscode
     shellcheck-minimal
-    nodePackages.yarn
-    nodePackages.bash-language-server
+    yarn
+    pnpm
+    bash-language-server
+    typescript-language-server
+    vue-language-server
     lua-language-server
   ];
 

@@ -2,14 +2,14 @@
   "nodes": {
     "nixpkgs": {
       "locked": {
-        "lastModified": 1719426051,
-        "narHash": "sha256-yJL9VYQhaRM7xs0M867ZFxwaONB9T2Q4LnGo1WovuR4=",
+        "lastModified": 1721576679,
+        "narHash": "sha256-6V0gDRYUm44nG0RIUT10RffDcMqfMquBfBBMsjTPzxM=",
         "type": "tarball",
-        "url": "https://github.moeyy.xyz/https://github.com/NixOS/nixpkgs/archive/89c49874fb15f4124bf71ca5f42a04f2ee5825fd.zip"
+        "url": "https://github.moeyy.xyz/https://github.com/NixOS/nixpkgs/archive/f6d4f4f0550e3574dc9c95a0be83e5e94e3c1837.zip"
       },
       "original": {
         "type": "tarball",
-        "url": "https://github.moeyy.xyz/https://github.com/NixOS/nixpkgs/archive/89c49874fb15f4124bf71ca5f42a04f2ee5825fd.zip"
+        "url": "https://github.moeyy.xyz/https://github.com/NixOS/nixpkgs/archive/f6d4f4f0550e3574dc9c95a0be83e5e94e3c1837.zip"
       }
     },
     "root": {

@@ -85,7 +85,7 @@ map l open
 map o &spawn xdg-open "$f"
 map i ${{
     case "$(file --mime-type -Lb "$f")" in
-        inode/x-empty|text/*|application/javascript) cat "$f" | less;;
+        inode/x-empty|text/*|application/javascript|application/json) less -- "$f";;
         application/x-tar|application/x-gzip|application/zip) atool -p -l "$f";;
     esac
 }}
@@ -112,6 +112,7 @@ map af push :mkfile<space>
 map f fzf_jump
 map w rg_jump
 map t $bash
+map gh cd ~
 map gd cd ~/Downloads
 map gp cd ~/Projects
 map gm cd ~/Music
@@ -123,5 +124,9 @@ map G bottom
 map / search
 map n search-next
 map N search-prev
+map \$ shell
+map \% shell-pipe
+map \! shell-wait
+map \& shell-async
 
 cmd on-quit clear

@@ -23,6 +23,7 @@
     capitaine-cursors
     intel-gpu-tools
     xflux
+    flameshot
   ];
 
   environment.variables = {
