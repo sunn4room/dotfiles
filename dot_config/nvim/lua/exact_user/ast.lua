@@ -22,6 +22,8 @@ return {
         lua = true,
         javascript = true,
         typescript = true,
+        tsx = "typescript",
+        vue = true,
         rust = true,
         python = true,
         go = true,
@@ -64,7 +66,7 @@ return {
         if value then
           local url = "https://gitee.com/sunn4mirror/tree-sitter-" .. name
           if type(value) == "string" then
-            url = value
+            url = "https://gitee.com/sunn4mirror/tree-sitter-" .. value
           end
           configs[name].install_info.url = url
           table.insert(names, name)

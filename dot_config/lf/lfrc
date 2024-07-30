@@ -128,5 +128,6 @@ map \$ shell
 map \% shell-pipe
 map \! shell-wait
 map \& shell-async
+map <esc> reload
 
 cmd on-quit clear

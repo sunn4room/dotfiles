@@ -59,43 +59,64 @@ return {
       },
       lsp = {
         lua_ls = {
+          condition = function()
+            return vim.fn.executable("lua-language-server") == 1
+          end,
           on_attach = function(_, bufnr)
             format_on_save(bufnr, "lua_ls")
           end,
         },
         rust_analyzer = {
+          condition = function()
+            return vim.fn.executable("rust-analyzer") == 1
+          end,
           on_attach = function(_, bufnr)
             format_on_save(bufnr, "rust_analyzer")
           end,
         },
         gopls = {
+          condition = function()
+            return vim.fn.executable("gopls") == 1
+          end,
           on_attach = function(_, bufnr)
             format_on_save(bufnr, "gopls")
           end,
         },
-        tsserver = function()
-          if vim.fn.isdirectory("node_modules/@vue/typescript-plugin") == 1 then
-            return {
-              filetypes = { "javascript", "javascriptreact", "javascript.jsx", "typescript", "typescriptreact", "typescript.tsx", "vue" },
-              init_options = {
-                plugins = {
-                  {
-                    name = "@vue/typescript-plugin",
-                    location = "node_modules/@vue/typescript-plugin",
-                    languages = { "javascript", "javascriptreact", "javascript.jsx", "typescript", "typescriptreact", "typescript.tsx", "vue" },
-                  },
-                }
+        tsserver = {
+          condition = function()
+            return vim.fn.executable("typescript-language-server") == 1 and vim.fn.executable("vue-language-server") == 1
+          end,
+          filetypes = { "javascript", "javascriptreact", "javascript.jsx", "typescript", "typescriptreact", "typescript.tsx", "vue" },
+          init_options = {
+            plugins = {
+              {
+                name = "@vue/typescript-plugin",
+                location = vim.fn.system({ "readlink", "/run/current-system/sw/bin/vue-language-server" }):sub(0, 25) ..
+                    "lib/node_modules/@vue/language-server/node_modules/@vue/typescript-plugin",
+                languages = { "vue" },
               },
             }
-          else
-            return {}
-          end
-        end,
-        volar = {},
-        eslint = {},
-        pyright = {},
-        bashls = {},
+          },
+        },
+        volar = {
+          condition = function()
+            return vim.fn.executable("typescript-language-server") == 1 and vim.fn.executable("vue-language-server") == 1
+          end,
+        },
+        pyright = {
+          condition = function()
+            return vim.fn.executable("pyright") == 1
+          end,
+        },
+        bashls = {
+          condition = function()
+            return vim.fn.executable("bash-language-server") == 1
+          end,
+        },
         taplo = {
+          condition = function()
+            return vim.fn.executable("taplo") == 1
+          end,
           on_attach = function(_, bufnr)
             format_on_save(bufnr, "taplo")
           end,
@@ -105,7 +126,7 @@ return {
         sources = {
           formatting = {
             prettier = {
-              filetypes = { "javascript", "typescript", "json", "vue" },
+              filetypes = { "javascript", "javascriptreact", "javascript.jsx", "typescript", "typescriptreact", "typescript.tsx", "vue" },
               condition = function(utils)
                 return utils.root_has_file { "node_modules/.bin/prettier" }
               end,
@@ -134,12 +155,12 @@ return {
         opts.default.capabilities = opts.default.capabilities()
       end
       for k, o in pairs(opts.lsp) do
-        if type(o) == "function" then
-          o = o()
+        if type(o.condition) ~= "function" or o.condition() then
+          o.condition = nil
+          require("lspconfig")[k].setup(
+            vim.tbl_deep_extend("force", {}, opts.default, o)
+          )
         end
-        require("lspconfig")[k].setup(
-          vim.tbl_deep_extend("force", {}, opts.default, o)
-        )
       end
       vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(
         vim.lsp.handlers.hover,
@@ -315,17 +336,27 @@ return {
           gR = vim.lsp.buf.implementation,
           gi = vim.lsp.buf.incoming_calls,
           go = vim.lsp.buf.outgoing_calls,
-          ga = vim.lsp.buf.code_actions,
+          ga = function()
+            vim.lsp.buf.code_actions {
+              context = {
+                only = {
+                  "source",
+                  "refactor",
+                  "quickfix",
+                },
+              },
+            }
+          end,
           cf = vim.lsp.buf.format,
           cn = vim.lsp.buf.rename,
           K = function()
             vim.lsp.buf.hover()
             vim.lsp.buf.hover()
           end,
-          ["<space>s"] = "<cmd>FzfLua lsp_live_workspace_symbols<cr>",
+          --["<space>s"] = "<cmd>FzfLua lsp_live_workspace_symbols<cr>",
         },
         v = {
-          ["<space>a"] = "<cmd>FzfLua lsp_code_actions<cr>",
+          --["<space>a"] = "<cmd>FzfLua lsp_code_actions<cr>",
           Cf = vim.lsp.buf.format,
         },
       },

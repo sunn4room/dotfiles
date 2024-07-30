@@ -79,16 +79,6 @@ return {
         end,
       })
       table.insert(tabline, {
-        update = {
-          "BufEnter",
-          "BufWrite",
-          "TextChanged",
-          "DiagnosticChanged",
-          "VimResized",
-          callback = vim.schedule_wrap(function()
-            vim.cmd([[redrawtabline]])
-          end),
-        },
         make_list(
           function()
             local list = {}
@@ -112,9 +102,6 @@ return {
               if vim.bo[self.item].modified then
                 bufstr = bufstr .. "+"
               end
-              if #vim.diagnostic.get(self.item) ~= 0 then
-                bufstr = bufstr .. "?"
-              end
               return bufstr
             end,
             hl = function(self)
@@ -134,12 +121,6 @@ return {
                   break
                 end
               end
-              for _, i in ipairs(self.items) do
-                if #vim.diagnostic.get(i) ~= 0 then
-                  trunc = trunc .. "?"
-                  break
-                end
-              end
               return trunc
             end,
             hl = "TabLine",
@@ -150,12 +131,6 @@ return {
               for _, i in ipairs(self.items) do
                 if vim.bo[i].modified then
                   trunc = trunc .. "+"
-                  break
-                end
-              end
-              for _, i in ipairs(self.items) do
-                if #vim.diagnostic.get(i) ~= 0 then
-                  trunc = trunc .. "?"
                   break
                 end
               end

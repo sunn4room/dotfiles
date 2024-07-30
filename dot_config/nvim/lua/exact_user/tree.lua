@@ -2,7 +2,7 @@ return {
   {
     "nvim-tree.lua",
     url = "https://gitee.com/sunn4mirror/nvim-tree.lua.git",
-    cmd = "NvimTreeFindFile",
+    lazy = true,
     opts = {
       hijack_cursor = true,
       on_attach = function(bufnr)
@@ -41,6 +41,18 @@ return {
             modified = false,
             diagnostics = false,
           },
+          glyphs = {
+            default = "*",
+            symlink = "*",
+            folder = {
+              default = "+",
+              open = "-",
+              empty = "+",
+              empty_open = "-",
+              symlink = "+",
+              symlink_open = "-",
+            },
+          },
         },
       },
       actions = {
@@ -53,6 +65,17 @@ return {
         },
       },
     },
+  },
+  {
+    "nvim-lsp-file-operations",
+    url = "https://gitee.com/sunn4mirror/nvim-lsp-file-operations.git",
+    dependencies = {
+      "plenary.nvim",
+      "nvim-tree.lua",
+    },
+    cmd = "NvimTreeFindFile",
+    main = "lsp-file-operations",
+    opts = {},
   },
   {
     "common.nvim",
