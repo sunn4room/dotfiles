@@ -58,6 +58,7 @@
     noto-fonts-cjk-serif
     noto-fonts-color-emoji
     jetbrains-mono
+    # (nerdfonts.override { fonts = [ "Noto" "JetBrainsMono" ]; })
   ];
   fonts.fontconfig.enable = true;
   fonts.fontconfig.defaultFonts.monospace = [

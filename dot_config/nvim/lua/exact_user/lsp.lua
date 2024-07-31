@@ -48,13 +48,12 @@ return {
           debounce_text_changes = 500,
         },
         capabilities = function()
-          local capabilities = vim.lsp.protocol.make_client_capabilities()
-          capabilities = vim.tbl_deep_extend(
+          return vim.tbl_deep_extend(
             "force",
-            capabilities,
-            require("cmp_nvim_lsp").default_capabilities()
+            vim.lsp.protocol.make_client_capabilities(),
+            require("cmp_nvim_lsp").default_capabilities(),
+            require("lsp-file-operations").default_capabilities()
           )
-          return capabilities
         end,
       },
       lsp = {

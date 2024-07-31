@@ -62,8 +62,9 @@
     XDG_DATA_HOME   = "$HOME/.local/share";
     XDG_STATE_HOME  = "$HOME/.local/state";
     XDG_BIN_HOME    = "$HOME/.local/bin";
-    PATH = [ 
+    PATH = [
       "${XDG_BIN_HOME}"
+      "$HOME/.local/share/nvim/mason/bin"
     ];
   };
 
@@ -91,6 +92,8 @@
 
   services.openssh.enable = true;
   services.cron.enable = true;
+
+  virtualisation.podman.enable = true;
 
   nixpkgs.config.allowUnfree = true;
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
