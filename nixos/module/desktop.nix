@@ -58,25 +58,32 @@
     noto-fonts-cjk-serif
     noto-fonts-color-emoji
     jetbrains-mono
-    # (nerdfonts.override { fonts = [ "Noto" "JetBrainsMono" ]; })
+    (nerdfonts.override {
+      fonts = [ "Noto" "JetBrainsMono" ];
+      fetchurl = { url, sha256 } : builtins.fetchurl {
+        url = "https://mirror.ghproxy.com/${url}";
+        inherit sha256;
+      };
+    })
   ];
   fonts.fontconfig.enable = true;
   fonts.fontconfig.defaultFonts.monospace = [
-    "JetBrains Mono NL"
+    "JetBrainsMonoNL Nerd Font"
+    "NotoSansM Nerd Font"
     "Noto Sans Mono CJK SC"
     "Noto Sans Mono CJK TC"
     "Noto Sans Mono CJK JP"
     "Noto Sans Mono CJK KR"
   ];
   fonts.fontconfig.defaultFonts.sansSerif = [
-    "Noto Sans"
+    "NotoSans Nerd Font"
     "Noto Sans CJK SC"
     "Noto Sans CJK TC"
     "Noto Sans CJK JP"
     "Noto Sans CJK KR"
   ];
   fonts.fontconfig.defaultFonts.serif = [
-    "Noto Serif"
+    "NotoSerif Nerd Font"
     "Noto Serif CJK SC"
     "Noto Serif CJK TC"
     "Noto Serif CJK JP"
