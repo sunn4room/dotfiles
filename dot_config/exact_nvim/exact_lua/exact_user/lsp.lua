@@ -93,7 +93,7 @@ return {
             self.names = names
             return #self.names ~= 0
           end,
-          { provider = " ", hl = "LineSpecial" },
+          { provider = " ", hl = "LineSpecial" },
           {
             provider = function(self)
               return " " .. table.concat(self.names, ",") .. " "

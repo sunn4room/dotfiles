@@ -47,13 +47,13 @@ return {
         ["<cr>l"] = { command = "<C-w>l", desc = "right window" },
         ["<cr>j"] = { command = "<C-w>j", desc = "below window" },
         ["<cr>k"] = { command = "<C-w>k", desc = "above window" },
-        ["<cr><cr>"] = { command = "<cmd>tabnew term://bash<cr>i", desc = "shell" },
         ["<c-j>"] = { command = "<c-e>", desc = "scroll down" },
         ["<c-k>"] = { command = "<c-y>", desc = "scorll up" },
         ["<c-h>"] = { command = "2zh", desc = "scroll left" },
         ["<c-l>"] = { command = "2zl", desc = "scroll right" },
         ["<c-v>"] = { command = "\"+P", desc = "paste" },
         gz = { command = "g`\"", desc = "last position" },
+        ["<cr>s"] = { command = "<cmd>tabnew term://bash<cr>i", desc = "shell" },
       },
       i = {
         ["<c-v>"] = { command = "<cmd>set paste<cr><c-r>+<cmd>set nopaste<cr>", desc = "paste" },
@@ -69,6 +69,17 @@ return {
       nxo = {
         H = { command = "^", desc = "start of line" },
         L = { command = "$", desc = "end of line" },
+      },
+    },
+    autocmds = {
+      autoclose_bash = {
+        {
+          event = "TermClose",
+          pattern = "term://*:bash",
+          callback = function()
+            vim.api.nvim_input("<CR>")
+          end,
+        },
       },
     },
     highlights = {

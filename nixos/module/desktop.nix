@@ -24,6 +24,7 @@
     intel-gpu-tools
     xflux
     flameshot
+    neovide
   ];
 
   environment.variables = {
