@@ -1,20 +1,15 @@
 return {
   {
     "neovim/nvim-lspconfig",
-    opts = {
-      servers = {
-        lua_ls = {
+    opts = function(_, opts)
+      if vim.fn.executable("lua-language-server") == 1 then
+        opts.servers.lua_ls = {
           on_attach = function(client, bufnr)
-            vim.api.nvim_create_autocmd("BufWritePre", {
-              buffer = bufnr,
-              callback = function()
-                vim.lsp.buf.format { bufnr = bufnr, name = client.name }
-              end,
-            })
+            vim.b[bufnr].formatting_client = client.name
           end,
-        },
-      },
-    },
+        }
+      end
+    end,
   },
   {
     "nvim-treesitter/nvim-treesitter",

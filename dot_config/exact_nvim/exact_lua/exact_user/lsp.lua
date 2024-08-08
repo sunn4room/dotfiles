@@ -1,32 +1,4 @@
 local progresses = {}
-vim.lsp.handlers["$/progress"] = function(_, res, ctx)
-  local name = vim.lsp.get_client_by_id(ctx.client_id).name
-  local token = tostring(res.token)
-  if res.value.kind == "begin" then
-    progresses[name] = progresses[name] or {}
-    progresses[name][token] = 0
-  elseif res.value.kind == "end" then
-    progresses[name][token] = nil
-  else
-    progresses[name][token] = res.value.percentage
-  end
-  vim.cmd [[doautocmd User ProgressUpdate]]
-end
-vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(
-  vim.lsp.handlers.hover,
-  {
-    border = "rounded",
-    silent = true,
-  }
-)
-vim.diagnostic.config {
-  underline = true,
-  virtual_text = false,
-  signs = false,
-  float = {
-    border = "rounded",
-  },
-}
 
 return {
   "neovim/nvim-lspconfig",
@@ -62,6 +34,34 @@ return {
       lspconfig[k].setup(v)
     end
     require("lspconfig.ui.windows").default_options.border = "rounded"
+    vim.lsp.handlers["$/progress"] = function(_, res, ctx)
+      local name = vim.lsp.get_client_by_id(ctx.client_id).name
+      local token = tostring(res.token)
+      if res.value.kind == "begin" then
+        progresses[name] = progresses[name] or {}
+        progresses[name][token] = 0
+      elseif res.value.kind == "end" then
+        progresses[name][token] = nil
+      else
+        progresses[name][token] = res.value.percentage
+      end
+      vim.cmd [[doautocmd User ProgressUpdate]]
+    end
+    vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(
+      vim.lsp.handlers.hover,
+      {
+        border = "rounded",
+        silent = true,
+      }
+    )
+    vim.diagnostic.config {
+      underline = true,
+      virtual_text = false,
+      signs = false,
+      float = {
+        border = "rounded",
+      },
+    }
   end,
   specs = {
     {
@@ -70,13 +70,108 @@ return {
         mappings = {
           n = {
             ["<cr>e"] = { command = "<cmd>LspStart<cr>", desc = "lsp" },
+            ["]e"] = { callback = vim.diagnostic.goto_next, desc = "next diagnostic" },
+            ["[e"] = { callback = vim.diagnostic.goto_prev, desc = "prev diagnostic" },
+            ["K"] = { callback = vim.lsp.buf.hover, desc = "hover" },
+            ["gd"] = { command = "<c-]>", desc = "goto definition" },
+            ["gD"] = { callback = vim.lsp.buf.declaration, desc = "goto declaration" },
+            ["gr"] = { callback = vim.lsp.buf.references, desc = "goto references" },
+            ["gR"] = { callback = vim.lsp.buf.implementation, desc = "goto implementation" },
+            ["<cr>v"] = { callback = vim.lsp.buf.rename, desc = "rename variable" },
           },
+          nv = {
+            ["gf"] = {
+              callback = function()
+                if vim.b.formatting_client ~= nil then
+                  vim.lsp.buf.format { name = vim.b.formatting_client }
+                else
+                  vim.notify("No formatting client", 3)
+                end
+              end,
+              desc = "format",
+            },
+          },
+        },
+        autocmds = {
+          format_on_save = { {
+            event = "BufWritePre",
+            pattern = "*",
+            callback = function(ctx)
+              if vim.b[ctx.buf].formatting_client ~= nil then
+                vim.lsp.buf.format {
+                  bufnr = ctx.buf,
+                  name = vim.b[ctx.buf].formatting_client,
+                }
+              end
+            end,
+          } },
         },
       },
     },
     {
       "rebelot/heirline.nvim",
       opts = {
+        diagnostic = {
+          update = {
+            "DiagnosticChanged",
+            "BufEnter",
+            callback = vim.schedule_wrap(function()
+              vim.cmd([[redrawstatus]])
+            end),
+          },
+          condition = function(self)
+            self.errors = #vim.diagnostic.get(0,
+              { severity = vim.diagnostic.severity.ERROR })
+            self.warnings = #vim.diagnostic.get(0,
+              { severity = vim.diagnostic.severity.WARN })
+            self.infos = #vim.diagnostic.get(0,
+              { severity = vim.diagnostic.severity.INFO })
+            self.hints = #vim.diagnostic.get(0,
+              { severity = vim.diagnostic.severity.HINT })
+            return self.errors + self.warnings + self.infos + self.hints ~= 0
+          end,
+          { provider = " " },
+          {
+            provider = function(self)
+              if self.hints ~= 0 then
+                return (" %d "):format(self.hints)
+              else
+                return ""
+              end
+            end,
+            hl = "LineTrace",
+          },
+          {
+            provider = function(self)
+              if self.infos ~= 0 then
+                return (" %d "):format(self.infos)
+              else
+                return ""
+              end
+            end,
+            hl = "LineDebug",
+          },
+          {
+            provider = function(self)
+              if self.warnings ~= 0 then
+                return (" %d "):format(self.warnings)
+              else
+                return ""
+              end
+            end,
+            hl = "LineWarn",
+          },
+          {
+            provider = function(self)
+              if self.errors ~= 0 then
+                return (" %d "):format(self.errors)
+              else
+                return ""
+              end
+            end,
+            hl = "LineError",
+          },
+        },
         lsp = {
           update = {
             "LspAttach",
@@ -113,7 +208,7 @@ return {
             for name, tokens in pairs(progresses) do
               local total = 0
               local count = 0
-              for token, percent in pairs(tokens) do
+              for _, percent in pairs(tokens) do
                 count = count + 1
                 total = total + percent
               end

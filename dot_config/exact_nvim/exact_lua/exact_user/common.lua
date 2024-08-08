@@ -72,6 +72,13 @@ return {
       },
     },
     autocmds = {
+      jump_last_position = {
+        {
+          event = "BufReadPost",
+          pattern = "*",
+          command = "silent! normal! g`\"zv",
+        },
+      },
       autoclose_bash = {
         {
           event = "TermClose",

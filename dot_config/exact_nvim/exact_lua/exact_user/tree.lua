@@ -15,10 +15,10 @@ return {
       end
       set("?", api.tree.toggle_help, "help")
       set("q", api.tree.close, "quit")
-      set("s", api.node.show_info_popup, "stat")
+      set("i", api.node.show_info_popup, "stat")
       set("h", api.node.navigate.parent_close, "close")
-      set("l", api.node.open.edit, "open")
-      set("<cr>", api.node.open.edit, "open")
+      set("l", api.node.open.no_window_picker, "open")
+      set("<cr>", api.node.open.no_window_picker, "open")
       set("a", api.fs.create, "new")
       set("r", api.fs.rename, "rename")
       set("d", api.fs.remove, "delete")

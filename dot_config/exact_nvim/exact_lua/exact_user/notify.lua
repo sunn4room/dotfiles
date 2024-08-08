@@ -13,13 +13,6 @@ local s2n = {
   WARN = 3,
   ERROR = 4,
 }
-local n2s = {
-  [0] = "TRACE",
-  [1] = "DEBUG",
-  [2] = "INFO",
-  [3] = "WARN",
-  [4] = "ERROR",
-}
 local s2h = {
   TRACE = "TraceMsg",
   DEBUG = "DebugMsg",
@@ -32,7 +25,7 @@ return {
   "rcarriga/nvim-notify",
   init = function()
     vim.notify_origin = vim.notify
-    vim.notify = function(m, l, o)
+    vim.notify = function(...)
       local ok, notify = pcall(require, "notify")
       if ok then
         vim.notify = function(m, l, o)
@@ -46,7 +39,7 @@ return {
       else
         vim.notify = vim.notify_origin
       end
-      return vim.notify(m, l, o)
+      return vim.notify(...)
     end
   end,
   lazy = true,
@@ -65,8 +58,8 @@ return {
       ERROR = "",
       WARN = "",
       INFO = "",
-      DEBUG = "",
-      TRACE = "",
+      DEBUG = "",
+      TRACE = "",
     },
   },
   specs = {
@@ -75,10 +68,33 @@ return {
       opts = {
         mappings = {
           n = {
-            ["<cr>n"] = { desc = "show notifications", callback = function()
-              local output = {}
-              for _, r in ipairs(require("notify").history()) do
-                if r.time > ntime then
+            ["<cr>n"] = {
+              desc = "show notifications",
+              callback = function()
+                local output = {}
+                for _, r in ipairs(require("notify").history()) do
+                  if r.time > ntime then
+                    table.insert(output, { r.title[2], "MoreMsg" })
+                    table.insert(output, { " ", "MsgArea" })
+                    table.insert(output, { r.level, s2h[r.level] })
+                    table.insert(output, { " ", "MsgArea" })
+                    table.insert(output, { r.title[1] .. "\n", "TitleMsg" })
+                    for _, line in ipairs(r.message) do
+                      table.insert(output, { line .. "\n", "MsgArea" })
+                    end
+                    ntime = r.time
+                  end
+                end
+                nlevel = -1
+                vim.cmd [[doautocmd User NotificationsLevel]]
+                vim.api.nvim_echo(output, true, {})
+              end
+            },
+            ["<cr>N"] = {
+              desc = "show all notifications",
+              callback = function()
+                local output = {}
+                for _, r in ipairs(require("notify").history()) do
                   table.insert(output, { r.title[2], "MoreMsg" })
                   table.insert(output, { " ", "MsgArea" })
                   table.insert(output, { r.level, s2h[r.level] })
@@ -87,27 +103,10 @@ return {
                   for _, line in ipairs(r.message) do
                     table.insert(output, { line .. "\n", "MsgArea" })
                   end
-                  ntime = r.time
                 end
+                vim.api.nvim_echo(output, true, {})
               end
-              nlevel = -1
-              vim.cmd [[doautocmd User NotificationsLevel]]
-              vim.api.nvim_echo(output, true, {})
-            end },
-            ["<cr>N"] = { desc = "show all notifications", callback = function()
-              local output = {}
-              for _, r in ipairs(require("notify").history()) do
-                table.insert(output, { r.title[2], "MoreMsg" })
-                table.insert(output, { " ", "MsgArea" })
-                table.insert(output, { r.level, s2h[r.level] })
-                table.insert(output, { " ", "MsgArea" })
-                table.insert(output, { r.title[1] .. "\n", "TitleMsg" })
-                for _, line in ipairs(r.message) do
-                  table.insert(output, { line .. "\n", "MsgArea" })
-                end
-              end
-              vim.api.nvim_echo(output, true, {})
-            end },
+            },
           },
         },
         highlights = {
