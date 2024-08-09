@@ -8,8 +8,15 @@ return {
       { "hrsh7th/cmp-nvim-lsp" },
       {
         "luozhiya/fittencode.nvim",
+        cmd = "Fitten",
         opts = {
           completion_mode = "source",
+          chat = {
+            sidebar = {
+              width = 40,
+              position = "right",
+            },
+          },
         },
       },
       {
@@ -89,7 +96,7 @@ return {
           },
           command = {
             sources = {
-              { name = "cmdline", option = { ignore_cmds = { 'Man', '!' } } },
+              { name = "cmdline", option = { ignore_cmds = { "Man", "!" } } },
               { name = "path" },
             },
           },
@@ -111,6 +118,13 @@ return {
             CmpItemAbbrMatch = { fg = 5 },
             CmpItemAbbrMatchFuzzy = "CmpItemAbbrMatch",
             CmpItemKind = { fg = 4 },
+            CmpItemKindFittenCode = "CmpItemKind",
+          },
+          mappings = {
+            n = {
+              ["<cr>q"] = { command = "<cmd>Fitten start_chat<cr>", desc = "start chat" },
+              ["\\q"] = { command = "<cmd>Fitten toggle_chat<cr>", desc = "toggle chat" },
+            },
           },
         },
       },
