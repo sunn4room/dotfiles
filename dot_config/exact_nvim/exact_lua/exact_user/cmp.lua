@@ -6,7 +6,20 @@ return {
       { "hrsh7th/cmp-path" },
       { "hrsh7th/cmp-cmdline" },
       { "hrsh7th/cmp-nvim-lsp" },
-      { "onsails/lspkind.nvim" },
+      {
+        "luozhiya/fittencode.nvim",
+        opts = {
+          completion_mode = "source",
+        },
+      },
+      {
+        "onsails/lspkind.nvim",
+        opts = {
+          symbol_map = {
+            FittenCode = "",
+          },
+        },
+      },
     },
     event = { "InsertEnter", "CmdlineEnter" },
     opts = function()
@@ -45,6 +58,7 @@ return {
           end, { "i", "c" }),
         },
         sources = {
+          { name = "fittencode" },
           { name = "nvim_lsp" },
           { name = "buffer" },
           { name = "path" },
@@ -65,7 +79,7 @@ return {
           },
         },
         performance = {
-          debounce = 500,
+          debounce = 300,
         },
         cmdline = {
           search = {

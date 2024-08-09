@@ -6,6 +6,7 @@
   "cmp-path": { "branch": "main", "commit": "91ff86cd9c29299a64f968ebb45846c485725f23" },
   "cmp_luasnip": { "branch": "master", "commit": "05a9ab28b53f71d1aece421ef32fee2cb857a843" },
   "common.nvim": { "branch": "main", "commit": "2f3bff2dfbba7ea8b70c063b74f30c986c4f0fdc" },
+  "fittencode.nvim": { "branch": "master", "commit": "47b5bb3287b45c8638430ad8768ab7a3050f16aa" },
   "fzf-lua": { "branch": "main", "commit": "e9413dc2b6e8ab7f62385c972df1dceba483492d" },
   "heirline.nvim": { "branch": "master", "commit": "0d797435e54645a5f98bad7ad6046aac1ef95c1e" },
   "hop.nvim": { "branch": "master", "commit": "1a1eceafe54b5081eae4cb91c723abd1d450f34b" },
