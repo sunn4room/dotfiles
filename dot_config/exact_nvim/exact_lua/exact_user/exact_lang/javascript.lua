@@ -46,18 +46,15 @@ return {
   },
   {
     "neovim/nvim-lspconfig",
-    opts = {
-      null_ls = {
-        sources = {
-          formatting = {
-            prettier = {
-              condition = function(utils)
-                return utils.root_has_file { "node_modules/.bin/prettier" }
-              end,
-            },
-          },
-        },
-      },
-    },
+    opts = function(_, opts)
+      table.insert(
+        opts.null_ls.sources,
+        require("null-ls").builtins.formatting.prettier.with {
+          condition = function(utils)
+            return utils.root_has_file { "node_modules/.bin/prettier" }
+          end,
+        }
+      )
+    end,
   },
 }
