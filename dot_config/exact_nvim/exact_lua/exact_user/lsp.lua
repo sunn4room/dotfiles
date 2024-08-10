@@ -3,20 +3,32 @@ local progresses = {}
 return {
   "neovim/nvim-lspconfig",
   dependencies = {
+    { "nvim-lua/plenary.nvim" },
     { "hrsh7th/cmp-nvim-lsp" },
-    { "nvimtools/none-ls.nvim" },
+    { "nvimtools/none-ls.nvim", name = "null-ls" },
   },
   cmd = "LspStart",
-  opts = function(_, opts)
-    opts.default = opts.default or {}
-    opts.default.capabilities = vim.tbl_deep_extend(
-      "force",
-      vim.lsp.protocol.make_client_capabilities(),
-      require("cmp_nvim_lsp").default_capabilities()
-    )
-    opts.servers = opts.servers or {}
-    opts.configs = opts.configs or {}
-    opts.null_ls = opts.null_ls or {}
+  opts = function()
+    return {
+      default = {
+        capabilities = vim.tbl_deep_extend(
+          "force",
+          vim.lsp.protocol.make_client_capabilities(),
+          require("cmp_nvim_lsp").default_capabilities()
+        ),
+      },
+      servers = {},
+      configs = {},
+      null_ls = {
+        root_dir = require("null-ls.utils").root_pattern(".git"),
+        on_attach = function(client, bufnr)
+          if client.supports_method("textDocument/formatting") then
+            vim.b[bufnr].formatting_client = client.name
+          end
+        end,
+        sources = {},
+      },
+    }
   end,
   config = function(_, opts)
     local lspconfig = require("lspconfig")
@@ -33,6 +45,18 @@ return {
     for k, v in pairs(opts.servers) do
       lspconfig[k].setup(v)
     end
+    local null_ls = require("null-ls")
+    for group, items in pairs(opts.null_ls.sources) do
+      for name, option in pairs(items) do
+        table.insert(
+          opts.null_ls.sources,
+          null_ls.builtins[group][name].with(option)
+        )
+      end
+      opts.null_ls.sources[group] = nil
+    end
+    opts.null_ls.root_dir = require("null-ls.utils").root_pattern(".git")
+    null_ls.setup(opts.null_ls)
     require("lspconfig.ui.windows").default_options.border = "rounded"
     vim.lsp.handlers["$/progress"] = function(_, res, ctx)
       local name = vim.lsp.get_client_by_id(ctx.client_id).name

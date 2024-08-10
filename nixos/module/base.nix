@@ -6,6 +6,7 @@
 
   environment.systemPackages = with pkgs; [
     gcc
+    alejandra
     file
     (python3.withPackages (python-pkgs: with python-pkgs; [
       requests

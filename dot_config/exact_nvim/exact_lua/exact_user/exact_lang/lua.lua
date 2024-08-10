@@ -1,5 +1,13 @@
 return {
   {
+    "nvim-treesitter/nvim-treesitter",
+    opts = {
+      ensure_installed = {
+        lua = true,
+      },
+    },
+  },
+  {
     "neovim/nvim-lspconfig",
     opts = function(_, opts)
       if vim.fn.executable("lua-language-server") == 1 then
@@ -10,13 +18,5 @@ return {
         }
       end
     end,
-  },
-  {
-    "nvim-treesitter/nvim-treesitter",
-    opts = {
-      ensure_installed = {
-        lua = true,
-      },
-    },
   },
 }

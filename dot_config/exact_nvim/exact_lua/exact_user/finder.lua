@@ -15,9 +15,9 @@ return {
   end,
   opts = {
     winopts = {
-      split = "tabnew",
+      split = "botright 10new",
       preview = {
-        layout = "vertical",
+        hidden = "hidden",
       },
     },
   },
