@@ -13,7 +13,7 @@ return {
           completion_mode = "source",
           chat = {
             sidebar = {
-              width = 40,
+              width = 35,
               position = "right",
             },
           },

@@ -26,6 +26,7 @@ return {
     sync_root_with_cwd = true,
     view = {
       side = "right",
+      width = 35,
       signcolumn = "no",
     },
     renderer = {

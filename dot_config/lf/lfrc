@@ -85,8 +85,8 @@ map l open
 map o &spawn xdg-open "$f"
 map i ${{
     case "$(file --mime-type -Lb "$f")" in
-        inode/x-empty|text/*|application/javascript|application/json) less -- "$f";;
         application/x-tar|application/x-gzip|application/zip) atool -p -l "$f";;
+        *) less -- "$f";;
     esac
 }}
 map e $nvim "$f"

@@ -3,7 +3,7 @@ return {
   cmd = "Outline",
   opts = {
     outline_window = {
-      width = 30,
+      width = 35,
       relative_width = false,
       auto_close = true,
     },
