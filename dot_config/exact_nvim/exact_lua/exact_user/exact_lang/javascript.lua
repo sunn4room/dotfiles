@@ -42,11 +42,6 @@ return {
           })
         end
       end
-    end,
-  },
-  {
-    "neovim/nvim-lspconfig",
-    opts = function(_, opts)
       table.insert(
         opts.null_ls.sources,
         require("null-ls").builtins.formatting.prettier.with {
