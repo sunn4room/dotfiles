@@ -73,7 +73,7 @@ return {
               callback = function()
                 local output = {}
                 for _, r in ipairs(require("notify").history()) do
-                  if r.time > ntime then
+                  if r.time >= ntime then
                     table.insert(output, { r.title[2], "MoreMsg" })
                     table.insert(output, { " ", "MsgArea" })
                     table.insert(output, { r.level, s2h[r.level] })
