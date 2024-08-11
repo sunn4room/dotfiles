@@ -33,36 +33,41 @@ return {
       local cmp = require("cmp")
       return {
         mapping = {
-          ["<tab>"] = cmp.mapping(function()
+          ["<c-l>"] = cmp.mapping(function()
             if cmp.visible() then
-              cmp.select_next_item()
+              cmp.confirm { behavior = cmp.ConfirmBehavior.Insert, select = false }
             else
               cmp.complete()
             end
           end, { "i", "c" }),
-          ["<s-tab>"] = cmp.mapping(function()
-            if cmp.visible() then
-              cmp.select_prev_item()
-            else
-              cmp.complete()
-            end
-          end, { "i", "c" }),
-          ["<cr>"] = cmp.mapping(function(fallback)
-            if not (cmp.visible() and cmp.confirm { select = false }) then
-              fallback()
-            end
-          end, { "i", "c" }),
-          ["<esc>"] = cmp.mapping(function(fallback)
+          ["<c-h>"] = cmp.mapping(function()
             if cmp.visible() then
               cmp.abort()
-            else
-              if vim.api.nvim_get_mode().mode == "i" then
-                fallback()
-              else
-                vim.api.nvim_input("<c-\\><c-n>")
-              end
             end
           end, { "i", "c" }),
+          ["<c-j>"] = cmp.mapping(function()
+            if cmp.visible() then
+              cmp.select_next_item { behavior = cmp.SelectBehavior.Select }
+            end
+          end, { "i", "c" }),
+          ["<c-k>"] = cmp.mapping(function()
+            if cmp.visible() then
+              cmp.select_prev_item { behavior = cmp.SelectBehavior.Select }
+            end
+          end, { "i", "c" }),
+          ["<c-d>"] = cmp.mapping(function()
+            if cmp.visible() then
+              cmp.scroll_docs(4)
+            end
+          end, { "i", "c" }),
+          ["<c-u>"] = cmp.mapping(function()
+            if cmp.visible() then
+              cmp.scroll_docs(-4)
+            end
+          end, { "i", "c" }),
+        },
+        completion = {
+          completeopt = "menu,menuone,preview",
         },
         sources = {
           { name = "fittencode" },
@@ -228,18 +233,14 @@ return {
           table.insert(opts.sources, { name = "luasnip" })
 
           if not opts.mappings then opts.mappings = {} end
-          opts.mapping["<right>"] = cmp.mapping(function(fallback)
+          opts.mapping["<c-n>"] = cmp.mapping(function()
             if luasnip.expand_or_locally_jumpable() then
               luasnip.expand_or_jump()
-            else
-              fallback()
             end
           end, { "i" })
-          opts.mapping["<left>"] = cmp.mapping(function(fallback)
+          opts.mapping["<c-p>"] = cmp.mapping(function()
             if luasnip.jumpable(-1) then
               luasnip.jump(-1)
-            else
-              fallback()
             end
           end, { "i" })
         end,
