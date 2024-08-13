@@ -88,7 +88,7 @@ return {
                 nlevel = -1
                 vim.cmd [[doautocmd User NotificationsLevel]]
                 vim.api.nvim_echo(output, true, {})
-              end
+              end,
             },
             ["<cr>N"] = {
               desc = "show all notifications",
@@ -105,7 +105,7 @@ return {
                   end
                 end
                 vim.api.nvim_echo(output, true, {})
-              end
+              end,
             },
           },
         },
@@ -133,25 +133,25 @@ return {
               vim.schedule(vim.cmd.redrawtabline)
             end,
           },
-          condition = function()
-            return nlevel >= min_level
-          end,
-          provider = function()
-            return " 󰌵 "
-          end,
-          hl = function()
-            if nlevel == 0 then
-              return "LineTrace"
-            elseif nlevel == 1 then
-              return "LineDebug"
-            elseif nlevel == 2 then
-              return "LineInfo"
-            elseif nlevel == 3 then
-              return "LineWarn"
-            elseif nlevel == 4 then
-              return "LineError"
-            end
-          end,
+          {
+            condition = function()
+              return nlevel >= min_level
+            end,
+            provider = " 󰌵 ",
+            hl = function()
+              if nlevel == 0 then
+                return "LineTrace"
+              elseif nlevel == 1 then
+                return "LineDebug"
+              elseif nlevel == 2 then
+                return "LineInfo"
+              elseif nlevel == 3 then
+                return "LineWarn"
+              elseif nlevel == 4 then
+                return "LineError"
+              end
+            end,
+          },
         },
       },
     },

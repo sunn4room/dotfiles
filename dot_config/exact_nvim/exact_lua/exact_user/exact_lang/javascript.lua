@@ -42,14 +42,12 @@ return {
           })
         end
       end
-      table.insert(
-        opts.null_ls.sources,
-        require("null-ls").builtins.formatting.prettier.with {
-          condition = function(utils)
-            return utils.root_has_file { "node_modules/.bin/prettier" }
-          end,
-        }
-      )
+      if vim.fn.executable("node_modules/.bin/prettier") == 1 then
+        table.insert(
+          opts.null_ls.sources,
+          require("null-ls").builtins.formatting.prettier
+        )
+      end
     end,
   },
 }

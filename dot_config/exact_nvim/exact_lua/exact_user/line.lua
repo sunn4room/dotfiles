@@ -1,5 +1,5 @@
 local make_list = function(
-  get_list, item_comp, left_comp, right_comp, limit
+    get_list, item_comp, left_comp, right_comp, limit
 )
   local max = (limit + 1) * 2 + 1
   return {
@@ -9,7 +9,7 @@ local make_list = function(
       end
       local list, current = get_list()
       if #list == 0 then return end
-      local lfdsfdsfeft, right
+      local left, right
       if #list <= max then
         left = 1
         right = #list
@@ -110,26 +110,35 @@ return {
       },
     },
     git = {
-      condition = function()
-        vim.fn.system { "git", "rev-parse", "--is-inside-work-tree" }
-        return vim.v.shell_error == 0
-      end,
-      { provider = " 󰘬", hl = "LineSpecial" },
+      update = {
+        "DirChanged",
+        "BufWritePost",
+        callback = vim.schedule_wrap(function()
+          vim.cmd([[redrawtabline]])
+        end),
+      },
       {
-        provider = function()
-          local branch = vim.fn.system { "git", "branch", "--show-current" }
-          if branch == "" then
-            branch = vim.fn.system { "git", "rev-parse", "--short", "HEAD" }
-          end
-          return " " .. branch:sub(1, -2) .. " "
+        condition = function()
+          vim.fn.system { "git", "rev-parse", "--is-inside-work-tree" }
+          return vim.v.shell_error == 0
         end,
-        hl = function()
-          if vim.fn.system { "git", "status", "-s" } == "" then
-            return "LineInfo"
-          else
-            return "LineError"
-          end
-        end,
+        { provider = " 󰘬", hl = "LineSpecial" },
+        {
+          provider = function()
+            local branch = vim.fn.system { "git", "branch", "--show-current" }
+            if branch == "" then
+              branch = vim.fn.system { "git", "rev-parse", "--short", "HEAD" }
+            end
+            return " " .. branch:sub(1, -2) .. " "
+          end,
+          hl = function()
+            if vim.fn.system { "git", "status", "-s" } == "" then
+              return "LineInfo"
+            else
+              return "LineError"
+            end
+          end,
+        },
       },
     },
     bufferlist = { { provider = " 󰈢", hl = "LineSpecial" }, make_list(
@@ -214,7 +223,7 @@ return {
       { provider = "< ", hl = "LineTrace" },
       { provider = "> ", hl = "LineTrace" },
       1
-    )},
+    ) },
   },
   config = function(_, opts)
     require("heirline").setup {

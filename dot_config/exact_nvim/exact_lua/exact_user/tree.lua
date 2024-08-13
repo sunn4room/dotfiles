@@ -68,6 +68,7 @@ return {
           NvimTreeHiddenFolderHL = { fg = 6 },
           NvimTreeHiddenIcon = { fg = 4 },
           NvimTreeFolderName = { fg = 6 },
+          NvimTreeOpenedFolderName = { fg = 6 },
           NvimTreeFolderIcon = { fg = 6 },
           NvimTreeEmptyFolderName = { fg = 6 },
           NvimTreeEmptyFolderIcon = { fg = 6 },
