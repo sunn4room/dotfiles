@@ -22,6 +22,33 @@ return {
     },
     mappings = {
       n = {
+        ["g0"] = {
+          callback = function()
+            vim.bo.expandtab = false
+            vim.bo.tabstop = 4
+            vim.bo.shiftwidth = 4
+            vim.bo.softtabstop = 4
+          end,
+          desc = "use tab"
+        },
+        ["g2"] = {
+          callback = function()
+            vim.bo.expandtab = true
+            vim.bo.tabstop = 2
+            vim.bo.shiftwidth = 2
+            vim.bo.softtabstop = 2
+          end,
+          desc = "use space 2"
+        },
+        ["g4"] = {
+          callback = function()
+            vim.bo.expandtab = true
+            vim.bo.tabstop = 4
+            vim.bo.shiftwidth = 4
+            vim.bo.softtabstop = 4
+          end,
+          desc = "use space 4"
+        },
         ["<bs>v"] = { command = "<cmd>qall<cr>", desc = "quit" },
         ["<cr>w"] = { command = "<cmd>w<cr>", desc = "save" },
         u = { command = "u", desc = "redo" },

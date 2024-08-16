@@ -32,6 +32,7 @@ return {
             ["<space>f"] = { command = "<cmd>FzfLua files<cr>", desc = "find file" },
             ["<space>w"] = { command = "<cmd>FzfLua live_grep<cr>", desc = "find word" },
             ["<space>h"] = { command = "<cmd>FzfLua helptags<cr>", desc = "find help" },
+            ["<space>k"] = { command = "<cmd>FzfLua keymaps<cr>", desc = "find keymap" },
           },
         },
       },
