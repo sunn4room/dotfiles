@@ -22,6 +22,7 @@ return {
     },
     mappings = {
       n = {
+        ["<cr>p"] = { command = "<cmd>Lazy<cr>", desc = "lazy" },
         ["g0"] = {
           callback = function()
             vim.bo.expandtab = false
