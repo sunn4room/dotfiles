@@ -10,6 +10,9 @@
     bash-language-server
     shellcheck-minimal
     shfmt
+    rustc
+    cargo
+    rust-analyzer
     (python3.withPackages (python-pkgs: with python-pkgs; [
       requests
       psutil
@@ -53,7 +56,7 @@
     ffmpeg
   ];
   environment.variables = {
-    EDITOR = "hx";
+    EDITOR = "nvim";
     PAGER = "less";
     FZF_DEFAULT_OPTS = ''
       --ansi

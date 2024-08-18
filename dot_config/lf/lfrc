@@ -90,7 +90,7 @@ map i ${{
         *) less -L "$f";;
     esac
 }}
-map e $nvim "$f"
+map e $$EDITOR "$f"
 map <m-1> select
 map J page-down
 map K page-up

@@ -95,7 +95,7 @@ __prompt_end() {
 }
 PS1='$(__prompt_start)$(__prompt_user)$(__prompt_host)$(__prompt_cwd)$(__prompt_env)$(__prompt_end)'
 
-alias e="hx"
+alias e="nvim"
 alias hm="chezmoi"
 alias hmg="chezmoi cd"
 alias hms="chezmoi status"
@@ -129,4 +129,3 @@ microsoft-edge-unsafe() {
 m3u82mp4() {
 	ffmpeg -i "$1" -c copy "$2.mp4"
 }
-
