@@ -192,6 +192,7 @@ return {
           update = {
             "LspAttach",
             "LspDetach",
+            "BufEnter",
             callback = vim.schedule_wrap(function()
               vim.cmd([[redrawstatus]])
             end),

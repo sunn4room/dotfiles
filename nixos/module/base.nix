@@ -13,6 +13,7 @@
     ]))
     nodejs_20
     lua
+    helix
     neovim
     git
     lazygit

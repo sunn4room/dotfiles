@@ -1,0 +1,25 @@
+theme = "dracula-custom"
+
+[editor]
+bufferline = "always"
+
+[editor.cursor-shape]
+insert = "bar"
+normal = "block"
+select = "underline"
+
+[editor.whitespace.render]
+tab = "all"
+space = "all"
+nbsp = "none"
+nnbsp = "none"
+newline = "none"
+
+[editor.whitespace.characters]
+tab = "<"
+tabpad = "-"
+space = "·"
+
+[editor.statusline]
+left = ["file-name", "read-only-indicator", "file-modification-indicator"]
+right = ["diagnostics", "selections", "register", "position"]
