@@ -10,15 +10,15 @@ select = "underline"
 
 [editor.whitespace.render]
 tab = "all"
-space = "all"
+space = "none"
 nbsp = "none"
 nnbsp = "none"
-newline = "none"
+newline = "all"
 
 [editor.whitespace.characters]
 tab = "<"
 tabpad = "-"
-space = "·"
+newline = "↙"
 
 [editor.statusline]
 left = ["file-name", "read-only-indicator", "file-modification-indicator"]

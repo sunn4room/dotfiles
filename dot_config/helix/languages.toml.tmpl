@@ -1,0 +1,56 @@
+[[language-server.typescript-language-server.config.plugins]]
+name = "@vue/typescript-plugin"
+location = "{{ output (print .chezmoi.sourceDir "/script/nix-store.sh") "vue-language-server" | trim }}/lib/node_modules/@vue/language-server/"
+languages = ["vue"]
+
+[[language]]
+name = "vue"
+scope = "source.vue"
+injection-regex = "vue"
+file-types = ["vue"]
+roots = ["package.json"]
+block-comment-tokens = { start = "<!--", end = "-->" }
+indent = { tab-width = 2, unit = "  " }
+auto-format = true
+formatter = { command = "prettier", args = ["--parser", "vue"] }
+language-servers = [ "typescript-language-server", "vuels" ]
+
+[[language]]
+name = "lua"
+injection-regex = "lua"
+scope = "source.lua"
+file-types = ["lua"]
+shebangs = ["lua", "luajit"]
+roots = [".luarc.json", ".git"]
+comment-token = "--"
+block-comment-tokens = { start = "--[[", end = "--]]" }
+indent = { tab-width = 2, unit = "  " }
+auto-format = true
+formatter = { command = "stylua", args = ["-"] }
+language-servers = [ "lua-language-server" ]
+
+[[language]]
+name = "bash"
+scope = "source.bash"
+injection-regex = "(shell|bash|zsh|sh)"
+file-types = [
+  "sh",
+  "bash",
+  { glob = "tmux.conf" },
+  { glob = ".bash_history" },
+  { glob = ".bash_login" },
+  { glob = ".bash_logout" },
+  { glob = ".bash_profile" },
+  { glob = ".bash_aliases" },
+  { glob = ".bashrc" },
+  { glob = ".profile" },
+  { glob = ".xprofile" },
+  { glob = ".xsession" },
+  { glob = ".xsessionrc" },
+]
+shebangs = ["sh", "bash"]
+comment-token = "#"
+indent = { tab-width = 4, unit = "\t" }
+auto-format = true
+formatter = { command = "shfmt", args = ["-"] }
+language-servers = [ "bash-language-server" ]

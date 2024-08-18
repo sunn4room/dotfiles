@@ -3,7 +3,6 @@
   imports = [
     ./module/base.nix
     ./module/desktop.nix
-    ./module/develop.nix
   ];
 
   nixpkgs.hostPlatform = "x86_64-linux";

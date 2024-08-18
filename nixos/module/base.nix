@@ -6,13 +6,25 @@
 
   environment.systemPackages = with pkgs; [
     gcc
-    file
+    lldb
+    bash-language-server
+    shellcheck-minimal
+    shfmt
     (python3.withPackages (python-pkgs: with python-pkgs; [
       requests
       psutil
     ]))
-    nodejs_20
+    nodePackages.nodejs
+    yarn
+    pnpm
+    typescript-language-server
+    vue-language-server
+    nodePackages.prettier
     lua
+    lua-language-server
+    stylua
+    taplo
+    file
     helix
     neovim
     git
@@ -41,7 +53,7 @@
     ffmpeg
   ];
   environment.variables = {
-    EDITOR = "nvim";
+    EDITOR = "hx";
     PAGER = "less";
     FZF_DEFAULT_OPTS = ''
       --ansi
