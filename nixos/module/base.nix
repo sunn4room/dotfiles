@@ -22,6 +22,7 @@
     nodePackages.nodejs
     yarn
     pnpm
+    typescript
     typescript-language-server
     vue-language-server
     nodePackages.prettier

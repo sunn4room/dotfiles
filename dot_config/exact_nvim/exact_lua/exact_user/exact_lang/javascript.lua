@@ -14,7 +14,10 @@ return {
   {
     "neovim/nvim-lspconfig",
     opts = function(_, opts)
-      if vim.fn.executable("typescript-language-server") == 1 then
+      if
+          vim.fn.executable("typescript-language-server") == 1
+          and vim.fn.executable("tsserver") == 1
+      then
         opts.servers.tsserver = {
           filetypes = {
             "javascript",
@@ -26,18 +29,26 @@ return {
           },
           init_options = {
             plugins = {},
+            tsserver = {
+              path = vim.fn.system { "readlink", "/run/current-system/sw/bin/tsserver" }
+                  :sub(1, -14) .. "lib/node_modules/typescript/lib/",
+            },
           },
         }
-        if vim.fn.executable("typescript-language-server") == 1 then
-          opts.servers.volar = {}
+        if vim.fn.executable("vue-language-server") == 1 then
+          opts.servers.volar = {
+            init_options = {
+              typescript = {
+                tsdk = vim.fn.system { "readlink", "/run/current-system/sw/bin/tsserver" }
+                    :sub(1, -14) .. "lib/node_modules/typescript/lib/",
+              },
+            },
+          }
           table.insert(opts.servers.tsserver.filetypes, "vue")
           table.insert(opts.servers.tsserver.init_options.plugins, {
             name = "@vue/typescript-plugin",
-            location = vim.fn.system {
-                  "readlink",
-                  "/run/current-system/sw/bin/vue-language-server",
-                }:sub(0, 25) ..
-                "lib/node_modules/@vue/language-server/node_modules/@vue/typescript-plugin",
+            location = vim.fn.system { "readlink", "/run/current-system/sw/bin/vue-language-server" }
+                :sub(1, -25) .. "lib/node_modules/@vue/language-server/",
             languages = { "vue" },
           })
         end
