@@ -12,7 +12,9 @@
     shfmt
     rustc
     cargo
+    cargo-nextest
     rust-analyzer
+    rustfmt
     (python3.withPackages (python-pkgs: with python-pkgs; [
       requests
       psutil
