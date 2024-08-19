@@ -30,7 +30,7 @@ return {
             vim.bo.shiftwidth = 4
             vim.bo.softtabstop = 4
           end,
-          desc = "use tab"
+          desc = "use tab",
         },
         ["g2"] = {
           callback = function()
@@ -39,7 +39,7 @@ return {
             vim.bo.shiftwidth = 2
             vim.bo.softtabstop = 2
           end,
-          desc = "use space 2"
+          desc = "use space 2",
         },
         ["g4"] = {
           callback = function()
@@ -48,7 +48,7 @@ return {
             vim.bo.shiftwidth = 4
             vim.bo.softtabstop = 4
           end,
-          desc = "use space 4"
+          desc = "use space 4",
         },
         ["<bs>v"] = { command = "<cmd>qall<cr>", desc = "quit" },
         ["<cr>w"] = { command = "<cmd>w<cr>", desc = "save" },

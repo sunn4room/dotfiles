@@ -33,44 +33,51 @@ return {
       local cmp = require("cmp")
       return {
         mapping = {
-          ["<c-l>"] = cmp.mapping(function()
+          ["<tab>"] = cmp.mapping(function(fallback)
             if cmp.visible() then
-              cmp.confirm { behavior = cmp.ConfirmBehavior.Insert, select = false }
+              cmp.select_next_item()
             else
-              cmp.complete()
+              local row, col = unpack(vim.api.nvim_win_get_cursor(0))
+              local line = vim.api.nvim_buf_get_lines(0, row - 1, row, true)[1]
+              local before = line:sub(1, col)
+              if vim.trim(before) ~= "" then
+                cmp.complete()
+              else
+                fallback()
+              end
             end
           end, { "i", "c" }),
-          ["<c-h>"] = cmp.mapping(function()
+          ["<s-tab>"] = cmp.mapping(function()
+            if cmp.visible() then
+              cmp.select_prev_item()
+            else
+              cmp.complete {
+                config = {
+                  sources = {
+                    { name = "fittencode" },
+                  },
+                },
+              }
+            end
+          end, { "i", "c" }),
+          ["<cr>"] = cmp.mapping(function(fallback)
+            if not (cmp.visible() and cmp.confirm { select = false }) then
+              fallback()
+            end
+          end, { "i", "c" }),
+          ["<esc>"] = cmp.mapping(function(fallback)
             if cmp.visible() then
               cmp.abort()
+            else
+              if vim.api.nvim_get_mode().mode == "i" then
+                fallback()
+              else
+                vim.api.nvim_input("<c-\\><c-n>")
+              end
             end
           end, { "i", "c" }),
-          ["<c-j>"] = cmp.mapping(function()
-            if cmp.visible() then
-              cmp.select_next_item { behavior = cmp.SelectBehavior.Select }
-            end
-          end, { "i", "c" }),
-          ["<c-k>"] = cmp.mapping(function()
-            if cmp.visible() then
-              cmp.select_prev_item { behavior = cmp.SelectBehavior.Select }
-            end
-          end, { "i", "c" }),
-          ["<c-d>"] = cmp.mapping(function()
-            if cmp.visible() then
-              cmp.scroll_docs(4)
-            end
-          end, { "i", "c" }),
-          ["<c-u>"] = cmp.mapping(function()
-            if cmp.visible() then
-              cmp.scroll_docs(-4)
-            end
-          end, { "i", "c" }),
-        },
-        completion = {
-          completeopt = "menu,menuone,preview",
         },
         sources = {
-          { name = "fittencode" },
           { name = "nvim_lsp" },
           { name = "buffer" },
           { name = "path" },
@@ -79,7 +86,7 @@ return {
           format = require("lspkind").cmp_format {
             mode = "symbol",
             maxwidth = 50,
-            ellipsis_char = "...",
+            ellipsis_char = "…",
           },
         },
         window = {
@@ -89,9 +96,6 @@ return {
           documentation = {
             border = "rounded",
           },
-        },
-        performance = {
-          debounce = 300,
         },
         cmdline = {
           search = {
