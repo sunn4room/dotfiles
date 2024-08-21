@@ -10,7 +10,9 @@ return {
     dap.adapters = opts.adapters
     dap.configurations = opts.configurations
     dap.listeners.after.event_initialized["dapui_config"] = function()
-      dap.repl.open()
+      dap.repl.open(nil, "botright split")
+      vim.cmd("wincmd b")
+      vim.cmd("startinsert")
     end
     -- dap.listeners.before.event_terminated["dapui_config"] = function()
     --   dap.repl.close()
@@ -75,10 +77,10 @@ return {
                         end
                       end
                     end
-                    vim.cmd("belowright sp term://" ..
-                    vim.fn.join(vim.tbl_map(function(p)
-                      return "\\\"" .. p .. "\\\""
-                    end, program), " "))
+                    return "<cmd>belowright sp term://" ..
+                        vim.fn.join(vim.tbl_map(function(p)
+                          return "\\\"" .. p .. "\\\""
+                        end, program), " ") .. "<cr>i"
                   end
                 end
               end,
