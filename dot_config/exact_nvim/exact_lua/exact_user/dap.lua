@@ -43,29 +43,65 @@ return {
       opts = {
         mappings = {
           n = {
-            ["\\m"] = { callback = function()
-              require("dap").toggle_breakpoint()
-            end, desc = "toggle breakpoint" },
-            ["\\M"] = { callback = function()
-              require("dap").set_breakpoint(
-                vim.fn.input("Breakpoint condition: ")
-              )
-            end, desc = "set condition breakpoint" },
-            ["<cr>m"] = { callback = function()
-              require("dap").continue()
-            end, desc = "start debug" },
-            ["<bs>m"] = { callback = function()
-              require("dap").terminate()
-            end, desc = "stop debug" },
-            ["gm"] = { callback = function()
-              require("dap").step_over()
-            end, desc = "step over" },
-            ["g."] = { callback = function()
-              require("dap").step_into()
-            end, desc = "step into" },
-            ["g,"] = { callback = function()
-              require("dap").step_out()
-            end, desc = "step out" },
+            ["\\d"] = {
+              callback = function()
+                require("dap").toggle_breakpoint()
+              end,
+              desc = "toggle breakpoint",
+            },
+            ["\\D"] = {
+              callback = function()
+                require("dap").set_breakpoint(
+                  vim.fn.input("Breakpoint condition: ")
+                )
+              end,
+              desc = "set condition breakpoint",
+            },
+            ["<cr>m"] = {
+              callback = function()
+                local dap = require("dap")
+                local bufnr = vim.api.nvim_get_current_buf()
+                local filetype = vim.bo[bufnr].filetype
+                local configs = dap.configurations[filetype]
+                if configs then
+                  local program = configs[1].program()
+                  if program ~= dap.ABORT then
+                    vim.cmd("belowright sp term://" .. program)
+                  end
+                end
+              end,
+              desc = "start main",
+            },
+            ["<cr>M"] = {
+              callback = function()
+                require("dap").continue()
+              end,
+              desc = "start main in debug mode",
+            },
+            ["<bs>d"] = {
+              callback = function()
+                require("dap").terminate()
+              end,
+              desc = "stop debug",
+            },
+            ["<f10>"] = {
+              callback = function()
+                require("dap").step_over()
+              end,
+              desc = "step over",
+            },
+            ["<f11>"] = {
+              callback = function()
+                require("dap").step_into()
+              end,
+              desc = "step into",
+            },
+            ["<s-f11>"] = {
+              callback = function()
+                require("dap").step_out()
+              end,
+              desc = "step out",
+            },
           },
         },
         highlights = {

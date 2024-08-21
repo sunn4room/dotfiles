@@ -20,12 +20,6 @@
       psutil
     ]))
     nodePackages.nodejs
-    yarn
-    pnpm
-    typescript
-    typescript-language-server
-    vue-language-server
-    nodePackages.prettier
     lua
     lua-language-server
     stylua
@@ -83,7 +77,8 @@
     XDG_BIN_HOME    = "$HOME/.local/bin";
     PATH = [
       "${XDG_BIN_HOME}"
-      "$HOME/.local/share/nvim/mason/bin"
+      "$HOME/.cargo/bin"
+      "$HOME/.npm-global/bin"
     ];
   };
 
