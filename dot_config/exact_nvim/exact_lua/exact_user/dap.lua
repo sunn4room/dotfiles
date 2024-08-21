@@ -12,12 +12,12 @@ return {
     dap.listeners.after.event_initialized["dapui_config"] = function()
       dap.repl.open()
     end
-    dap.listeners.before.event_terminated["dapui_config"] = function()
-      dap.repl.close()
-    end
-    dap.listeners.before.event_exited["dapui_config"] = function()
-      dap.repl.close()
-    end
+    -- dap.listeners.before.event_terminated["dapui_config"] = function()
+    --   dap.repl.close()
+    -- end
+    -- dap.listeners.before.event_exited["dapui_config"] = function()
+    --   dap.repl.close()
+    -- end
     vim.fn.sign_define("DapBreakpoint", {
       text = "",
       texthl = "",
@@ -66,7 +66,19 @@ return {
                 if configs then
                   local program = configs[1].program()
                   if program ~= dap.ABORT then
-                    vim.cmd("belowright sp term://" .. program)
+                    program = { program }
+                    if configs[1].args then
+                      local args = configs[1].args()
+                      if args then
+                        for _, arg in ipairs(args) do
+                          table.insert(program, arg)
+                        end
+                      end
+                    end
+                    vim.cmd("belowright sp term://" ..
+                    vim.fn.join(vim.tbl_map(function(p)
+                      return "\\\"" .. p .. "\\\""
+                    end, program), " "))
                   end
                 end
               end,

@@ -75,7 +75,9 @@ return {
       "rouge8/neotest-rust",
     },
     opts = function(_, opts)
-      table.insert(opts.adapters, require("neotest-rust"))
+      table.insert(opts.adapters, require("neotest-rust") {
+        dap_adapter = "lldb",
+      })
     end,
   },
 }
