@@ -13,13 +13,12 @@ return {
     vim.fn.system { "rm", "-f", fifo }
     vim.fn.system { "mkfifo", fifo }
     dap.listeners.after.event_initialized["dapui_config"] = function()
-      dap.repl.open(nil, "botright 40vsplit")
-      vim.cmd("wincmd b")
-      vim.cmd("botright 10split term://tail\\ -f\\ " .. fifo)
-      vim.cmd("wincmd b")
+      vim.cmd("belowright 10split term://tail\\ -f\\ " .. fifo)
       vim.cmd("normal G")
       vim.cmd("setlocal nobuflisted")
       vim.cmd("wincmd p")
+      dap.repl.open(nil, "belowright 40vsplit")
+      vim.cmd("wincmd l")
       vim.cmd("startinsert")
     end
     dap.listeners.before.event_terminated["dapui_config"] = function()

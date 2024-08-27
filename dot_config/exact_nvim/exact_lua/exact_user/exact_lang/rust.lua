@@ -57,7 +57,7 @@ return {
           {
             type = "lldb",
             request = "launch",
-            name = "run",
+            name = "main",
             program = function()
               return get_build_target(false) or require("dap").ABORT
             end,
