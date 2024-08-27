@@ -28,25 +28,28 @@ return {
         },
       },
     },
-    event = { "InsertEnter", "CmdlineEnter" },
     opts = function()
       local cmp = require("cmp")
       return {
-        completion = {
-          autocomplete = false,
-        },
+        -- completion = {
+        --   autocomplete = false,
+        -- },
         mapping = {
           ["<tab>"] = cmp.mapping(function(fallback)
             if cmp.visible() then
               cmp.select_next_item()
             else
-              local row, col = unpack(vim.api.nvim_win_get_cursor(0))
-              local line = vim.api.nvim_buf_get_lines(0, row - 1, row, true)[1]
-              local before = line:sub(1, col)
-              if vim.trim(before) ~= "" then
-                cmp.complete()
+              if vim.api.nvim_get_mode().mode == "i" then
+                local row, col = unpack(vim.api.nvim_win_get_cursor(0))
+                local line = vim.api.nvim_buf_get_lines(0, row - 1, row, true)[1]
+                local before = line:sub(1, col)
+                if vim.trim(before) ~= "" then
+                  cmp.complete()
+                else
+                  fallback()
+                end
               else
-                fallback()
+                cmp.complete()
               end
             end
           end, { "i", "c" }),
@@ -69,7 +72,7 @@ return {
             end
           end, { "i", "c" }),
           ["<esc>"] = cmp.mapping(function(fallback)
-            if cmp.visible() then
+            if cmp.visible() and cmp.get_selected_entry() ~= nil then
               cmp.abort()
             else
               if vim.api.nvim_get_mode().mode == "i" then
@@ -79,6 +82,8 @@ return {
               end
             end
           end, { "i", "c" }),
+          ["<pagedown>"] = cmp.mapping.scroll_docs(4),
+          ["<pageup>"] = cmp.mapping.scroll_docs(-4),
         },
         sources = {
           { name = "nvim_lsp" },
