@@ -25,7 +25,6 @@
     xflux
     flameshot
     neovide
-    zed-editor
   ];
 
   environment.variables = {

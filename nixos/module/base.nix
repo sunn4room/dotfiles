@@ -10,6 +10,9 @@
     bash-language-server
     shellcheck-minimal
     shfmt
+    go
+    gopls
+    delve
     rustc
     cargo
     cargo-nextest

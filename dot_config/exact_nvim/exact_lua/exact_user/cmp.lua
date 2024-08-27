@@ -32,6 +32,9 @@ return {
     opts = function()
       local cmp = require("cmp")
       return {
+        completion = {
+          autocomplete = false,
+        },
         mapping = {
           ["<tab>"] = cmp.mapping(function(fallback)
             if cmp.visible() then

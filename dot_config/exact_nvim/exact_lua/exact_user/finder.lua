@@ -1,18 +1,6 @@
 return {
   "ibhagwan/fzf-lua",
   cmd = "FzfLua",
-  init = function()
-    vim.ui.select_origin = vim.ui.select
-    vim.ui.select = function(items, opts, on_choice)
-      local ok, fzf_lua = pcall(require, "fzf-lua")
-      if ok then
-        fzf_lua.register_ui_select()
-      else
-        vim.ui.select = vim.ui.select_origin
-      end
-      return vim.ui.select(items, opts, on_choice)
-    end
-  end,
   opts = {
     winopts = {
       split = "botright 10new",

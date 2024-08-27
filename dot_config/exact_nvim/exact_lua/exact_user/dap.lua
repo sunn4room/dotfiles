@@ -9,17 +9,17 @@ return {
     local dap = require("dap")
     dap.adapters = opts.adapters
     dap.configurations = opts.configurations
+    dap.defaults.fallback.on_output = function(_, body)
+      local output = body.output
+      output = output:gsub("\x1b%[m.", "")
+      output = output:gsub("\x1b%[[%d;]*m", "")
+      require("dap.repl").append(output, "$", { newline = false })
+    end
     dap.listeners.after.event_initialized["dapui_config"] = function()
       dap.repl.open(nil, "botright split")
       vim.cmd("wincmd b")
       vim.cmd("startinsert")
     end
-    -- dap.listeners.before.event_terminated["dapui_config"] = function()
-    --   dap.repl.close()
-    -- end
-    -- dap.listeners.before.event_exited["dapui_config"] = function()
-    --   dap.repl.close()
-    -- end
     vim.fn.sign_define("DapBreakpoint", {
       text = "",
       texthl = "",
@@ -47,50 +47,50 @@ return {
           n = {
             ["\\d"] = {
               callback = function()
-                require("dap").toggle_breakpoint()
+                local bufnr = vim.fn.bufnr()
+                vim.b[bufnr].breakpoints = nil
+                local linenr, _ = unpack(vim.api.nvim_win_get_cursor(0))
+                local bps = require("dap.breakpoints").get()
+                if bps[bufnr] then
+                  for _, bp in ipairs(bps[bufnr]) do
+                    if bp.line == linenr then
+                      require("dap").toggle_breakpoint()
+                      return
+                    end
+                  end
+                end
+                require("dap").set_breakpoint(
+                  vim.fn.input("Breakpoint condition: ")
+                )
               end,
               desc = "toggle breakpoint",
             },
             ["\\D"] = {
               callback = function()
-                require("dap").set_breakpoint(
-                  vim.fn.input("Breakpoint condition: ")
-                )
-              end,
-              desc = "set condition breakpoint",
-            },
-            ["<cr>m"] = {
-              callback = function()
-                local dap = require("dap")
-                local bufnr = vim.api.nvim_get_current_buf()
-                local filetype = vim.bo[bufnr].filetype
-                local configs = dap.configurations[filetype]
-                if configs then
-                  local program = configs[1].program()
-                  if program ~= dap.ABORT then
-                    program = { program }
-                    if configs[1].args then
-                      local args = configs[1].args()
-                      if args then
-                        for _, arg in ipairs(args) do
-                          table.insert(program, arg)
-                        end
-                      end
+                local dbps = require("dap.breakpoints")
+                local bufnr = vim.fn.bufnr()
+                if vim.b[bufnr].breakpoints then
+                  for _, bp in ipairs(vim.b[bufnr].breakpoints) do
+                    dbps.set(bp, bufnr, bp.line)
+                  end
+                  vim.b[bufnr].breakpoints = nil
+                else
+                  local bps = dbps.get()
+                  if bps[bufnr] then
+                    vim.b[bufnr].breakpoints = bps[bufnr]
+                    for _, bp in ipairs(bps[bufnr]) do
+                      dbps.remove(bufnr, bp.line)
                     end
-                    return "<cmd>belowright sp term://" ..
-                        vim.fn.join(vim.tbl_map(function(p)
-                          return "\\\"" .. p .. "\\\""
-                        end, program), " ") .. "<cr>i"
                   end
                 end
               end,
-              desc = "start main",
+              desc = "set condition breakpoint",
             },
-            ["<cr>M"] = {
+            ["<cr>d"] = {
               callback = function()
                 require("dap").continue()
               end,
-              desc = "start main in debug mode",
+              desc = "start debug",
             },
             ["<bs>d"] = {
               callback = function()
