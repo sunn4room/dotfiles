@@ -9,16 +9,43 @@ return {
     local dap = require("dap")
     dap.adapters = opts.adapters
     dap.configurations = opts.configurations
-    dap.defaults.fallback.on_output = function(_, body)
-      local output = body.output
-      output = output:gsub("\x1b%[m.", "")
-      output = output:gsub("\x1b%[[%d;]*m", "")
-      require("dap.repl").append(output, "$", { newline = false })
-    end
+    local fifo = "/tmp/dap_fifo"
+    vim.fn.system { "rm", "-f", fifo }
+    vim.fn.system { "mkfifo", fifo }
     dap.listeners.after.event_initialized["dapui_config"] = function()
-      dap.repl.open(nil, "botright split")
+      dap.repl.open(nil, "botright 40vsplit")
       vim.cmd("wincmd b")
+      vim.cmd("botright 10split term://tail\\ -f\\ " .. fifo)
+      vim.cmd("wincmd b")
+      vim.cmd("normal G")
+      vim.cmd("setlocal nobuflisted")
+      vim.cmd("wincmd p")
       vim.cmd("startinsert")
+    end
+    dap.listeners.before.event_terminated["dapui_config"] = function()
+      dap.repl.close()
+      vim.cmd("wincmd b")
+      local pid = vim.fn.expand("%")
+          :match("%d+:tail %-f /tmp/dap_fifo$")
+          :sub(1, -23)
+      vim.fn.system { "kill", "-s", "SIGINT", pid }
+    end
+    dap.listeners.before.event_exited["dapui_config"] = function()
+      dap.repl.close()
+      vim.cmd("wincmd b")
+      local pid = vim.fn.expand("%")
+          :match("%d+:tail %-f /tmp/dap_fifo$")
+          :sub(1, -23)
+      vim.fn.system { "kill", "-s", "SIGINT", pid }
+    end
+    dap.defaults.fallback.on_output = function(_, body)
+      if body.category == "stdout" or body.category == "stderr" then
+        local fifof = io.open(fifo, "w")
+        if fifof then
+          fifof:write(body.output)
+          fifof:close()
+        end
+      end
     end
     vim.fn.sign_define("DapBreakpoint", {
       text = "",
