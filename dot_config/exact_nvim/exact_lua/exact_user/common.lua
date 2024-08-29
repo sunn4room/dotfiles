@@ -100,6 +100,12 @@ return {
       },
     },
     autocmds = {
+      auto_fcitx5_switch = {
+        {
+          event = "InsertLeave",
+          command = "silent !fcitx5-remote -c",
+        },
+      },
       jump_last_position = {
         {
           event = "BufReadPost",
