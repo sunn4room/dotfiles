@@ -7,23 +7,15 @@ return {
       { "hrsh7th/cmp-cmdline" },
       { "hrsh7th/cmp-nvim-lsp" },
       {
-        "luozhiya/fittencode.nvim",
-        cmd = "Fitten",
-        opts = {
-          completion_mode = "source",
-          chat = {
-            sidebar = {
-              width = 35,
-              position = "right",
-            },
-          },
-        },
+        "sunn4room/nvim-cmp-codegeex",
+        -- dir = vim.env.HOME .. "/Projects/nvim-cmp-codegeex",
+        opts = {},
       },
       {
         "onsails/lspkind.nvim",
         opts = {
           symbol_map = {
-            FittenCode = "",
+            CodeGeeX = "",
           },
         },
       },
@@ -31,9 +23,6 @@ return {
     opts = function()
       local cmp = require("cmp")
       return {
-        -- completion = {
-        --   autocomplete = false,
-        -- },
         mapping = {
           ["<tab>"] = cmp.mapping(function(fallback)
             if cmp.visible() then
@@ -60,7 +49,7 @@ return {
               cmp.complete {
                 config = {
                   sources = {
-                    { name = "fittencode" },
+                    { name = "codegeex" },
                   },
                 },
               }
@@ -135,13 +124,7 @@ return {
             CmpItemAbbrMatch = { fg = 5 },
             CmpItemAbbrMatchFuzzy = "CmpItemAbbrMatch",
             CmpItemKind = { fg = 4 },
-            CmpItemKindFittenCode = "CmpItemKind",
-          },
-          mappings = {
-            n = {
-              ["<cr>q"] = { command = "<cmd>Fitten start_chat<cr>", desc = "start chat" },
-              ["\\q"] = { command = "<cmd>Fitten toggle_chat<cr>", desc = "toggle chat" },
-            },
+            CmpItemKindCodeGeeX = "CmpItemKind",
           },
         },
       },
