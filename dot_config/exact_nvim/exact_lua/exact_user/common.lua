@@ -100,12 +100,19 @@ return {
       },
     },
     autocmds = {
-      auto_fcitx5_switch = {
-        {
-          event = "InsertLeave",
-          command = "silent !fcitx5-remote -c",
-        },
-      },
+      auto_fcitx5_switch = function()
+        vim.system { "pgrep", "fcitx5" }
+        if vim.v.shell_error == 0 then
+          return {
+            {
+              event = "InsertLeave",
+              command = "silent !fcitx5-remote -c",
+            },
+          }
+        else
+          return {}
+        end
+      end,
       jump_last_position = {
         {
           event = "BufReadPost",
