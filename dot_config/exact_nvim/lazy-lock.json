@@ -13,7 +13,7 @@
   "lspkind.nvim": { "branch": "master", "commit": "cff4ae321a91ee3473a92ea1a8c637e3a9510aec" },
   "null-ls": { "branch": "main", "commit": "cfa65d86e21eeb60544d5e823f6db43941322a53" },
   "nvim-cmp": { "branch": "main", "commit": "ae644feb7b67bf1ce4260c231d1d4300b19c6f30" },
-  "nvim-cmp-codegeex": { "branch": "main", "commit": "fd4ca505023a70bb03f9e5eb4db643a6f1fe26bf" },
+  "nvim-cmp-codegeex": { "branch": "main", "commit": "38f0a91b7b747d44db0d1b76d28325bdb991af16" },
   "nvim-dap": { "branch": "master", "commit": "9b81479813c5b1e79d2c7e2df6dc99aa1580bc19" },
   "nvim-lspconfig": { "branch": "master", "commit": "6c505d4220b521f3b0e7b645f6ce45fa914d0eed" },
   "nvim-notify": { "branch": "master", "commit": "d333b6f167900f6d9d42a59005d82919830626bf" },
