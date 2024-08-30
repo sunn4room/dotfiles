@@ -62,6 +62,11 @@ return {
           },
         },
       },
+      type_to_filetypes = {
+        go = {
+          go = true,
+        },
+      },
     },
   },
 }

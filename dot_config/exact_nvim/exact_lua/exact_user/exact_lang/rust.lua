@@ -82,6 +82,11 @@ return {
           },
         },
       },
+      type_to_filetypes = {
+        lldb = {
+          rust = true,
+        },
+      },
     },
   },
 }

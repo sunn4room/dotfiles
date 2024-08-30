@@ -4,11 +4,25 @@ return {
   opts = {
     adapters = {},
     configurations = {},
+    type_to_filetypes = {},
   },
   config = function(_, opts)
     local dap = require("dap")
     dap.adapters = opts.adapters
     dap.configurations = opts.configurations
+    for t, fts in pairs(opts.type_to_filetypes) do
+      local arr = {}
+      for k, v in pairs(fts) do
+        if v then
+          table.insert(arr, k)
+        end
+      end
+      opts.type_to_filetypes[t] = arr
+    end
+    require("dap.ext.vscode").load_launchjs(
+      "launch.json",
+      opts.type_to_filetypes
+    )
     dap.listeners.after.event_initialized["dapui_config"] = function()
       dap.repl.open(nil, "belowright 10split")
       vim.cmd("wincmd l")

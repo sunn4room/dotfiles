@@ -24,22 +24,31 @@ return {
   },
   {
     "mfussenegger/nvim-dap",
-    opts = function(_, opts)
-      if vim.fn.executable("debugpy") == 1 then
-        opts.adapters.python = {
+    opts = {
+      adapters = {
+        python = {
           type = "executable",
           command = "python",
           args = { "-m", "debugpy.adapter" },
-        }
-        opts.configurations.python = {{
-          type = "python",
-          request = "launch",
-          name = "launch",
-          program = function()
-            return vim.api.nvim_buf_get_name(0)
-          end,
-        }}
-      end
-    end,
+        },
+      },
+      configurations = {
+        python = {
+          {
+            type = "python",
+            request = "launch",
+            name = "launch",
+            program = function()
+              return vim.api.nvim_buf_get_name(0)
+            end,
+          },
+        },
+      },
+      type_to_filetypes = {
+        python = {
+          python = true,
+        },
+      },
+    },
   },
 }
