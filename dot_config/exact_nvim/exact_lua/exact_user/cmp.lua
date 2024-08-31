@@ -9,7 +9,10 @@ return {
       {
         "sunn4room/nvim-cmp-codegeex",
         -- dir = vim.env.HOME .. "/Projects/nvim-cmp-codegeex",
-        opts = {},
+        opts = {
+          range = 200,
+          delay = 500,
+        },
       },
       {
         "onsails/lspkind.nvim",
@@ -24,35 +27,16 @@ return {
       local cmp = require("cmp")
       return {
         mapping = {
-          ["<tab>"] = cmp.mapping(function(fallback)
+          ["<tab>"] = cmp.mapping(function()
             if cmp.visible() then
               cmp.select_next_item()
             else
-              if vim.api.nvim_get_mode().mode == "i" then
-                local row, col = unpack(vim.api.nvim_win_get_cursor(0))
-                local line = vim.api.nvim_buf_get_lines(0, row - 1, row, true)[1]
-                local before = line:sub(1, col)
-                if vim.trim(before) ~= "" then
-                  cmp.complete()
-                else
-                  fallback()
-                end
-              else
-                cmp.complete()
-              end
+              cmp.complete()
             end
           end, { "i", "c" }),
           ["<s-tab>"] = cmp.mapping(function()
             if cmp.visible() then
               cmp.select_prev_item()
-            else
-              cmp.complete {
-                config = {
-                  sources = {
-                    { name = "codegeex" },
-                  },
-                },
-              }
             end
           end, { "i", "c" }),
           ["<cr>"] = cmp.mapping(function(fallback)
@@ -75,6 +59,10 @@ return {
           ["<pageup>"] = cmp.mapping.scroll_docs(-4),
         },
         sources = {
+          {
+            name = "codegeex",
+            trigger_characters = { "", " ", "\t", "." },
+          },
           { name = "nvim_lsp" },
           { name = "buffer" },
           { name = "path" },

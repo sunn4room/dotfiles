@@ -31,6 +31,10 @@
   time.timeZone = "Asia/Shanghai";
   i18n.defaultLocale = "en_US.UTF-8";
   networking.hostName = "omen";
+  networking.nameservers = [
+    "223.5.5.5"
+    "223.6.6.6"
+  ];
   networking.wireless.iwd.enable = true;
 
   services.libinput.enable = true;
@@ -44,4 +48,3 @@
   users.users.sunny.extraGroups = [ "vboxusers" ];
 
 }
-

@@ -80,6 +80,8 @@
     XDG_STATE_HOME = "$HOME/.local/state";
     XDG_BIN_HOME = "$HOME/.local/bin";
     PYTHONPATH = "$HOME/.python-packages";
+	GO111MODULE = "on";
+	GOPROXY = "https://goproxy.cn";
     PATH = [
       "${XDG_BIN_HOME}"
       "$HOME/.cargo/bin"
