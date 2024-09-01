@@ -7,7 +7,6 @@
   environment.systemPackages = with pkgs; [
     gcc
     lldb
-    bash-language-server
     shellcheck-minimal
     shfmt
     go
@@ -24,7 +23,7 @@
       pip
     ]))
     nodePackages.nodejs
-    lua
+    lua51Packages.lua
     lua-language-server
     stylua
     taplo
@@ -35,7 +34,6 @@
     lazygit
     curl
     wget
-    httpie
     tmux
     chezmoi
     htop-vim

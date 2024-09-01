@@ -59,10 +59,7 @@ return {
           ["<pageup>"] = cmp.mapping.scroll_docs(-4),
         },
         sources = {
-          {
-            name = "codegeex",
-            trigger_characters = { "", " ", "\t", "." },
-          },
+          { name = "codegeex" },
           { name = "nvim_lsp" },
           { name = "buffer" },
           { name = "path" },
@@ -70,8 +67,8 @@ return {
         formatting = {
           format = require("lspkind").cmp_format {
             mode = "symbol",
-            maxwidth = 50,
-            ellipsis_char = "…",
+            maxwidth = 40,
+            ellipsis_char = "...",
           },
         },
         window = {
@@ -80,6 +77,12 @@ return {
           },
           documentation = {
             border = "rounded",
+          },
+        },
+        completion = {
+          autocomplete = {
+            "InsertEnter",
+            "TextChanged",
           },
         },
         cmdline = {

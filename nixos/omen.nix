@@ -16,8 +16,8 @@
   boot.supportedFilesystems = [ "ntfs" ];
   hardware.cpu.intel.updateMicrocode = true;
   hardware.enableRedistributableFirmware = true;
-  hardware.graphics.enable = true;
-  hardware.graphics.extraPackages = with pkgs; [
+  hardware.opengl.enable = true;
+  hardware.opengl.extraPackages = with pkgs; [
     intel-vaapi-driver
   ];
 

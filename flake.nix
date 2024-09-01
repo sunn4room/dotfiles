@@ -3,7 +3,7 @@
   description = "sunn4room nixos config";
 
   inputs = {
-    nixpkgs.url = "https://github.moeyy.xyz/https://github.com/NixOS/nixpkgs/archive/f6d4f4f0550e3574dc9c95a0be83e5e94e3c1837.zip";
+    nixpkgs.url = "https://github.moeyy.xyz/https://github.com/NixOS/nixpkgs/archive/e3f44724538b5e727162c76e841d175d1ff838ea.zip";
   };
 
   outputs = {
