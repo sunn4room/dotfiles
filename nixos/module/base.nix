@@ -1,4 +1,12 @@
-{ config, lib, pkgs, ... }: {
+{ config, lib, pkgs, inputs, ... }: {
+
+  nixpkgs.overlays = [
+    (final: prev: {
+      unstable = import inputs.nixpkgs-unstable {
+        system = final.system;
+      };
+    })
+  ];
 
   boot.loader.systemd-boot.configurationLimit = 2;
   boot.loader.timeout = 15;
@@ -29,7 +37,7 @@
     taplo
     file
     helix
-    neovim
+    unstable.neovim
     git
     lazygit
     curl

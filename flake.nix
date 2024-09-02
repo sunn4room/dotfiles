@@ -4,6 +4,7 @@
 
   inputs = {
     nixpkgs.url = "https://github.moeyy.xyz/https://github.com/NixOS/nixpkgs/archive/e3f44724538b5e727162c76e841d175d1ff838ea.zip";
+    nixpkgs-unstable.url = "https://github.moeyy.xyz/https://github.com/NixOS/nixpkgs/archive/075e1905868bd6528e1e82a564081356fc8964fe.zip";
   };
 
   outputs = {

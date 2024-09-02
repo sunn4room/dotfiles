@@ -101,7 +101,7 @@ return {
     },
     autocmds = {
       auto_fcitx5_switch = function()
-        vim.system { "pgrep", "fcitx5" }
+        vim.fn.system { "pgrep", "fcitx5" }
         if vim.v.shell_error == 0 then
           return {
             {
