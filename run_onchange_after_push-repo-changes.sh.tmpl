@@ -16,7 +16,7 @@ if test "$(git status -s | wc -l)" -ne "0"; then
 		MSG="-"
 	fi
 	git commit -m "$MSG"
-	git remote set-url origin git@gitee.com:sunn4room/dotfiles.git
+	git remote set-url origin git@github.com:sunn4room/dotfiles.git
 	git push origin main
 fi
 
