@@ -32,8 +32,7 @@
   i18n.defaultLocale = "en_US.UTF-8";
   networking.hostName = "omen";
   networking.nameservers = [
-    "223.5.5.5"
-    "223.6.6.6"
+    "1.1.1.1"
   ];
   networking.wireless.iwd.enable = true;
 

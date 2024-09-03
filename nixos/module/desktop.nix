@@ -25,6 +25,7 @@
     xflux
     flameshot
     neovide
+    appimage-run
   ];
 
   environment.variables = {

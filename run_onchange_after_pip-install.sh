@@ -1,8 +1,9 @@
 #!/usr/bin/env sh
 
-pip install --target ~/.python-packages --upgrade\
-    black==24.8.0\
-    pyright==1.1.377\
-    debugpy==1.8.5\
-
+xargs pip install --target ~/.python-packages --upgrade <<EOF
+black==24.8.0
+pyright==1.1.362
+debugpy==1.8.5
+mitmproxy==10.3.0
+EOF
 

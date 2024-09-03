@@ -43,7 +43,7 @@
     curl
     wget
     tmux
-    chezmoi
+    unstable.chezmoi
     htop-vim
     ripgrep
     fzf
@@ -58,7 +58,6 @@
     rclone
     sqlite
     peaclock
-    mitmproxy
     exiftool
     ffmpeg
   ];
