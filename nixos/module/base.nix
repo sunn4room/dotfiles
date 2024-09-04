@@ -42,6 +42,7 @@
     lazygit
     curl
     wget
+    dig
     tmux
     unstable.chezmoi
     htop-vim

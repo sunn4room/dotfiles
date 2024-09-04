@@ -131,3 +131,10 @@ microsoft-edge-unsafe() {
 m3u82mp4() {
 	ffmpeg -i "$1" -c copy "$2.mp4"
 }
+http() {
+	cd "$(mktemp -d)"
+	tee tmp.http >/dev/null
+	httpyac tmp.http -a
+	rm -rf .
+	cd - >/dev/null
+}
