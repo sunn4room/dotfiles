@@ -31,10 +31,23 @@
   time.timeZone = "Asia/Shanghai";
   i18n.defaultLocale = "en_US.UTF-8";
   networking.hostName = "omen";
-  networking.nameservers = [
-    "1.1.1.1"
-  ];
+  # networking.nameservers = [
+  #   "1.1.1.1"
+  #   "9.9.9.9"
+  #   "114.114.114.114"
+  #   "223.5.5.5"
+  # ];
   networking.wireless.iwd.enable = true;
+  services.dnsmasq.enable = true;
+  services.dnsmasq.settings.server = [
+    "/github.com/1.1.1.1"
+    "/github.io/1.1.1.1"
+    "/githubusercontent.com/1.1.1.1"
+    "/githubassets.com/1.1.1.1"
+    "/githubstatus.com/1.1.1.1"
+    "114.114.114.114"
+    "223.5.5.5"
+  ];
 
   services.libinput.enable = true;
   services.libinput.touchpad.naturalScrolling = true;

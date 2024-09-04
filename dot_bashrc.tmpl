@@ -134,7 +134,7 @@ m3u82mp4() {
 http() {
 	cd "$(mktemp -d)"
 	tee tmp.http >/dev/null
-	httpyac tmp.http -a
+	httpyac tmp.http "$@"
 	rm -rf .
 	cd - >/dev/null
 }
