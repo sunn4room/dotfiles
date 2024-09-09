@@ -2,7 +2,7 @@
 
   environment.systemPackages = with pkgs; [
     alacritty
-    microsoft-edge
+    unstable.microsoft-edge
     zathura
     xorg.libxcvt
     xsel
