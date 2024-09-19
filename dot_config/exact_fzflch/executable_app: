@@ -5,9 +5,11 @@ if [ "$#" -eq 0 ]; then
     | tr ":" "\n" \
     | sed 's#$#/applications#' \
     | while read line; do
-        test -d "$line" && fd --base-directory "$line" -e desktop
-    done \
-    | sed 's#\.desktop$##'
+        if test -d "$line"; then
+            cd "$line"
+            fd -e desktop | xargs grep "Type=Application" | sed 's#.desktop:Type=Application$##'
+        fi
+    done
 else
     spawn gtk-launch "$1"
 fi

@@ -15,6 +15,8 @@ return {
       number = false,
       signcolumn = "no",
       foldcolumn = "0",
+      splitbelow = true,
+      splitright = true,
       termguicolors = function()
         return vim.fn.has("gui_running") ~= 0
       end,

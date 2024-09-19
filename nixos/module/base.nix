@@ -29,13 +29,16 @@
     (python3.withPackages (python-pkgs: with python-pkgs; [
       requests
       psutil
-      pip
+      mitmproxy
     ]))
     nodePackages.nodejs
+    nodePackages.yarn
+    nodePackages.pnpm
     lua51Packages.lua
     lua-language-server
     stylua
     taplo
+    mitmproxy
     file
     helix
     unstable.neovim
@@ -79,6 +82,8 @@
       --bind="change:first,tab:down,btab:up"
     '';
     FZF_DEFAULT_COMMAND = "fd -H -L --strip-cwd-prefix";
+    GO111MODULE = "on";
+    GOPROXY = "https://goproxy.cn";
   };
   environment.sessionVariables = rec {
     XDG_CACHE_HOME = "$HOME/.cache";
@@ -86,14 +91,8 @@
     XDG_DATA_HOME = "$HOME/.local/share";
     XDG_STATE_HOME = "$HOME/.local/state";
     XDG_BIN_HOME = "$HOME/.local/bin";
-    PYTHONPATH = "$HOME/.python-packages";
-	GO111MODULE = "on";
-	GOPROXY = "https://goproxy.cn";
     PATH = [
       "${XDG_BIN_HOME}"
-      "$HOME/.cargo/bin"
-      "$HOME/.npm-global/bin"
-      "$HOME/.python-packages/bin"
     ];
   };
 

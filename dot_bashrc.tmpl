@@ -51,10 +51,10 @@ __prompt_host() {
 }
 __prompt_cwd() {
 	printf " ${BLUE}# "
-	if test "$(stat -c %u "$(pwd -P)")" -eq 0; then
-		printf "${RED}"
-	else
+	if test -w "$PWD"; then
 		printf "${CYAN}"
+	else
+		printf "${RED}"
 	fi
 	printf '%s' "$(dirs +0)"
 	if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then

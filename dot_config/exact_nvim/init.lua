@@ -1,5 +1,3 @@
-GHPROXY = "https://gh-proxy.com/"
-
 local lazypath = vim.fn.stdpath "data" .. "/lazy/lazy.nvim"
 if not vim.uv.fs_stat(lazypath) then
   local quit_on_error = function(error)
@@ -22,7 +20,7 @@ if not vim.uv.fs_stat(lazypath) then
     "clone",
     "--filter=blob:none",
     "--branch=main",
-    GHPROXY .. "https://github.com/folke/lazy.nvim.git",
+    "https://github.com/folke/lazy.nvim.git",
     lazypath,
   }
   if vim.v.shell_error == 0 then
@@ -42,9 +40,6 @@ require("lazy").setup {
   spec = {
     { import = "user" },
     { import = "user.lang" },
-  },
-  git = {
-    url_format = GHPROXY .. "https://github.com/%s.git",
   },
   install = {
     colorscheme = { "default" },
