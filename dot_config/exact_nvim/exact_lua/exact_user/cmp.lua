@@ -142,11 +142,13 @@ return {
         n = n or 1
         return luasnip.function_node(function()
           local indent
-          if not vim.api.nvim_buf_get_option(0, "expandtab") then
+          if not vim.api.nvim_get_option_value("expandtab", { buf = 0 }) then
             indent = "\t"
           else
-            indent = string.rep(" ",
-              vim.api.nvim_buf_get_option(0, "shiftwidth"))
+            indent = string.rep(
+              " ",
+              vim.api.nvim_get_option_value("shiftwidth", { buf = 0 })
+            )
           end
           return string.rep(indent, n)
         end)
