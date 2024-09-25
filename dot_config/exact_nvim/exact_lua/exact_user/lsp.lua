@@ -1,16 +1,9 @@
-local progresses = {}
 vim.lsp.handlers["$/progress"] = function(_, res, ctx)
   local name = vim.lsp.get_client_by_id(ctx.client_id).name
-  local token = tostring(res.token)
-  if res.value.kind == "begin" then
-    progresses[name] = progresses[name] or {}
-    progresses[name][token] = 0
-  elseif res.value.kind == "end" then
-    progresses[name][token] = nil
-  else
-    progresses[name][token] = res.value.percentage
-  end
-  vim.cmd [[doautocmd User ProgressUpdate]]
+  local token = res.token
+  local kind = res.value.kind
+  local percentage = res.value.percentage
+  vim.notify(name, token, { kind = kind, percentage = percentage })
 end
 vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(
   vim.lsp.handlers.hover,
@@ -210,43 +203,6 @@ return {
             {
               provider = function(self)
                 return " " .. table.concat(self.names, ",") .. " "
-              end,
-            },
-          },
-        },
-        progress = {
-          update = {
-            "User",
-            pattern = "ProgressUpdate",
-            callback = function()
-              vim.schedule(vim.cmd.redrawtabline)
-            end,
-          },
-          {
-            condition = function(self)
-              local str = ""
-              for name, tokens in pairs(progresses) do
-                local total = 0
-                local count = 0
-                for _, percent in pairs(tokens) do
-                  count = count + 1
-                  total = total + percent
-                end
-                if count ~= 0 then
-                  str = str .. ("%s:%d,"):format(name, math.floor(total / count))
-                end
-              end
-              if #str ~= 0 then
-                self.progresses = str:sub(1, -2)
-                return true
-              else
-                return false
-              end
-            end,
-            { provider = " ", hl = "LineSpecial" },
-            {
-              provider = function(self)
-                return " " .. self.progresses .. " "
               end,
             },
           },

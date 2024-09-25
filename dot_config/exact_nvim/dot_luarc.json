@@ -1,8 +1,8 @@
 {
-  "runtime.version" : "Lua 5.1",
-  "diagnostics": {
-    "globals": [
-      "vim"
-    ]
-  }
+  "$schema": "https://raw.githubusercontent.com/sumneko/vscode-lua/master/setting/schema.json",
+  "runtime.version": "LuaJIT",
+  "workspace.library": [
+    "$VIMRUNTIME",
+    "$HOME/.local/share/nvim/lazy/luvit-meta/library"
+  ]
 }

@@ -1,67 +1,28 @@
-local min_level = 2
-local nlevel = -1
-local ntime = 0
-local s2n = {
-  [0] = 0,
-  [1] = 1,
-  [2] = 2,
-  [3] = 3,
-  [4] = 4,
-  TRACE = 0,
-  DEBUG = 1,
-  INFO = 2,
-  WARN = 3,
-  ERROR = 4,
+local n2s = {
+  [0] = "TRACE",
+  [1] = "DEBUG",
+  [2] = "INFO",
+  [3] = "WARN",
+  [4] = "ERROR",
 }
-local s2h = {
-  TRACE = "TraceMsg",
-  DEBUG = "DebugMsg",
-  INFO = "InfoMsg",
-  WARN = "WarnMsg",
-  ERROR = "ErrorMsg",
+local n2h = {
+  [0] = "TraceMsg",
+  [1] = "DebugMsg",
+  [2] = "InfoMsg",
+  [3] = "WarnMsg",
+  [4] = "ErrorMsg",
 }
 
+local notif_idx = 0
+local notif_level_idx = 0
+local notif_level = -1
+
 return {
-  "rcarriga/nvim-notify",
-  init = function()
-    vim.notify_origin = vim.notify
-    vim.notify = function(...)
-      local ok, notify = pcall(require, "notify")
-      if ok then
-        vim.notify = function(m, l, o)
-          local level = s2n[l or 2]
-          if level > nlevel then
-            nlevel = level
-            vim.cmd [[doautocmd User NotificationsLevel]]
-          end
-          return notify(m, l, o)
-        end
-      else
-        vim.notify = vim.notify_origin
-      end
-      return vim.notify(...)
-    end
+  "sunn4room/notify.nvim",
+  -- dir = vim.env.HOME .. "/Projects/notify.nvim",
+  config = function()
+    vim.notify = require("notify")
   end,
-  lazy = true,
-  opts = {
-    level = min_level,
-    max_width = function()
-      return math.floor(vim.o.columns * 0.5)
-    end,
-    max_height = function()
-      return math.floor(vim.o.lines * 0.25)
-    end,
-    minimum_width = 40,
-    stages = "static",
-    render = "default",
-    icons = {
-      ERROR = "",
-      WARN = "",
-      INFO = "",
-      DEBUG = "",
-      TRACE = "",
-    },
-  },
   specs = {
     {
       "sunn4room/common.nvim",
@@ -69,56 +30,26 @@ return {
         mappings = {
           n = {
             ["<cr>n"] = {
-              desc = "show notifications",
+              desc = "notifications",
               callback = function()
-                local output = {}
-                for _, r in ipairs(require("notify").history()) do
-                  if r.time >= ntime then
-                    table.insert(output, { r.title[2], "MoreMsg" })
+                if notif_idx ~= notif_level_idx then
+                  local notifs = require("notify").notifications
+                  local output = {}
+                  for i = notif_idx + 1, notif_level_idx do
+                    local r = notifs[i]
+                    table.insert(output, { r.time, "MoreMsg" })
                     table.insert(output, { " ", "MsgArea" })
-                    table.insert(output, { r.level, s2h[r.level] })
-                    table.insert(output, { " ", "MsgArea" })
-                    table.insert(output, { r.title[1] .. "\n", "TitleMsg" })
-                    for _, line in ipairs(r.message) do
-                      table.insert(output, { line .. "\n", "MsgArea" })
-                    end
-                    ntime = r.time
+                    table.insert(output, { n2s[r.level] .. "\n", n2h[r.level] })
+                    table.insert(output, { r.message .. "\n", "MsgArea" })
                   end
+                  notif_idx = notif_level_idx
+                  notif_level = -1
+                  vim.cmd [[doautocmd User Notified]]
+                  vim.api.nvim_echo(output, true, {})
                 end
-                nlevel = -1
-                vim.cmd [[doautocmd User NotificationsLevel]]
-                vim.api.nvim_echo(output, true, {})
-              end,
-            },
-            ["<cr>N"] = {
-              desc = "show all notifications",
-              callback = function()
-                local output = {}
-                for _, r in ipairs(require("notify").history()) do
-                  table.insert(output, { r.title[2], "MoreMsg" })
-                  table.insert(output, { " ", "MsgArea" })
-                  table.insert(output, { r.level, s2h[r.level] })
-                  table.insert(output, { " ", "MsgArea" })
-                  table.insert(output, { r.title[1] .. "\n", "TitleMsg" })
-                  for _, line in ipairs(r.message) do
-                    table.insert(output, { line .. "\n", "MsgArea" })
-                  end
-                end
-                vim.api.nvim_echo(output, true, {})
               end,
             },
           },
-        },
-        highlights = {
-          NotifyERRORBorder = { fg = 1, bold = true },
-          NotifyWARNBorder = { fg = 3, bold = true },
-          NotifyINFOBorder = { fg = 2, bold = true },
-          NotifyERRORIcon = { fg = 1, bold = true },
-          NotifyWARNIcon = { fg = 3, bold = true },
-          NotifyINFOIcon = { fg = 2, bold = true },
-          NotifyERRORTitle = { fg = 1, bold = true },
-          NotifyWARNTitle = { fg = 3, bold = true },
-          NotifyINFOTitle = { fg = 2, bold = true },
         },
       },
     },
@@ -128,29 +59,89 @@ return {
         notify = {
           update = {
             "User",
-            pattern = "NotificationsLevel",
+            pattern = "Notified",
             callback = function()
               vim.schedule(vim.cmd.redrawtabline)
             end,
           },
           {
             condition = function()
-              return nlevel >= min_level
+              return #require("notify").notifications ~= notif_idx
             end,
-            provider = " 󰌵 ",
-            hl = function()
-              if nlevel == 0 then
-                return "LineTrace"
-              elseif nlevel == 1 then
-                return "LineDebug"
-              elseif nlevel == 2 then
-                return "LineInfo"
-              elseif nlevel == 3 then
-                return "LineWarn"
-              elseif nlevel == 4 then
-                return "LineError"
-              end
+            {
+              provider = " ",
+              hl = function()
+                local notifs = require("notify").notifications
+                if #notifs ~= notif_level_idx then
+                  for i = notif_level_idx + 1, #notifs do
+                    if notifs[i].level > notif_level then
+                      notif_level = notifs[i].level
+                    end
+                  end
+                  notif_level_idx = #notifs
+                end
+                if notif_level == 0 then
+                  return "LineTrace"
+                elseif notif_level == 1 then
+                  return "LineDebug"
+                elseif notif_level == 2 then
+                  return "LineInfo"
+                elseif notif_level == 3 then
+                  return "LineWarn"
+                elseif notif_level == 4 then
+                  return "LineError"
+                end
+              end,
+            },
+            {
+              provider = function()
+                local notifs = require("notify").notifications
+                local msg = string.gsub(notifs[#notifs].message, "%%", "%%%%")
+                if #msg > 30 then
+                  msg = msg:sub(1, 29) .. "…"
+                end
+                return msg
+              end,
+              hl = function()
+                local notifs = require("notify").notifications
+                local level = notifs[#notifs].level
+                if level == 0 then
+                  return "LineTrace"
+                elseif level == 1 then
+                  return "LineDebug"
+                elseif level == 2 then
+                  return "LineInfo"
+                elseif level == 3 then
+                  return "LineWarn"
+                elseif level == 4 then
+                  return "LineError"
+                end
+              end,
+            },
+            { provider = " " },
+          },
+          {
+            condition = function()
+              return not vim.tbl_isempty(require("notify").progresses)
             end,
+            { provider = " ", hl = "LineSpecial" },
+            {
+              provider = function()
+                local items = {}
+                for name, tokens in pairs(require("notify").progresses) do
+                  local count = 0
+                  local total = 0
+                  for _, percentage in pairs(tokens) do
+                    count = count + 1
+                    total = total + percentage
+                  end
+                  items[#items + 1] = name ..
+                      ":" .. tostring(math.floor(total / count))
+                end
+                return vim.fn.join(items, ",")
+              end,
+            },
+            { provider = " " },
           },
         },
       },

@@ -14,16 +14,33 @@ return {
     },
   },
   {
-    "mistweaverco/kulala.nvim",
-    ft = "http",
+    "sunn4room/httpc.nvim",
+    -- dir = vim.env.HOME .. "/Projects/httpc.nvim",
     opts = {
-      default_view = "headers_body",
-      icons = {
-        inlay = {
-          loading = "…",
-          done = "✔",
-          error = "✘",
+      animation = {
+        spinner = {
+          {
+            { ">", "Comment" },
+            { ">", "Comment" },
+            { ">", "Comment" },
+          },
+          {
+            { ">", "Special" },
+            { ">", "Comment" },
+            { ">", "Comment" },
+          },
+          {
+            { ">", "Comment" },
+            { ">", "Special" },
+            { ">", "Comment" },
+          },
+          {
+            { ">", "Comment" },
+            { ">", "Comment" },
+            { ">", "Special" },
+          },
         },
+        interval = 200,
       },
     },
   },

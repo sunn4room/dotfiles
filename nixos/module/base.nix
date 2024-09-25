@@ -40,7 +40,6 @@
     taplo
     mitmproxy
     file
-    helix
     unstable.neovim
     git
     lazygit

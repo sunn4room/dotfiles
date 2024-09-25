@@ -14,31 +14,13 @@ return {
         opts.servers.lua_ls = {
           on_attach = function(client, bufnr)
             vim.b[bufnr].formatting_client = client.name
-            local cwdname = vim.fn.fnamemodify(vim.fn.getcwd(), ":t")
-            if
-                cwdname == "nvim"
-                or cwdname:sub(1, 5) == "nvim-"
-                or cwdname:sub(-5, -1) == ".nvim"
-            then
-              require("lazy").load {
-                plugins = { "lazydev.nvim" },
-              }
-            end
           end,
         }
       end
     end,
   },
   {
-    "folke/lazydev.nvim",
+    "Bilal2453/luvit-meta",
     lazy = true,
-    dependencies = {
-      { "Bilal2453/luvit-meta" },
-    },
-    opts = {
-      library = {
-        "luvit-meta/library",
-      },
-    },
   },
 }

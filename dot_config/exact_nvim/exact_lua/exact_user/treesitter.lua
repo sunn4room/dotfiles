@@ -1,6 +1,9 @@
 return {
   "nvim-treesitter/nvim-treesitter",
   build = ":TSUpdate",
+  dependencies = {
+    { "nvim-treesitter/playground" },
+  },
   opts = {
     ensure_installed = {
       vim = true,
@@ -9,8 +12,12 @@ return {
       bash = true,
       markdown = true,
       markdown_inline = true,
+      query = true,
     },
     highlight = {
+      enable = true,
+    },
+    playground = {
       enable = true,
     },
   },
@@ -25,4 +32,16 @@ return {
     opts.ensure_installed = ensure_installed
     require("nvim-treesitter.configs").setup(opts)
   end,
+  specs = {
+    {
+      "sunn4room/common.nvim",
+      opts = {
+        mappings = {
+          n = {
+            ["\\t"] = { command = "<cmd>TSPlaygroundToggle<cr>", desc = "treesitter" },
+          },
+        },
+      },
+    },
+  },
 }

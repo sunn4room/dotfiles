@@ -226,6 +226,20 @@ return {
     ) },
   },
   config = function(_, opts)
+    if opts.tabline then
+      local tabline = {}
+      for _, comp in pairs(opts.tabline) do
+        tabline[#tabline + 1] = comp
+      end
+      opts.tabline = tabline
+    end
+    if opts.statusline then
+      local statusline = {}
+      for _, comp in pairs(opts.statusline) do
+        statusline[#statusline + 1] = comp
+      end
+      opts.statusline = statusline
+    end
     require("heirline").setup {
       tabline = {
         opts.cut,
@@ -233,6 +247,7 @@ return {
         opts.git,
         opts.bufferlist,
         opts.align,
+        opts.tabline or opts.empty,
         opts.progress or opts.empty,
         opts.notify or opts.empty,
         opts.tablist,
@@ -241,6 +256,7 @@ return {
         opts.cut,
         opts.filename,
         opts.align,
+        opts.statusline or opts.empty,
         opts.diagnostic or opts.empty,
         opts.lsp or opts.empty,
         opts.diff or opts.empty,
