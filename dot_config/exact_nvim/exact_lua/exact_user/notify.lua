@@ -49,6 +49,23 @@ return {
                 end
               end,
             },
+            ["<cr>N"] = {
+              desc = "notifications history",
+              callback = function()
+                if notif_idx ~= 0 then
+                  local notifs = require("notify").notifications
+                  local output = {}
+                  for i = 1, notif_idx do
+                    local r = notifs[i]
+                    table.insert(output, { r.time, "MoreMsg" })
+                    table.insert(output, { " ", "MsgArea" })
+                    table.insert(output, { n2s[r.level] .. "\n", n2h[r.level] })
+                    table.insert(output, { r.message .. "\n", "MsgArea" })
+                  end
+                  vim.api.nvim_echo(output, true, {})
+                end
+              end,
+            },
           },
         },
       },

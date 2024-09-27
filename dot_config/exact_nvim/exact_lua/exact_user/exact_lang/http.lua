@@ -16,7 +16,9 @@ return {
   {
     "sunn4room/httpc.nvim",
     -- dir = vim.env.HOME .. "/Projects/httpc.nvim",
+    ft = "http",
     opts = {
+      register = "r",
       animation = {
         spinner = {
           {
@@ -41,6 +43,17 @@ return {
           },
         },
         interval = 200,
+      },
+    },
+    specs = {
+      {
+        "sunn4room/common.nvim",
+        opts = {
+          commands = {
+            Httpc = { callback = function() require("httpc").run() end },
+            Httpcx = { callback = function() require("httpc").cancel() end },
+          },
+        },
       },
     },
   },

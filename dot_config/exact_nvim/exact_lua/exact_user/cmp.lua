@@ -117,6 +117,9 @@ return {
             CmpItemKind = { fg = 4 },
             CmpItemKindCodeGeeX = "CmpItemKind",
           },
+          commands = {
+            Codegeex = { callback = function() vim.b.use_codegeex = not vim.b.use_codegeex end },
+          },
         },
       },
     },

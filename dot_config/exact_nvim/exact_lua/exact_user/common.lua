@@ -24,6 +24,7 @@ return {
     },
     mappings = {
       n = {
+        ["<cr><cr>"] = { command = "<cr>", desc = "enter" },
         ["<cr>p"] = { command = "<cmd>Lazy<cr>", desc = "lazy" },
         ["g0"] = {
           callback = function()
