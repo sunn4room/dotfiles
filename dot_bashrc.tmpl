@@ -1,0 +1,43 @@
+if [[ ":$PATH:" != *":{{ .chezmoi.homeDir }}/.local/bin:"* ]]; then
+	export PATH={{ .chezmoi.homeDir }}/.local/bin:$PATH
+fi
+
+export FZF_DEFAULT_OPTS="
+--ansi
+--algo=v1
+--tiebreak=chunk,begin,length,index
+--layout=reverse
+--info=inline
+--no-separator
+--color=fg:white,hl:magenta,fg+:bright-white,bg+:-1,hl+:bright-magenta
+--color=prompt:green,query:bright-white,info:cyan,pointer:bright-magenta,marker:magenta,header:blue,spinner:red
+--bind=change:first,tab:down,btab:up
+--preview-window=down
+--preview-border=line
+"
+export FZF_DEFAULT_COMMAND="fd -H -L"
+
+[[ $- != *i* ]] && return
+
+set -o vi
+bind '"\e[A": history-search-backward'
+bind '"\e[B": history-search-forward'
+
+{{ if eq .chezmoi.username "sunny" -}}
+echo -n -e "\033[1;35m"
+cat <<EOF
+     ____                ____
+    /  _/_______________/ . /_____________
+   /_  / / /   /   / / /   / . / . /     /
+  /___/___/_/_/_/_/_  /_/_/___/___/_/_/_/
+                 /___/
+EOF
+echo -n -e "\033[0m"
+{{- end }}
+
+export EDITOR="nvim"
+
+alias ls='ls --color=auto'
+alias grep='grep --color=auto'
+
+eval "$(starship init bash)"

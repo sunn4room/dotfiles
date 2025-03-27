@@ -1,0 +1,41 @@
+#!/bin/bash
+
+if test "$#" -eq "0"; then
+  fd -e desktop "" /usr/share/applications ~/.local/share/applications | sort | while read file; do
+    cat "${file}"
+  done | sed -e '/^#/d' -e '/^$/d' | sed -e '1d' -e '$a[Desktop Entry]' | awk -F "=" '
+    {
+      if ($1 == "[Desktop Entry]") {
+        if (APP == 1) {
+          if (TERM == 1) printf("%s%s   alacritty --title \"%s\" -e %s\n", NAME, SUBNAME, NAME, EXEC);
+          else printf("%s%s   %s\n", NAME, SUBNAME, EXEC);
+        }
+        NAME = "";
+        SUBNAME = "";
+        TERM = 0;
+        APP=0;
+        EXEC = "";
+      } else if ($1 ~ /^\[Desktop Action .+\]$/) {
+        if (APP == 1) {
+          if (TERM == 1) printf("%s%s   alacritty --title \"%s\" -e %s\n", NAME, SUBNAME, NAME, EXEC);
+          else printf("%s%s   %s\n", NAME, SUBNAME, EXEC);
+        }
+        SUBNAME = "";
+        EXEC = "";
+      } else if ($1 == "Name") {
+        if (NAME == "") NAME = $2;
+        else SUBNAME = "("$2")";
+      } else if ($1 == "Exec") {
+        EXEC = $2;
+      } else if ($1 == "Type" && $2 == "Application") {
+        APP = 1;
+      } else if ($1 == "Terminal" && $2 == "true") {
+        TERM = 1;
+      }
+    }
+  '
+else
+  command="${1#*   }"
+  command="${command% \%*}"
+  bgrun "${command}"
+fi

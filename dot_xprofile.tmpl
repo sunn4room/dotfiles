@@ -1,0 +1,14 @@
+xrdb ~/.Xresources
+
+export GTK_THEME=Adwaita-dark
+export QT_STYLE_OVERRIDE=adwaita-dark
+export QT_FONT_DPI={{.gui.dpi}}
+
+export GTK_IM_MODULE=fcitx
+export QT_IM_MODULE=fcitx
+export XMODIFIERS=@im=fcitx
+fcitx &
+
+dunst &
+
+clipit &

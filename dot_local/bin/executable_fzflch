@@ -1,0 +1,34 @@
+#!/bin/bash
+set -e
+
+list_scripts() {
+  cd "${HOME}/.config/fzflch"
+  for script in *; do
+    if test "${script: -1}" = ":"; then
+      "${HOME}/.config/fzflch/${script}" | sed "s/^/${script} /"
+    else
+      echo "${script}"
+    fi
+  done
+}
+first_selection="$(list_scripts | sed -e "s/   /   "$'\e[1;34m'"/" -e "s/\$/"$'\e[0m'"/" | fzf --prompt "select > " --bind "space:accept")"
+command=("${first_selection%% *}")
+prompt=("${command[0]}")
+if test "${command[0]}" != "${first_selection}"; then
+  command+=("${first_selection#* }")
+  prompt+=("${command[1]%%   *}")
+fi
+while true; do
+  if test "${command[@]: -1}" = '$'; then
+    "${HOME}/.config/fzflch/${command[0]}" "${command[@]:1}"
+    break
+  fi
+  if test "${command[@]: -1}" = '?'; then
+    userinput="$(echo "" | fzf --prompt "${prompt[*]} > " --disabled --bind "change:reload:echo {q}")"
+    command+=("${userinput}")
+    prompt+=("${userinput}")
+  fi
+  selection="$("${HOME}/.config/fzflch/${command[0]}" "${command[@]:1}" | sed -e "s/   /   "$'\e[1;34m'"/" -e "s/\$/"$'\e[0m'"/" | fzf --prompt "${prompt[*]} > " --select-1 --exit-0)"
+  command+=("${selection}")
+  prompt+=("${selection%%   *}")
+done

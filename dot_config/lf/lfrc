@@ -1,0 +1,127 @@
+set nopreview
+set ratios "1"
+set ifs "\n"
+
+cmd new &{{
+	if [[ "$1" =~ ^[^/]+$ ]] && [ ! -e "$1" ]; then
+		touch "$1"
+		res="$(printf '%s' "$1" | sed 's/\\/\\\\/g;s/"/\\"/g')"
+		lf -remote "send $id reload"
+		lf -remote "send $id select \"$res\""
+	elif [[ "$1" =~ ^[^/]+/$ ]] && [ ! -e "$1" ]; then
+		mkdir "$1"
+		res="$(printf '%s' "$1" | sed 's/\\/\\\\/g;s/"/\\"/g')"
+		lf -remote "send $id reload"
+		lf -remote "send $id select \"$res\""
+	fi
+}}
+
+cmd fd_jump ${{
+	fzf --prompt="fd jump > " \
+		--bind='enter:become(lf -remote "send $id select \"$(printf "%s" {} | sed '\''s/\\/\\\\/g;s/"/\\"/g'\'')\"")' \
+		--preview='cat -- {}'
+}}
+
+cmd rg_jump ${{
+	cmd="rg --line-number --no-heading --color=always --smart-case --field-match-separator=//"
+	fzf --prompt="rg jump > " --disabled --delimiter=// \
+		--bind="start:reload([ -n {q} ] && $cmd -- {q} || true)" \
+		--bind="change:reload([ -n {q} ] && $cmd -- {q} || true)" \
+		--bind='enter:become(lf -remote "send $id select \"$(printf "%s" {1} | sed '\''s/\\/\\\\/g;s/"/\\"/g'\'')\""; less +{2} -- {1})' \
+}}
+
+cmd extract ${{
+	set -e
+	atool -l -- $fx | less
+	read -n 1 -p "extract? [y/n]" USERINPUT
+	test "$USERINPUT" = "y" && atool --extract-to="$PWD" -- $fx || true
+}}
+
+cmd compress ${{
+	if [ -n "$*" ]; then
+		atool -a "$*" -- $(basename -a -- $fx)
+	fi
+}}
+
+cmd bulk-rename ${{
+	old="$(mktemp)"
+	new="$(mktemp)"
+	fs="$(basename -a -- $fs)"
+	printf '%s\n' "$fs" > "$old"
+	printf '%s\n' "$fs" > "$new"
+	$EDITOR "$new"
+	[ "$(wc -l < "$new")" -ne "$(wc -l < "$old")" ] && exit
+	paste "$old" "$new" | while IFS= read -r names; do
+		src="$(printf '%s' "$names" | cut -f1)"
+		dst="$(printf '%s' "$names" | cut -f2)"
+		if [ "$src" = "$dst" ] || [ -e "$dst" ]; then
+			continue
+		fi
+		mv -- "$src" "$dst"
+	done
+	rm -- "$old" "$new"
+	lf -remote "send $id unselect"
+}}
+
+clearmaps
+map q quit
+map h updir
+map l open
+map j down
+map k up
+map / search
+map n search-next
+map N search-prev
+map . set hidden!
+map r &{{
+	if [ -z "$fs" ]; then
+		lf -remote "send $id rename"
+	else
+		lf -remote "send $id bulk-rename"
+	fi
+}}
+map d delete
+map y copy
+map c cut
+map p paste
+map <space> toggle
+map a push :new<space>
+map gg top
+map gf fd_jump
+map gw rg_jump
+map G bottom
+map sn :set sortby natural; set info
+map ss :set sortby size; set info size
+map st :set sortby time; set info time
+map sa :set sortby atime; set info atime
+map sc :set sortby ctime; set info ctime
+map \$ shell
+map \% shell-pipe
+map \! shell-wait
+map \& shell-async
+map e $$EDITOR -- $fx
+map v $less -- $fx
+map x extract
+map z push :compress<space>
+map w ${{
+	if [ -z "$fs" ]; then
+		if [ -d "$f" ]; then
+			if expr match "$fx" "$HOME/Videos" >/dev/null; then
+				mpv --shuffle --directory-filter-types=video "$(basename -- "$fx")"
+			elif expr match "$fx" "$HOME/Music" >/dev/null; then
+				mpv --shuffle --directory-filter-types=audio,video "$(basename -- "$fx")"
+			elif expr match "$fx" "$HOME/Pictures" >/dev/null; then
+				mpv --shuffle --directory-filter-types=image "$(basename -- "$fx")"
+			else
+				mpv --shuffle "$(basename -- "$fx")"
+			fi
+		else
+			mpv "$f"
+		fi
+	else
+		mpv -- $(basename -a -- $fs)
+	fi
+}}
+map gh cd ~
+map gr cd /
+

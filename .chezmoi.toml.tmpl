@@ -1,0 +1,27 @@
+{{ if eq .chezmoi.username "sunny" -}}
+encryption = "age"
+
+[age]
+identity = "~/.config/chezmoi/key.txt"
+recipient = "age1prx2wwermyqs05ax744enx8dtay8xyelyzxm7t8qk6kj4epl9eqqwja0wc"
+
+{{ end -}}
+[data]
+admin = {{ output "bash" "-c" "id -Gn | grep -qw wheel && echo -n true || echo -n false" }}
+
+{{ if eq .chezmoi.hostname "omen" -}}
+[data.dev]
+enable = true
+lua = true
+python = true
+node = true
+
+[data.cn]
+enable = true
+
+[data.gui]
+enable = true
+type = "intel"
+dpi = 120
+
+{{ end -}}

@@ -1,0 +1,31 @@
+#!/bin/bash
+
+if test "$#" -eq "0"; then
+	echo "lock"
+	echo "logout"
+	echo "hibernate"
+	echo "suspend"
+	echo "poweroff"
+	echo "reboot"
+else
+	case "$1" in
+	lock)
+		i3lock-wrapper >/dev/null 2>&1
+		;;
+	logout)
+		awesome-client "awesome.quit()" >/dev/null 2>&1
+		;;
+	hibernate)
+		systemctl hibernate >/dev/null 2>&1
+		;;
+	suspend)
+		systemctl suspend >/dev/null 2>&1
+		;;
+	poweroff)
+		systemctl poweroff >/dev/null 2>&1
+		;;
+	reboot)
+		systemctl reboot >/dev/null 2>&1
+		;;
+	esac
+fi

@@ -1,0 +1,242 @@
+#!/bin/bash
+set -e
+
+# {{ output "date" "+%x" | trim }}
+
+{{ if .cn.enable -}}
+test -f /etc/pacman.d/mirrorlist.bk || sudo cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bk
+sudo tee /etc/pacman.d/mirrorlist <<EOF >/dev/null
+Server = https://mirrors.tuna.tsinghua.edu.cn/archlinux/\$repo/os/\$arch
+EOF
+{{- end }}
+
+test -f /etc/pacman.conf.bk || sudo cp /etc/pacman.conf /etc/pacman.conf.bk
+sudo tee /etc/pacman.conf <<EOF >/dev/null
+[options]
+HoldPkg = pacman glibc
+IgnorePkg = microsoft-edge-stable-bin
+Architecture = auto
+Color
+CheckSpace
+ParallelDownloads = 5
+DownloadUser = alpm
+SigLevel = Never
+
+[core]
+Include = /etc/pacman.d/mirrorlist
+
+[extra]
+Include = /etc/pacman.d/mirrorlist
+
+[archlinuxcn]
+{{ if .cn.enable -}}
+Server = https://mirrors.tuna.tsinghua.edu.cn/archlinuxcn/\$arch
+{{ else -}}
+Server = https://repo.archlinuxcn.org/\$arch
+{{- end }}
+EOF
+
+command -v paru >/dev/null || sudo pacman -Sy --noconfirm paru
+
+echo "refresh package databases..."
+paru -Sy
+
+PKGS="$(cat <<EOF | sed '/^#/d;/^$/d' | sort
+# system
+base
+base-devel
+linux
+linux-firmware
+pacman-contrib
+paru
+man-db
+tldr
+less
+openssh
+
+# tool
+wget
+rclone
+fuse3
+htop
+atool
+zip
+unzip
+starship
+neovim
+git
+tmux
+age
+chezmoi
+fzf
+fd
+jq
+ripgrep
+lf
+
+{{ if .dev.enable -}}
+# develop
+bat
+{{ if .dev.lua -}}
+lua-language-server
+{{- end }}
+{{ if .dev.python -}}
+python
+pyright
+python-black
+python-isort
+python-debugpy
+{{- end }}
+{{ if .dev.node -}}
+nodejs
+npm
+yarn
+pnpm
+vtsls
+eslint-language-server
+vue-language-server
+prettier
+{{- end }}
+{{- end }}
+
+{{ if .gui.enable -}}
+# gui
+{{ if eq .gui.type "intel" -}}
+mesa
+vulkan-intel
+intel-media-driver
+{{ else -}}
+xf86-video-vmware
+{{- end }}
+archlinux-wallpaper
+capitaine-cursors
+gnome-themes-extra
+adwaita-qt5
+adwaita-qt6
+noto-fonts
+ttf-jetbrains-mono-nerd
+ttf-noto-nerd
+noto-fonts-cjk
+noto-fonts-emoji
+noto-fonts-extra
+lightdm
+lightdm-gtk-greeter
+xorg-server
+xorg-xinit
+xorg-xrandr
+xsel
+libnotify
+dunst
+clipit
+pulseaudio
+brightnessctl
+fcitx
+fcitx-qt5
+fcitx-qt6
+fcitx-configtool
+fcitx-googlepinyin
+awesome
+vicious
+alacritty
+mpv
+microsoft-edge-stable-bin
+{{- end }}
+
+# other
+{{ if eq .chezmoi.hostname "omen" -}}
+efibootmgr
+grub
+os-prober
+intel-ucode
+iwd
+ntfs-3g
+keepassxc
+{{- end }}
+EOF
+)"
+
+CURPKGS="$(paru -Qeq | sort)"
+
+echo "remove packages..."
+comm -13 <(echo "$PKGS") <(echo "$CURPKGS") | xargs -r paru -Rs --noconfirm
+echo "upgrade packages..."
+paru -Su --noconfirm
+echo "add packages..."
+comm -23 <(echo "$PKGS") <(echo "$CURPKGS") | xargs -r paru -S --noconfirm
+echo "$PKGS" | xargs paru -D --asexplicit >/dev/null
+
+paccache -qruk1
+paccache -qrk2
+
+sudo systemctl enable sshd
+sudo systemctl start sshd
+
+{{ if .gui.enable -}}
+sudo tee /etc/X11/xorg.conf.d/30-touchpad.conf <<EOF >/dev/null
+Section "InputClass"
+    Identifier "touchpad"
+    Driver "libinput"
+    MatchIsTouchpad "on"
+    Option "Tapping" "on"
+    Option "NaturalScrolling" "true"
+EndSection
+EOF
+
+sudo tee /etc/fonts/local.conf <<EOF >/dev/null
+<?xml version="1.0"?>
+<!DOCTYPE fontconfig SYSTEM "urn:fontconfig:fonts.dtd">
+<fontconfig>
+	<alias binding="same">
+		<family>serif</family>
+		<prefer>
+			<family>NotoSerif Nerd Font</family>
+			<family>Noto Serif CJK SC</family>
+			<family>Noto Serif CJK TC</family>
+			<family>Noto Serif CJK JP</family>
+			<family>Noto Serif CJK KR</family>
+		</prefer>
+	</alias>
+	<alias binding="same">
+		<family>sans-serif</family>
+		<prefer>
+			<family>NotoSans Nerd Font</family>
+			<family>Noto Sans CJK SC</family>
+			<family>Noto Sans CJK TC</family>
+			<family>Noto Sans CJK JP</family>
+			<family>Noto Sans CJK KR</family>
+		</prefer>
+	</alias>
+	<alias binding="same">
+		<family>monospace</family>
+		<prefer>
+			<family>JetBrainsMono Nerd Font</family>
+			<family>Noto Sans Mono CJK SC</family>
+			<family>Noto Sans Mono CJK TC</family>
+			<family>Noto Sans Mono CJK JP</family>
+			<family>Noto Sans Mono CJK KR</family>
+		</prefer>
+	</alias>
+	<alias binding="same">
+		<family>emoji</family>
+		<prefer>
+			<family>Noto Color Emoji</family>
+		</prefer>
+	</alias>
+
+</fontconfig>
+EOF
+
+test -f /etc/lightdm/lightdm-gtk-greeter.conf.bk || sudo cp /etc/lightdm/lightdm-gtk-greeter.conf /etc/lightdm/lightdm-gtk-greeter.conf.bk
+sudo tee /etc/lightdm/lightdm-gtk-greeter.conf <<EOF >/dev/null
+[greeter]
+xft-dpi={{ .gui.dpi }}
+font-name=monospace
+theme-name=Adwaita-dark
+cursor-theme-name=capitaine-cursors-light
+cursor-theme-size=32
+indicators=~host;~spacer;~power
+background=/usr/share/backgrounds/archlinux/conference.png
+EOF
+
+sudo systemctl enable lightdm.service
+{{- end }}

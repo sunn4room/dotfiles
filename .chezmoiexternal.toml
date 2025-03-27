@@ -1,0 +1,5 @@
+{{ if .gui.enable -}}
+[".config/wallpaper"]
+type = "file"
+url = "https://{{.cn.ghproxy}}/https://raw.githubusercontent.com/sunn4room/images/main/yard-under-the-sun.jpg"
+{{ end -}}

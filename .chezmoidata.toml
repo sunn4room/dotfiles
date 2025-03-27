@@ -1,0 +1,41 @@
+[cn]
+ghproxy = "gh.llkk.cc"
+
+[gui]
+color00 = "#282A36"
+color01 = "#FF5555"
+color02 = "#50FA7B"
+color03 = "#F1FA8C"
+color04 = "#BD93F9"
+color05 = "#FF79C6"
+color06 = "#8BE9FD"
+color07 = "#F8F8F2"
+color10 = "#525674"
+color11 = "#FF6E6E"
+color12 = "#69FF94"
+color13 = "#FFFFA5"
+color14 = "#D6ACFF"
+color15 = "#FF92DF"
+color16 = "#A4FFFF"
+color17 = "#FFFFFF"
+
+[secret]
+rclone_jianguoyun_pass = """
+-----BEGIN AGE ENCRYPTED FILE-----
+YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBIdWdSUWJoVnpyb1V3L3U0
+ZUlPYXVYay81RzNsTzAxcUY4endCN29VZXdRCkVwbmRoMDlvR29BZmZQVE1kYnRO
+NFgxNHI4ZW5QdEhtaWFucmJYRTY4aFUKLS0tIC9DNURkQmQydFY4d2NrQVZObjFs
+YTdHRjNydlFJeGhnenJPK2ZwUlZkNFUKOZhA9m04t9qFcV6cvdaRuxKjh2ghicoR
+1ivNwLTiM0bxYRsIAy8DAI21JhgW18sazmCCvXb6m0INhW3i4d/RbdGwzbSCDztT
+oXWn
+-----END AGE ENCRYPTED FILE-----
+"""
+github_token = """
+-----BEGIN AGE ENCRYPTED FILE-----
+YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBSL08rc0Z0M0IwOWQ3RWpM
+N0NnZklGazhab0Q1M0Y3aG40dFB2SUN2dEIwCk55TmtDamVHa05QSWJ0SGlKVEpn
+U3NSUUxDL2p5RmFhd25adnRyWUZwa2sKLS0tIHdZeWtLUkpxWG5Jbm5nVDJmR0xi
+c0FrdDJhRmNiWG5DUFR1WmQ5MlF6dFEKp2LInRuVxWDj9kY1/mPa4p9QF0z+6u3X
+8NXO6cB2twEkUFsCeIBPFwlYuQ3m9hu6WNOmOWq15PVNnd8pzTg+EHVTaKt1YOrY
+-----END AGE ENCRYPTED FILE-----
+"""

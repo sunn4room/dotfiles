@@ -1,0 +1,74 @@
+# global
+/**/*
+!/.config/
+!/.config/systemd/
+!/.config/systemd/user/
+!/.local/
+!/.local/bin/
+!/.local/share/
+!/.local/share/applications/
+
+# common
+!/.editorconfig
+!/.bashrc
+!/.bash_profile
+!/.config/starship.toml
+!/.gitconfig
+!/.config/fd/
+!/.config/fd/**/*
+!/.config/lf/
+!/.config/lf/**/*
+!/.config/tmux/
+!/.config/tmux/**/*
+
+# encrypt
+{{ if eq .chezmoi.username "sunny" -}}
+!/key
+!/.ssh/
+!/.ssh/id_rsa
+!/.ssh/id_rsa.pub
+!/.config/rclone/
+!/.config/rclone/**/*
+!/.config/systemd/user/rclone@jianguoyun.service
+!/.config/systemd/user/rclone@jianguoyun.service.sh
+{{- end }}
+
+# develop
+{{ if .dev.enable -}}
+!/.config/nvim/
+!/.config/nvim/*
+!/.config/nvim/lua/user/
+!/.config/nvim/lua/user/*
+{{ if .dev.lua -}}
+!/.config/nvim/lua/user/lang/lua.lua
+{{- end }}
+{{ if .dev.python -}}
+!/.config/nvim/lua/user/lang/python.lua
+{{- end }}
+{{ if .dev.node -}}
+!/.config/nvim/lua/user/lang/node.lua
+{{- end }}
+{{- end }}
+
+# gui
+{{ if .gui.enable -}}
+!/.Xresources
+!/.xprofile
+!/.config/awesome/
+!/.config/awesome/**/*
+!/.config/alacritty/
+!/.config/alacritty/**/*
+!/.config/dunst/
+!/.config/dunst/**/*
+!/.config/mpv/
+!/.config/mpv/**/*
+!/.local/bin/fzflch
+!/.config/fzflch/
+!/.config/fzflch/*
+{{- end }}
+
+# admin
+{{ if .admin -}}
+!/system
+{{- end }}
+

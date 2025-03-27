@@ -1,0 +1,11 @@
+#!/bin/bash
+
+set -e
+
+cd {{ .chezmoi.sourceDir }}
+
+if test "$(git status -s | wc -l)" -ne "0"; then
+	git add --all
+	git commit -m "new starter"
+	git push
+fi

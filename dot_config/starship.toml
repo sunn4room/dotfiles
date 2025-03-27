@@ -1,0 +1,35 @@
+format = "$status$username$hostname$directory$git_branch$git_commit$git_state$git_status\n$character"
+
+[character]
+error_symbol = "[do](bold blue)"
+success_symbol = "[do](bold blue)"
+
+[directory]
+format = "[in](bold blue) [$path](bold cyan)( [$read_only](bold red))"
+read_only = "[RO]"
+truncate_to_repo = false
+truncation_length = 1000
+
+[git_branch]
+format = " [git](bold blue) [$branch(:$remote_branch)](bold purple)"
+
+[git_commit]
+format = "[ -> $hash](bold purple)"
+
+[git_state]
+format = " [$state( $progress_current/$progress_total)]($style)"
+
+[git_status]
+format = "( [\\[$all_status$ahead_behind\\]]($style))"
+
+[hostname]
+format = "[at](bold blue) [$hostname](bold yellow) "
+
+[status]
+disabled = false
+format = "[done](bold blue) [$status](bold red)\n"
+
+[username]
+format = "[by](bold blue) [$user]($style) "
+style_user = "bold green"
+

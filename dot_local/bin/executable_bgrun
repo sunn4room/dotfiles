@@ -1,0 +1,3 @@
+#!/bin/bash
+
+TMUX= tmux new-session -A -s background bash -c 'read -n 1 -p "Background session. Press any key..."' \; new-window -c "$HOME" "$@" \; detach-client >/dev/null

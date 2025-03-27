@@ -1,0 +1,660 @@
+local awful = require("awful")
+local gears = require("gears")
+local wibox = require("wibox")
+local beautiful = require("beautiful")
+local dpi = require("beautiful.xresources").apply_dpi
+local vicious = require("vicious")
+
+require("awful.autofocus")
+
+if awesome.startup_errors then
+  awful.spawn {
+    "notify-send",
+    "-u",
+    "critical",
+    "AwesomeWM starup error",
+    awesome.startup_errors,
+  }
+end
+
+do
+  local in_error = false
+  awesome.connect_signal("debug::error", function(err)
+    if in_error then return end
+    in_error = true
+    awful.spawn {
+      "notify-send",
+      "-u",
+      "critical",
+      "AwesomeWM error",
+      tostring(err),
+    }
+    in_error = false
+  end)
+end
+
+beautiful.init {
+  wallpaper = os.getenv("HOME") .. "/.config/wallpaper",
+  font = "monospace " .. dpi(13) .. "px",
+  master_width_factor = 0.5,
+  useless_gap = dpi(4),
+  border_width = dpi(2),
+  border_normal = "{{.gui.color10}}",
+  border_focus = "{{.gui.color05}}",
+  wibar_fg = "{{.gui.color07}}",
+  wibar_bg = "#00000000",
+  wibar_height = dpi(36),
+  wibar_opacity = 1.0,
+  taglist_fg_focus = "{{.gui.color07}}",
+  taglist_bg_focus = "{{.gui.color00}}",
+  taglist_fg_urgent = "{{.gui.color01}}",
+  taglist_bg_urgent = "{{.gui.color00}}",
+  taglist_fg_occupied = "{{.gui.color04}}",
+  taglist_bg_occupied = "{{.gui.color00}}",
+  taglist_fg_empty = "{{.gui.color10}}",
+  taglist_bg_empty = "{{.gui.color00}}",
+  tasklist_fg_focus = "{{.gui.color07}}",
+  tasklist_bg_focus = "{{.gui.color00}}",
+  tasklist_fg_normal = "{{.gui.color04}}",
+  tasklist_bg_normal = "{{.gui.color00}}",
+  tasklist_fg_urgent = "{{.gui.color01}}",
+  tasklist_bg_urgent = "{{.gui.color00}}",
+  tasklist_spacing = dpi(8),
+  tasklist_disable_icon = true,
+  tasklist_plain_task_name = true,
+  tasklist_font = "sans " .. dpi(13) .. "px",
+}
+
+modkey = "Mod4"
+
+cpuwidget = awful.widget.graph()
+cpuwidget:set_width(dpi(32))
+cpuwidget:set_step_width(dpi(8))
+cpuwidget:set_background_color("{{.gui.color10}}")
+cpuwidget:set_color("{{.gui.color15}}")
+vicious.register(cpuwidget, vicious.widgets.cpu, "$1", 1)
+
+memwidget = awful.widget.graph()
+memwidget:set_width(dpi(32))
+memwidget:set_step_width(dpi(8))
+memwidget:set_background_color("{{.gui.color10}}")
+memwidget:set_color("{{.gui.color15}}")
+vicious.register(memwidget, vicious.widgets.mem, "$1", 1)
+
+vicious.cache(vicious.widgets.net)
+
+netdownwidget = awful.widget.graph()
+netdownwidget:set_width(dpi(32))
+netdownwidget:set_step_width(dpi(8))
+netdownwidget:set_background_color("{{.gui.color10}}")
+netdownwidget:set_color("{{.gui.color15}}")
+vicious.register(netdownwidget, vicious.widgets.net, function(_, args)
+  local total = 0
+  for k, v in pairs(args) do
+    if k:sub(-8) == "down_kb}" then
+      total = total + v
+    end
+  end
+  return total * 100 / 4096
+end, 1)
+
+netupwidget = awful.widget.graph()
+netupwidget:set_width(dpi(32))
+netupwidget:set_step_width(dpi(8))
+netupwidget:set_background_color("{{.gui.color10}}")
+netupwidget:set_color("{{.gui.color15}}")
+vicious.register(netupwidget, vicious.widgets.net, function(_, args)
+  local total = 0
+  for k, v in pairs(args) do
+    if k:sub(-6) == "up_kb}" then
+      total = total + v
+    end
+  end
+  return total * 100 / 4096
+end, 1)
+
+datewidget = wibox.widget.textbox()
+vicious.register(datewidget, vicious.widgets.date, " %H:%M ", 1)
+
+taglist_buttons = gears.table.join(
+  awful.button({}, 1, function(t)
+    t:view_only()
+    for _, c in ipairs(awful.screen.focused().clients) do
+      c:move_to_tag(t)
+    end
+  end),
+  awful.button({}, 3, function(t)
+    if client.focus then
+      client.focus:move_to_tag(t)
+    end
+  end),
+  nil
+)
+
+tasklist_buttons = gears.table.join(
+  awful.button({}, 1, function (c)
+    c:emit_signal( "request::activate", "tasklist", { raise = true })
+  end),
+  awful.button({}, 3, function(c) c:kill() end),
+  nil
+)
+
+local function set_wallpaper(s)
+  if beautiful.wallpaper then
+    local wallpaper = beautiful.wallpaper
+    if type(wallpaper) == "function" then
+      wallpaper = wallpaper(s)
+    end
+    gears.wallpaper.maximized(wallpaper, s, false)
+  end
+end
+screen.connect_signal("property::geometry", set_wallpaper)
+
+awful.layout.layouts = {
+  awful.layout.suit.max,
+  awful.layout.suit.tile,
+  awful.layout.suit.fair,
+}
+
+awful.screen.connect_for_each_screen(function(s)
+  set_wallpaper(s)
+
+  s.mytaglist = awful.widget.taglist {
+    screen  = s,
+    filter  = awful.widget.taglist.filter.all,
+    buttons = taglist_buttons
+  }
+  s.mytasklist = awful.widget.tasklist {
+    screen  = s,
+    filter  = awful.widget.tasklist.filter.currenttags,
+    buttons = tasklist_buttons
+  }
+  s.mylayoutbox = wibox.widget.textbox(" [?] ")
+  s.mylayoutbox:connect_signal("button::press", function()
+    awful.layout.inc(1)
+  end)
+  local update_layout = function()
+    local current_tag = awful.screen.focused().selected_tag
+    if current_tag then
+      local layout_index = awful.layout.get_tag_layout_index(current_tag)
+      if layout_index == 1 then
+        s.mylayoutbox:set_text(" [ ] ")
+      elseif layout_index == 2 then
+        s.mylayoutbox:set_text(" [|] ")
+      else
+        s.mylayoutbox:set_text(" [+] ")
+      end
+    else
+      s.mylayoutbox:set_text(" [?] ")
+    end
+  end
+  awful.tag.attached_connect_signal(s, "property::selected", update_layout)
+  awful.tag.attached_connect_signal(s, "property::layout", update_layout)
+
+  local tags = awful.tag({ "1", "2", "3", "4", "5", "6", "7", "8", "9", "0" }, s, awful.layout.suit.max)
+  tags[10].layout = awful.layout.suit.fair
+
+  s.mybar = awful.wibar({ position = "top", screen = s })
+  s.mybar:setup {
+    layout = wibox.container.margin,
+    left = beautiful.useless_gap * 2,
+    right = beautiful.useless_gap * 2,
+    top = beautiful.useless_gap * 2,
+    bottom = 0,
+    {
+      layout = wibox.layout.align.horizontal,
+      {
+        layout = wibox.layout.fixed.horizontal,
+        {
+          layout = wibox.container.background,
+          bg = "{{.gui.color00}}",
+          fg = "{{.gui.color05}}",
+          s.mylayoutbox,
+        },
+        wibox.widget.textbox(" "),
+        s.mytaglist,
+        wibox.widget.textbox(" "),
+      },
+      s.mytasklist,
+      {
+        layout = wibox.layout.fixed.horizontal,
+        wibox.widget.textbox(" "),
+        {
+          layout = wibox.container.background,
+          bg = "{{.gui.color00}}",
+          {
+            layout = wibox.layout.fixed.horizontal,
+            {
+              layout = wibox.container.margin,
+              top = dpi(4),
+              bottom = dpi(4),
+              left = dpi(4),
+              right = dpi(4),
+              cpuwidget,
+            },
+            {
+              layout = wibox.container.margin,
+              top = dpi(4),
+              bottom = dpi(4),
+              right = dpi(4),
+              memwidget,
+            },
+            {
+              layout = wibox.container.margin,
+              top = dpi(4),
+              bottom = dpi(4),
+              right = dpi(4),
+              netdownwidget,
+            },
+            {
+              layout = wibox.container.margin,
+              top = dpi(4),
+              bottom = dpi(4),
+              right = dpi(4),
+              netupwidget,
+            },
+          },
+        },
+        wibox.widget.textbox(" "),
+        {
+          layout = wibox.container.background,
+          bg = "{{.gui.color00}}",
+          datewidget,
+        },
+      },
+    },
+  }
+end)
+
+globalkeys = gears.table.join(
+  awful.key({ modkey }, "Escape", awesome.restart),
+  awful.key({ modkey, "Shift" }, "Escape", awesome.quit),
+  awful.key({ modkey }, "q", function()
+    if client.focus and client.focus.class == "launcher" then
+      client.focus:kill()
+    else
+      awful.spawn({
+        "alacritty",
+        "--class",
+        "launcher",
+        "--title",
+        "launcher",
+        "-o",
+        "window.dimensions.columns=80",
+        "-o",
+        "window.dimensions.lines=20",
+        "-e",
+        "fzflch",
+      })
+    end
+  end),
+  awful.key({ modkey }, "Return", function()
+    if client.focus and client.focus.class == "foreground" then
+      client.focus:kill()
+    else
+      awful.spawn({
+        "alacritty",
+        "--class",
+        "foreground",
+        "--title",
+        "foreground",
+        "-o",
+        "window.dimensions.columns=100",
+        "-o",
+        "window.dimensions.lines=25",
+        "-e",
+        "tmux",
+        "new",
+        "-s",
+        "foreground",
+        "-A",
+      })
+    end
+  end),
+  awful.key({ modkey, "Shift" }, "Return", function()
+    if client.focus and client.focus.class == "background" then
+      client.focus:kill()
+    else
+      awful.spawn({
+        "alacritty",
+        "--class",
+        "background",
+        "--title",
+        "background",
+        "-o",
+        "window.dimensions.columns=100",
+        "-o",
+        "window.dimensions.lines=25",
+        "-e",
+        "tmux",
+        "new",
+        "-s",
+        "background",
+        "-A",
+        "bash",
+        "-c",
+        "read -n 1 -p 'Background session. Press any key...'",
+      })
+    end
+  end),
+  awful.key({ modkey }, ".", function()
+    if awful.screen.focused().selected_tag.layout == awful.layout.suit.tile then
+      awful.tag.incmwfact(0.05)
+    end
+  end),
+  awful.key({ modkey }, ",", function()
+    if awful.screen.focused().selected_tag.layout == awful.layout.suit.tile then
+      awful.tag.incmwfact(-0.05)
+    end
+  end),
+  awful.key({ modkey }, "Tab", function ()
+    awful.client.focus.byidx(1)
+  end),
+  awful.key({ modkey, "Shift" }, "Tab", function ()
+    awful.layout.inc(1)
+  end),
+  awful.key({ modkey }, "i", function ()
+    if client.focus then
+      awful.spawn {
+        "notify-send",
+        "-u",
+        "normal",
+        "Window Info",
+        string.format("class:    %s\ninstance: %s\nname:     %s", client.focus.class or "<undefine>", client.focus.instance or "<undefine>", client.focus.name or "<undefine>")
+      }
+    end
+  end),
+  nil
+)
+
+for i = 0, 9 do
+  globalkeys = gears.table.join(
+    awful.key({ modkey }, tostring(i), function()
+      local screen = awful.screen.focused()
+      local tag = awful.tag.find_by_name(screen, tostring(i))
+      tag:view_only()
+      for _, c in ipairs(awful.screen.focused().clients) do
+        c:move_to_tag(tag)
+      end
+    end),
+    awful.key({ modkey, "Shift" }, tostring(i), function()
+      if client.focus and not client.focus.sticky then
+        local screen = awful.screen.focused()
+        local tag = awful.tag.find_by_name(screen, tostring(i))
+        client.focus:move_to_tag(tag)
+      end
+    end),
+    globalkeys
+  )
+end
+
+root.keys(globalkeys)
+
+directions = {
+  left = { -1, 0 },
+  right = { 1, 0 },
+  down = { 0, 1 },
+  up = { 0, -1 },
+}
+focus_by_direction = function(c, d)
+  local x, y = c.width / 2 + c.x, c.height / 2 + c.y
+  local cc, mindd
+  for _, ec in ipairs(awful.screen.focused().clients) do
+    if ec ~= c then
+      local ex, ey = ec.width / 2 + ec.x, ec.height / 2 + ec.y
+      local d1, d2
+      if d == "left" then
+        d1 = x - ex
+        d2 = math.abs(y - ey)
+      elseif d == "right" then
+        d1 = ex - x
+        d2 = math.abs(y - ey)
+      elseif d == "down" then
+        d1 = ey - y
+        d2 = math.abs(x - ex)
+      elseif d == "up" then
+        d1 = y - ey
+        d2 = math.abs(x - ex)
+      end
+      if d1 > 0 then
+        local dd = d1 + 2 * d2
+        if not mindd or mindd > dd then
+          cc = ec
+          mindd = dd
+        end
+      end
+    end
+  end
+  if cc then
+    cc:emit_signal("request::activate", "focus_by_direction", { raise = true })
+  end
+end
+move_by_direction = function(c, d)
+  if c.floating then
+    local dd = 40
+    local fcs = {}
+    for _, ec in ipairs(awful.screen.focused().clients) do
+      if ec ~= c and ec.floating then
+        table.insert(fcs, ec)
+      end
+    end
+    if directions[d][1] ~= 0 then
+      local poss = {
+        beautiful.useless_gap * 2,
+        awful.screen.focused().geometry.width - beautiful.useless_gap * 2 - c.width - beautiful.border_width * 2,
+      }
+      for _, ec in ipairs(fcs) do
+        table.insert(poss, ec.x + ec.width + beautiful.border_width * 2 + beautiful.useless_gap * 2)
+        table.insert(poss, ec.x - beautiful.useless_gap * 2 - c.width - beautiful.border_width * 2)
+      end
+      for _, ep in ipairs(poss) do
+        local ndd = (ep - c.x) * directions[d][1]
+        if ndd > 0 and ndd < dd then
+          dd = ndd
+        end
+      end
+    else
+      local poss = {
+        awful.screen.focused().mybar.height + beautiful.useless_gap * 2,
+        awful.screen.focused().geometry.height - beautiful.useless_gap * 2 - c.height - beautiful.border_width * 2,
+      }
+      for _, ec in ipairs(fcs) do
+        table.insert(poss, ec.y + ec.height + beautiful.border_width * 2 + beautiful.useless_gap * 2)
+        table.insert(poss, ec.y - beautiful.useless_gap * 2 - c.height - beautiful.border_width * 2)
+      end
+      for _, ep in ipairs(poss) do
+        local ndd = (ep - c.y) * directions[d][2]
+        if ndd > 0 and ndd < dd then
+          dd = ndd
+        end
+      end
+    end
+    c:relative_move(directions[d][1] * dd, directions[d][2] * dd, 0, 0)
+  else
+    awful.client.swap.bydirection(d)
+  end
+end
+resize_by_direction = function(c, d)
+  if c.floating then
+    local dd = 40
+    local fcs = {}
+    for _, ec in ipairs(awful.screen.focused().clients) do
+      if ec ~= c and ec.floating then
+        table.insert(fcs, ec)
+      end
+    end
+    if directions[d][1] ~= 0 then
+      local poss = {
+        awful.screen.focused().geometry.width - beautiful.useless_gap * 2 - c.width - beautiful.border_width * 2,
+      }
+      for _, ec in ipairs(fcs) do
+        table.insert(poss, ec.x - beautiful.useless_gap * 2 - c.width - beautiful.border_width * 2)
+      end
+      for _, ep in ipairs(poss) do
+        local ndd = (ep - c.x) * directions[d][1]
+        if ndd > 0 and ndd < dd then
+          dd = ndd
+        end
+      end
+    else
+      local poss = {
+        awful.screen.focused().geometry.height - beautiful.useless_gap * 2 - c.height - beautiful.border_width * 2,
+      }
+      for _, ec in ipairs(fcs) do
+        table.insert(poss, ec.y - beautiful.useless_gap * 2 - c.height - beautiful.border_width * 2)
+      end
+      for _, ep in ipairs(poss) do
+        local ndd = (ep - c.y) * directions[d][2]
+        if ndd > 0 and ndd < dd then
+          dd = ndd
+        end
+      end
+    end
+    if c.width + directions[d][1] * dd > 0 and c.height + directions[d][2] * dd > 0 then
+      c:relative_move(0, 0, directions[d][1] * dd, directions[d][2] * dd)
+    end
+  else
+    if c.first_tag.layout == awful.layout.suit.tile.right then
+      if d == "left" then
+        awful.tag.incmwfact(-0.05)
+      elseif d == "right" then
+        awful.tag.incmwfact(0.05)
+      end
+    elseif c.first_tag.layout == awful.layout.suit.tile.bottom then
+      if d == "down" then
+        awful.tag.incmwfact(0.05)
+      elseif d == "up" then
+        awful.tag.incmwfact(-0.05)
+      end
+    end
+  end
+end
+
+awful.rules.rules = {
+  {
+    rule = {},
+    properties = {
+      border_width = beautiful.border_width,
+      border_color = beautiful.border_normal,
+      focus = awful.client.focus.filter,
+      raise = true,
+      keys = gears.table.join(
+        awful.key({ modkey }, "h", function(c)
+          focus_by_direction(c, "left")
+        end),
+        awful.key({ modkey }, "l", function(c)
+          focus_by_direction(c, "right")
+        end),
+        awful.key({ modkey }, "j", function(c)
+          focus_by_direction(c, "down")
+        end),
+        awful.key({ modkey }, "k", function(c)
+          focus_by_direction(c, "up")
+        end),
+        awful.key({ modkey, "Shift" }, "h", function(c)
+          move_by_direction(c, "left")
+        end),
+        awful.key({ modkey, "Shift" }, "l", function(c)
+          move_by_direction(c, "right")
+        end),
+        awful.key({ modkey, "Shift" }, "j", function(c)
+          move_by_direction(c, "down")
+        end),
+        awful.key({ modkey, "Shift" }, "k", function(c)
+          move_by_direction(c, "up")
+        end),
+        awful.key({ modkey, "Control" }, "h", function(c)
+          resize_by_direction(c, "left")
+        end),
+        awful.key({ modkey, "Control" }, "l", function(c)
+          resize_by_direction(c, "right")
+        end),
+        awful.key({ modkey, "Control" }, "j", function(c)
+          resize_by_direction(c, "down")
+        end),
+        awful.key({ modkey, "Control" }, "k", function(c)
+          resize_by_direction(c, "up")
+        end),
+        awful.key({ modkey }, "f",  function(c)
+          c.floating = not c.floating
+          c.ontop = not c.ontop
+          c.sticky = not c.sticky
+	        c.maximized = false
+        end),
+        awful.key({ modkey }, "d",  function (c) c:kill() end),
+        awful.key({ modkey }, "m", function(c)
+          if not c.floating and c.first_tag.layout == awful.layout.suit.tile then
+            c:swap(awful.client.getmaster())
+          end
+        end),
+        nil
+      ),
+      buttons = gears.table.join(
+        awful.button({}, 1, function (c)
+          c:emit_signal("request::activate", "mouse_click", {raise = true})
+        end),
+        awful.button({ modkey }, 1, function (c)
+          c.floating = true
+          c.ontop = true
+          c.sticky = true
+          c:emit_signal("request::activate", "mouse_click", {raise = true})
+          awful.mouse.client.move(c)
+        end),
+        awful.button({ modkey }, 3, function (c)
+          c.floating = true
+          c.ontop = true
+          c.sticky = true
+          c:emit_signal("request::activate", "mouse_click", {raise = true})
+          awful.mouse.client.resize(c)
+        end),
+        nil
+      ),
+      screen = awful.screen.preferred,
+      size_hints_honor = false,
+      placement = awful.placement.no_overlap + awful.placement.no_offscreen,
+    },
+  },
+  {
+    rule_any = { instance = { "launcher", "foreground", "background" } },
+    properties = {
+      floating = true,
+      ontop = true,
+      sticky = true,
+      placement = awful.placement.centered,
+      callback = function(c)
+        c:connect_signal("unfocus", function() c:kill() end)
+      end,
+    },
+  },
+  {
+    rule = { name = "Picture in picture" },
+    properties = {
+      floating = true,
+      sticky = true,
+      ontop = true,
+    },
+  },
+  {
+    rule_any = { instance = { "www.bing.com__translator" } },
+    properties = {
+      floating = true,
+      sticky = true,
+      ontop = true,
+      placement = awful.placement.centered,
+    },
+  },
+}
+
+client.connect_signal("manage", function (c)
+  if not awesome.startup then awful.client.setslave(c) end
+  if
+    awesome.startup
+    and not c.size_hints.user_position
+    and not c.size_hints.program_position
+  then
+    awful.placement.no_offscreen(c)
+  end
+end)
+
+client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus end)
+client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)

@@ -1,0 +1,14 @@
+[init]
+	defaultBranch = "main"
+
+{{ if eq .chezmoi.username "sunny" -}}
+[user]
+	email = "sunn4room@163.com"
+	name = "sunn4room"
+{{- end }}
+
+{{ if .cn.enable -}}
+[url "https://{{ .cn.ghproxy }}/https://github.com/"]
+	insteadOf = "https://github.com/"
+	pushInsteadOf = "https://github.com/"
+{{- end }}
