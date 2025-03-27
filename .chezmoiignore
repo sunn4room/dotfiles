@@ -27,6 +27,7 @@
 !/.ssh/
 !/.ssh/id_rsa
 !/.ssh/id_rsa.pub
+!/repo
 !/.config/rclone/
 !/.config/rclone/**/*
 !/.config/systemd/user/rclone@jianguoyun.service
