@@ -14,7 +14,7 @@ test -f /etc/pacman.conf.bk || sudo cp /etc/pacman.conf /etc/pacman.conf.bk
 sudo tee /etc/pacman.conf <<EOF >/dev/null
 [options]
 HoldPkg = pacman glibc
-IgnorePkg = microsoft-edge-stable-bin
+IgnorePkg = microsoft-edge-stable-bin visual-studio-code-bin
 Architecture = auto
 Color
 CheckSpace
@@ -77,21 +77,24 @@ lf
 {{ if .dev.enable -}}
 # develop
 bat
+python
+nodejs
+npm
+yarn
+pnpm
+{{ if .gui.enable -}}
+visual-studio-code-bin
+{{- end }}
 {{ if .dev.lua -}}
 lua-language-server
 {{- end }}
 {{ if .dev.python -}}
-python
 pyright
 python-black
 python-isort
 python-debugpy
 {{- end }}
 {{ if .dev.node -}}
-nodejs
-npm
-yarn
-pnpm
 vtsls
 eslint-language-server
 vue-language-server
