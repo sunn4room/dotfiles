@@ -27,7 +27,15 @@ return {
       { type = "padding", val = 2 },
       {
         type = "text",
-        val = { "aal izz well." },
+        val = function()
+          local stats = require("lazy.stats").stats()
+          return {
+            string.format(
+              "lazy.nvim startup in %.3f ms",
+              stats.times.LazyDone - stats.times.LazyStart
+            ),
+          }
+        end,
         opts = {
           position = "center",
           hl = "Comment",
