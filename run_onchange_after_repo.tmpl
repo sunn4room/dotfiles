@@ -6,6 +6,6 @@ cd {{ .chezmoi.sourceDir }}
 
 if test "$(git status -s | wc -l)" -ne "0"; then
 	git add --all
-	git commit -m "llm qwen 3b and 32b for neovim"
+	git commit -m "lazy load llm plugin in neovim"
 	git push
 fi

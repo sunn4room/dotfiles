@@ -5,6 +5,11 @@ return {
     "MunifTanjim/nui.nvim",
   },
   build = "make",
+  event = "InsertEnter",
+  cmd = {
+    "AvanteAsk",
+    "AvanteChat",
+  },
   opts = {
     provider = "qwen_32b",
     auto_suggestions_provider = "qwen_3b",
