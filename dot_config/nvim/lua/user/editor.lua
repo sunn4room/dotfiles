@@ -2,6 +2,9 @@ vim.opt.laststatus = 2
 vim.opt.showtabline = 2
 vim.opt.number = false
 vim.opt.wrap = false
+vim.opt.incsearch = false
+vim.opt.ignorecase = true
+vim.opt.smartcase = true
 vim.opt.signcolumn = "no"
 vim.opt.foldcolumn = "0"
 vim.opt.splitbelow = true
@@ -9,10 +12,10 @@ vim.opt.splitright = true
 vim.opt.termguicolors = false
 vim.opt.list = true
 vim.opt.listchars = {
-	tab = "<-",
-	trail = "~",
-	extends = ">",
-	precedes = "<",
+  tab = "<-",
+  trail = "~",
+  extends = ">",
+  precedes = "<",
 }
 vim.opt.scrolloff = 4
 vim.opt.sidescrolloff = 8
@@ -42,23 +45,23 @@ vim.keymap.set("n", "dw", "<cmd>q<cr>")
 vim.keymap.set("n", "dh", "<cmd>noh<cr>")
 
 vim.api.nvim_create_autocmd("BufReadPost", {
-	group = vim.api.nvim_create_augroup("RestoreLastPosition", {}),
-	pattern = "*",
-	command = "silent! normal! g`\"zv",
+  group = vim.api.nvim_create_augroup("RestoreLastPosition", {}),
+  pattern = "*",
+  command = "silent! normal! g`\"zv",
 })
 vim.api.nvim_create_autocmd("BufEnter", {
-	group = vim.api.nvim_create_augroup("AutoInsertTerm", {}),
-	pattern = "term://*",
-	callback = function()
-		vim.api.nvim_input("i")
-	end,
+  group = vim.api.nvim_create_augroup("AutoInsertTerm", {}),
+  pattern = "term://*",
+  callback = function()
+    vim.api.nvim_input("i")
+  end,
 })
 vim.api.nvim_create_autocmd("TermClose", {
-	group = vim.api.nvim_create_augroup("AutoCloseTerm", {}),
-	pattern = { "term://*:bash", "term://*:lazygit" },
-	callback = function()
-		vim.api.nvim_input("<CR>")
-	end,
+  group = vim.api.nvim_create_augroup("AutoCloseTerm", {}),
+  pattern = { "term://*:bash", "term://*:lazygit" },
+  callback = function()
+    vim.api.nvim_input("<CR>")
+  end,
 })
 
 vim.api.nvim_set_hl(0, "Visual", { ctermbg = 8 })

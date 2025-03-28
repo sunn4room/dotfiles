@@ -83,7 +83,7 @@ vim.diagnostic.config {
 
 vim.keymap.set("n", "ge", function() vim.diagnostic.goto_next() end)
 vim.keymap.set("n", "gE", function() vim.diagnostic.goto_prev() end)
-vim.keymap.set({ "n", "x" }, "<space>a", function() require("fzf-lua").lsp_code_actions() end)
+vim.keymap.set({ "n", "x" }, "sa", function() require("fzf-lua").lsp_code_actions() end)
 vim.keymap.set("n", "gd", function() vim.lsp.buf.definition() end)
 vim.keymap.set("n", "gD", function() vim.lsp.buf.declaration() end)
 vim.keymap.set("n", "gr", function() vim.lsp.buf.references() end)

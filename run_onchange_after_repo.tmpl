@@ -6,6 +6,6 @@ cd {{ .chezmoi.sourceDir }}
 
 if test "$(git status -s | wc -l)" -ne "0"; then
 	git add --all
-	git commit -m "add vscode"
+	git commit -m "abandon easymotion plugin in neovim"
 	git push
 fi
