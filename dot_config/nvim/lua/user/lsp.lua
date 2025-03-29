@@ -68,10 +68,6 @@ vim.lsp.handlers["$/progress"] = function(_, result, ctx)
   end
 end
 
-vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(
-  vim.lsp.handlers.hover,
-  { border = "rounded", silent = true }
-)
 vim.diagnostic.config {
   underline = true,
   virtual_text = false,
@@ -92,7 +88,7 @@ vim.keymap.set("n", "K", function()
   if require("lazy.core.config").plugins["nvim-dap"]._.loaded ~= nil and require("dap").session() ~= nil then
     require("dapui").eval()
   elseif vim.diagnostic.open_float { border = "rounded" } == nil then
-    vim.lsp.buf.hover()
+    vim.lsp.buf.hover { border = "rounded", silent = true }
   end
 end)
 vim.keymap.set("n", "cn", function() vim.lsp.buf.rename() end)
