@@ -60,7 +60,37 @@ return {
     "nvimtools/none-ls.nvim",
     opts = function(_, opts)
       local null_ls = require("null-ls")
-      table.insert(opts.sources, null_ls.builtins.formatting.prettier)
+      table.insert(opts.sources, null_ls.builtins.formatting.prettier.with {
+        filetypes = {
+          "javascript",
+          "javascriptreact",
+          "typescript",
+          "typescriptreact",
+          "vue",
+        },
+        condition = function(utils)
+          return utils.root_has_file {
+            ".prettierrc",
+            ".prettierrc.json",
+            ".prettierrc.json5",
+            ".prettierrc.yml",
+            ".prettierrc.yaml",
+            ".prettierrc.toml",
+            ".prettierrc.js",
+            "prettierrc.config.js",
+            ".prettierrc.ts",
+            "prettierrc.config.ts",
+            ".prettierrc.mjs",
+            "prettierrc.config.mjs",
+            ".prettierrc.mts",
+            "prettierrc.config.mts",
+            ".prettierrc.cjs",
+            "prettierrc.config.cjs",
+            ".prettierrc.cts",
+            "prettierrc.config.cts",
+          }
+        end,
+      })
     end,
   },
 }
