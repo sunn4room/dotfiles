@@ -77,3 +77,12 @@
 !/system
 {{- end }}
 
+# cn
+{{ if .cn.enable -}}
+!/.config/mitmproxy/
+!/.config/mitmproxy/*
+!/.local/bin/proxy
+!/.local/bin/proxy-sudo
+!/.config/systemd/user/mitmproxy.service
+!/.config/systemd/user/mitmproxy.service.sh
+{{- end }}

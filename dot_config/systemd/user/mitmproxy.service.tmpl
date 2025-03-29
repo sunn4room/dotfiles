@@ -1,0 +1,14 @@
+[Unit]
+Description=mitmproxy
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+{{ if .gui.enable -}}
+ExecStart=mitmweb --no-web-open-browser --set confdir=%h/.config/mitmproxy --set connection_strategy=lazy --scripts %h/.config/mitmproxy/addon.py
+{{ else -}}
+ExecStart=mitmdump --set confdir=%h/.config/mitmproxy --set connection_strategy=lazy --scripts %h/.config/mitmproxy/addon.py
+{{- end }}
+
+[Install]
+WantedBy=default.target

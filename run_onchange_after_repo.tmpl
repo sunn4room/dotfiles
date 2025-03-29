@@ -6,6 +6,6 @@ cd {{ .chezmoi.sourceDir }}
 
 if test "$(git status -s | wc -l)" -ne "0"; then
 	git add --all
-	git commit -m "add condition for neovim prettier formatter"
+	git commit -m "add mitmproxy service with ghproxy support"
 	git push
 fi

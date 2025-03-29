@@ -1,0 +1,14 @@
+import logging
+import re
+
+gp = "https://{{ .cn.ghproxy }}/"
+p1 = re.compile(r'^https://github\.com/[^/]+/[^/]+/(?:releases|archive|raw)/.*$')
+p2 = re.compile(r'^https://raw\.githubusercontent\.com/[^/]+/[^/]+/.*$')
+p3 = re.compile(r'^https://github\.com/[^/]+/[^/]+/(?:info|git-).*$')
+
+def request(flow):
+	url = flow.request.url
+	if p1.match(url) or p2.match(url) or p3.match(url):
+		logging.info("valid url: %s" % url)
+		flow.request.url = gp + url
+
