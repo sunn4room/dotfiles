@@ -41,7 +41,7 @@
 !/.config/nvim/lua/user/
 !/.config/nvim/lua/user/*
 {{ if eq .chezmoi.username "sunny" -}}
-!/.config/QWEN_API_KEY
+!/.config/*_API_KEY
 !/.config/nvim/lua/user/lang/llm.lua
 {{- end }}
 {{ if .dev.lua -}}
