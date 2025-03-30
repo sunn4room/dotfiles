@@ -55,6 +55,7 @@ less
 openssh
 
 # tool
+podman
 wget
 rclone
 fuse3
@@ -144,6 +145,9 @@ vicious
 alacritty
 mpv
 microsoft-edge-stable-bin
+{{ if eq .chezmoi.username "sunny" -}}
+keepassxc
+{{- end }}
 {{- end }}
 
 # other
@@ -154,7 +158,6 @@ os-prober
 intel-ucode
 iwd
 ntfs-3g
-keepassxc
 {{- end }}
 EOF
 )"

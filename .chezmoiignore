@@ -20,6 +20,8 @@
 !/.config/lf/**/*
 !/.config/tmux/
 !/.config/tmux/**/*
+!/.config/containers/
+!/.config/containers/**/*
 
 # encrypt
 {{ if eq .chezmoi.username "sunny" -}}
@@ -32,6 +34,12 @@
 !/.config/rclone/**/*
 !/.config/systemd/user/rclone@jianguoyun.service
 !/.config/systemd/user/rclone@jianguoyun.service.sh
+!/.config/mitmproxy/
+!/.config/mitmproxy/*
+!/.local/bin/proxy
+!/.local/bin/proxy-sudo
+!/.config/systemd/user/mitmproxy.service
+!/.config/systemd/user/mitmproxy.service.sh
 {{- end }}
 
 # develop
@@ -77,12 +85,3 @@
 !/system
 {{- end }}
 
-# cn
-{{ if .cn.enable -}}
-!/.config/mitmproxy/
-!/.config/mitmproxy/*
-!/.local/bin/proxy
-!/.local/bin/proxy-sudo
-!/.config/systemd/user/mitmproxy.service
-!/.config/systemd/user/mitmproxy.service.sh
-{{- end }}

@@ -5,7 +5,7 @@ Wants=network-online.target
 
 [Service]
 {{ if .gui.enable -}}
-ExecStart=mitmweb --no-web-open-browser --set confdir=%h/.config/mitmproxy --set connection_strategy=lazy --scripts %h/.config/mitmproxy/addon.py
+ExecStart=mitmweb --no-web-open-browser --set web_password=mitmproxy --set confdir=%h/.config/mitmproxy --set connection_strategy=lazy --scripts %h/.config/mitmproxy/addon.py
 {{ else -}}
 ExecStart=mitmdump --set confdir=%h/.config/mitmproxy --set connection_strategy=lazy --scripts %h/.config/mitmproxy/addon.py
 {{- end }}

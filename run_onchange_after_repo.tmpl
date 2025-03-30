@@ -6,6 +6,6 @@ cd {{ .chezmoi.sourceDir }}
 
 if test "$(git status -s | wc -l)" -ne "0"; then
 	git add --all
-	git commit -m "update neovim lsp config due to deprecated"
+	git commit -m "add podman"
 	git push
 fi
